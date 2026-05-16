@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Easy Road",
-  description: "Plateforme de réservation Easy Road",
+  title: "Easy Package",
+  description: "Plateforme de réservation Easy Package",
 };
 
 export default function RootLayout({

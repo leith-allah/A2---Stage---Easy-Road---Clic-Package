@@ -22,7 +22,7 @@ export default function HomePage() {
             text-blue-600
           "
         >
-          Bienvenue sur Easy Road
+          Bienvenue sur Easy Package
         </h1>
 
         <p

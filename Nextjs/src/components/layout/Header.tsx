@@ -1,5 +1,6 @@
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   return (
@@ -15,14 +16,24 @@ export default function Header() {
         items-center
       "
     >
-      <h1 className="text-2xl font-bold text-blue-600">
-        Easy Road
-      </h1>
+      <Link href="/">
+        <Image
+          src="/logo.ico"
+          alt="Easy Package Logo"
+          width={150}
+          height={1000}
+          priority
+          className="object-contain"
+        />
+      </Link>
 
       <nav className="flex gap-6">
         <Link href="/">Accueil</Link>
-        <Link href="/reservation">Réservation</Link>
+        <Link href="/offres">Offres</Link>
+        <Link href="/about-us">À propos</Link>
+        <Link href="/contact">Contact</Link>
         <Link href="/login">Connexion</Link>
+        <Link href="/register">Inscription</Link>
       </nav>
     </header>
   );
