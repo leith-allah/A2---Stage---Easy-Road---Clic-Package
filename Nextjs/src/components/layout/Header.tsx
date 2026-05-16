@@ -32,6 +32,7 @@ export default function Header() {
         <Link href="/offres">Offres</Link>
         <Link href="/about-us">À propos</Link>
         <Link href="/contact">Contact</Link>
+        <Link href="/dashboard/solde">Solde</Link>
         <Link href="/login">Connexion</Link>
         <Link href="/register">Inscription</Link>
       </nav>
