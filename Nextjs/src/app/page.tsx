@@ -22,7 +22,7 @@ export default function HomePage() {
             text-blue-600
           "
         >
-          Bienvenue sur Easy Package
+          Bienvenue sur Clic Package
         </h1>
 
         <p

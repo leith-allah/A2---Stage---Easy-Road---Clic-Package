@@ -34,7 +34,7 @@ export default function BalancePage() {
           </h1>
 
           <p className="text-gray-600 text-lg">
-            Gérez votre portefeuille Easy Package
+            Gérez votre portefeuille Clic Package
           </p>
         </div>
 

@@ -19,8 +19,8 @@ export default function Header() {
       <Link href="/">
         <Image
           src="/logo.ico"
-          alt="Easy Package Logo"
-          width={150}
+          alt="Clic Package Logo"
+          width={100}
           height={1000}
           priority
           className="object-contain"
@@ -30,9 +30,9 @@ export default function Header() {
       <nav className="flex gap-6">
         <Link href="/">Accueil</Link>
         <Link href="/offres">Offres</Link>
+        <Link href="/dashboard/solde">Solde</Link>
         <Link href="/about-us">À propos</Link>
         <Link href="/contact">Contact</Link>
-        <Link href="/dashboard/solde">Solde</Link>
         <Link href="/login">Connexion</Link>
         <Link href="/register">Inscription</Link>
       </nav>

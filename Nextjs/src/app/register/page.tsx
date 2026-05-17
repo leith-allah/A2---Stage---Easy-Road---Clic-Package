@@ -26,7 +26,7 @@ export default function RegisterPage() {
           </h1>
 
           <p className="text-gray-600 mt-3">
-            Rejoignez Easy Package et accédez à une plateforme
+            Rejoignez Clic Package et accédez à une plateforme
             complète de gestion de voyages B2B.
           </p>
         </div>

@@ -8,7 +8,7 @@ export default function AboutUsPage() {
         </h1>
 
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Easy Package est une plateforme B2B innovante
+          Clic Package est une plateforme B2B innovante
           dédiée aux agences de voyage, leur permettant
           d’acheter et de gérer facilement des packages
           touristiques complets.

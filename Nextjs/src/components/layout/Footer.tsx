@@ -10,7 +10,7 @@ export default function Footer() {
       "
     >
       <p>
-        © 2026 Easy Package — Tous droits réservés
+        © 2026 Clic Package — Tous droits réservés
       </p>
     </footer>
   );

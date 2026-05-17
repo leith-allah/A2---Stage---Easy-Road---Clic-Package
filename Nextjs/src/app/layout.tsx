@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Easy Package",
-  description: "Plateforme de réservation Easy Package",
+  title: "Clic Package",
+  description: "Plateforme de réservation Clic Package",
 };
 
 export default function RootLayout({

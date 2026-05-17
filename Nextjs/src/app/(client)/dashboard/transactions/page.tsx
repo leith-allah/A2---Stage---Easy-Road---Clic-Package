@@ -1,4 +1,6 @@
 
+import BackButton from "@/src/components/navigation/BackButton";
+
 export default function TransactionsPage() {
   const transactions = [
     {
@@ -18,7 +20,7 @@ export default function TransactionsPage() {
     {
       id: 3,
       type: "Paiement",
-      user: "Easy Package",
+      user: "Clic Package",
       account: "ER-0001",
       amount: "- 120 000 DZD",
     },
@@ -27,6 +29,12 @@ export default function TransactionsPage() {
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
       <div className="max-w-5xl mx-auto">
+                
+        {/* Bouton Retour */}
+        <div className="mb-6">
+          <BackButton href="/dashboard/solde" />
+        </div>
+        
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-10">
           <div>
@@ -53,8 +61,8 @@ export default function TransactionsPage() {
           >
             <option>Trier par</option>
             <option>Type</option>
-            <option>Date croissante</option>
-            <option>Date décroissante</option>
+            <option>Date la plus récente</option>
+            <option>Date la plus ancienne</option>
             <option>Montant croissant</option>
             <option>Montant décroissant</option>
           </select>

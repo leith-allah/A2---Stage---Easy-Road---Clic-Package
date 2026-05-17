@@ -1,4 +1,6 @@
 
+import BackButton from "@/src/components/navigation/BackButton";
+
 export default function TopUpPage() {
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
@@ -11,7 +13,13 @@ export default function TopUpPage() {
           shadow-xl
           p-10
         "
-      >
+      >     
+        
+        {/* Bouton Retour */}
+        <div className="mb-6">
+          <BackButton href="/dashboard/solde" />
+        </div>
+        
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-blue-600">
             Recharger mon solde
@@ -19,7 +27,7 @@ export default function TopUpPage() {
 
           <p className="text-gray-600 mt-3">
             Envoyez une demande de rechargement de
-            portefeuille Easy Package.
+            portefeuille Clic Package.
           </p>
         </div>
 

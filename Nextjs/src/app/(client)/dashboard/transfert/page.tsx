@@ -1,4 +1,6 @@
 
+import BackButton from "@/src/components/navigation/BackButton";
+
 export default function TransferPage() {
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
@@ -12,6 +14,12 @@ export default function TransferPage() {
           p-10
         "
       >
+                
+        {/* Bouton Retour */}
+        <div className="mb-6">
+          <BackButton href="/dashboard/solde" />
+        </div>
+                
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-blue-600">
             Envoyer / Demander

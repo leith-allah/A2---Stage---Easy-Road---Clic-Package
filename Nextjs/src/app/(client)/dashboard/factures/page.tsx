@@ -1,4 +1,6 @@
 
+import BackButton from "@/src/components/navigation/BackButton";
+
 export default function InvoicesPage() {
   const invoices = [
     {
@@ -20,6 +22,12 @@ export default function InvoicesPage() {
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
       <div className="max-w-6xl mx-auto">
+        
+        {/* Bouton Retour */}
+        <div className="mb-6">
+          <BackButton href="/dashboard/solde" />
+        </div>
+
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-blue-600">

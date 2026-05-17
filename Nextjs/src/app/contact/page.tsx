@@ -9,7 +9,7 @@ export default function ContactPage() {
 
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
           Une question, une demande de partenariat ou besoin
-          d’assistance ? Notre équipe Easy Package est là pour vous aider.
+          d’assistance ? Notre équipe Clic Package est là pour vous aider.
         </p>
       </div>
 
