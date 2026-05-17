@@ -34,6 +34,7 @@ export default function Header() {
         <Link href="/dashboard/balance">Solde</Link>
         <Link href="/about-us">À propos</Link>
         <Link href="/contact">Contact</Link>
+        <Link href="/dashboard/profile">Profil</Link>
         <Link href="/login">Connexion</Link>
         <Link href="/register">Inscription</Link>
       </nav>
