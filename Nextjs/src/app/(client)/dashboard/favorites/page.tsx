@@ -8,7 +8,7 @@ import Link from "next/link";
 import BackButton from "@/src/components/navigation/BackButton";
 
 import SearchBar from "@/src/components/ui/SearchBar";
-import FilterBar from "@/src/components/ui/Filterbar";
+import FilterBar from "@/src/components/ui/FilterBar";
 
 import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
 
