@@ -5,8 +5,6 @@ import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import BackButton from "@/src/components/navigation/BackButton";
-
 import SearchBar from "@/src/components/ui/SearchBar";
 import FilterBar from "@/src/components/ui/FilterBar";
 
@@ -98,11 +96,6 @@ export default function FavoritesPage() {
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
       <div className="max-w-7xl mx-auto">
-
-        {/* Retour */}
-        <div className="mb-6">
-          <BackButton href="/dashboard" />
-        </div>
 
         {/* Header */}
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 mb-12">

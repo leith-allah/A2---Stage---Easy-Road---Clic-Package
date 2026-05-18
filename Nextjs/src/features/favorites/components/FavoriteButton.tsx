@@ -3,22 +3,21 @@
 
 import { useState } from "react";
 
-interface FavoriteButtonProps {
+type FavoriteButtonProps = {
   initialFavorite?: boolean;
-}
+};
 
 export default function FavoriteButton({
   initialFavorite = false,
 }: FavoriteButtonProps) {
-  const [isFavorite, setIsFavorite] = useState(initialFavorite);
-
-  function toggleFavorite() {
-    setIsFavorite(!isFavorite);
-  }
+  const [isFavorite, setIsFavorite] =
+    useState(initialFavorite);
 
   return (
     <button
-      onClick={toggleFavorite}
+      onClick={() =>
+        setIsFavorite(!isFavorite)
+      }
       className="
         bg-white
         rounded-full
@@ -33,11 +32,7 @@ export default function FavoriteButton({
         transition
       "
     >
-      {isFavorite ? (
-        <span className="text-red-500">♥</span>
-      ) : (
-        <span className="text-black">♡</span>
-      )}
+      {isFavorite ? "❤️" : "🤍"}
     </button>
   );
 }
