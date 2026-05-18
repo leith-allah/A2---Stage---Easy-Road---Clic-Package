@@ -1,31 +1,86 @@
 
-import BackButton from "@/src/components/navigation/BackButton";
-
-import ProfileHeader from "@/src/features/profile/components/ProfileHeader";
-import SecurityCard from "@/src/features/profile/components/SecurityCard";
-import AgencyCard from "@/src/features/profile/components/AgencyCard";
-
 export default function ProfilePage() {
   return (
-    <section className="min-h-screen bg-gray-50 py-10 px-6">
-      <div className="max-w-6xl mx-auto">
+    <div
+      className="
+        bg-white
+        rounded-3xl
+        shadow-md
+        p-10
+      "
+    >
+      <div className="flex items-center gap-8">
 
-        {/* Retour */}
-        <div className="mb-6">
-          <BackButton href="/dashboard" />
+        {/* Avatar */}
+        <div
+          className="
+            w-32
+            h-32
+            rounded-full
+            bg-blue-100
+            flex
+            items-center
+            justify-center
+            text-5xl
+            font-bold
+            text-blue-600
+          "
+        >
+          L
         </div>
 
-        {/* Header */}
-        <ProfileHeader />
+        {/* Infos */}
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold">
+            Leith Allah
+          </h1>
 
-        {/* Cards */}
-        <div className="grid lg:grid-cols-2 gap-8 mt-10">
-          <SecurityCard />
+          <div className="grid md:grid-cols-2 gap-6 mt-6">
 
-          <AgencyCard />
+            <div>
+              <p className="text-sm text-gray-500">
+                Matricule Utilisateur
+              </p>
+
+              <p className="font-semibold">
+                USER-2026-001
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-500">
+                Statut
+              </p>
+
+              <p className="font-semibold text-green-600">
+                Actif
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-500">
+                Email Professionnel
+              </p>
+
+              <p className="font-semibold">
+                leith@easyroad.com
+              </p>
+            </div>
+
+            <div>
+              <p className="text-sm text-gray-500">
+                Numéro Portefeuille
+              </p>
+
+              <p className="font-semibold">
+                WALLET-55892
+              </p>
+            </div>
+
+          </div>
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }
