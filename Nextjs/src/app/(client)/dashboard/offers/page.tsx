@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import SearchBar from "@/src/components/ui/SearchBar";
 import FilterBar from "@/src/components/ui/FilterBar";
 
-import PackageCard from "@/src/features/packages/components/PackageCard";
+import PackageCard from "@/src/features/packages/client/components/PackageCard";
 
 import { mockPackages } from "@/src/features/packages/data/mockPackages";
 

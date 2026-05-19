@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
 
-import { PackageType } from "../types/package.types";
+import { PackageType } from "../../types/package.types";
 
 type Props = {
   packageItem: PackageType;
