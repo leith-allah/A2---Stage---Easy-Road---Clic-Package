@@ -88,6 +88,25 @@ export default function CreatePackageLayout() {
               setPackageData={setPackageData}
             />
 
+          </div>
+
+          {/* RIGHT */}
+          <div className="sticky top-8">
+            <PackagePreview
+              packageData={packageData}
+              hotelData={hotelData}
+              flightData={flightData}
+              transportData={transportData}
+              excursionData={excursionData}
+              pricingData={pricingData}
+            />
+          </div>
+        </div>
+
+
+        {/* Down */}
+        <div className="grid md:grid-cols-2 gap-8 items-start mt-8">
+
             <HotelSelector
               hotelData={hotelData}
               setHotelData={setHotelData}
@@ -113,20 +132,7 @@ export default function CreatePackageLayout() {
               setPricingData={setPricingData}
             />
           </div>
-
-          {/* RIGHT */}
-          <div className="sticky top-8">
-            <PackagePreview
-              packageData={packageData}
-              hotelData={hotelData}
-              flightData={flightData}
-              transportData={transportData}
-              excursionData={excursionData}
-              pricingData={pricingData}
-            />
-          </div>
         </div>
-      </div>
     </section>
   );
 }
