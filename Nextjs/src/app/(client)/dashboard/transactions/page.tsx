@@ -32,7 +32,7 @@ export default function TransactionsPage() {
                 
         {/* Bouton Retour */}
         <div className="mb-6">
-          <BackButton href="/dashboard/solde" />
+          <BackButton href="/dashboard/balance" />
         </div>
         
         {/* Header */}

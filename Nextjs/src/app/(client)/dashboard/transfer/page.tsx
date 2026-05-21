@@ -17,7 +17,7 @@ export default function TransferPage() {
                 
         {/* Bouton Retour */}
         <div className="mb-6">
-          <BackButton href="/dashboard/solde" />
+          <BackButton href="/dashboard/balance" />
         </div>
                 
         <div className="text-center mb-10">

@@ -1,9 +1,16 @@
 
 "use client";
 
+import UserStatusButton from "@/src/features/admin/users/components/UserStatusButton";
+import { useState } from "react";
+
 export default function UserDetailsPage() {
 
-  const user = {
+  type Status =
+  | "ACTIVE"
+  | "SUSPENDED";
+
+  const [user, setUser] = useState({
     id: 1,
 
     firstname: "Thomas",
@@ -18,7 +25,7 @@ export default function UserDetailsPage() {
 
     wallet: "WAL-001",
 
-    status: "ACTIVE",
+    status: "ACTIVE" as Status,
 
     nin: "1928374657281",
 
@@ -40,7 +47,18 @@ export default function UserDetailsPage() {
     role: "Manager",
 
     balance: 884000,
-  };
+  });
+  
+  function toggleUserStatus() {
+    setUser((prev) => ({
+      ...prev,
+
+      status:
+        prev.status === "ACTIVE"
+          ? "SUSPENDED"
+          : "ACTIVE",
+    }));
+  }
 
   return (
     <section className="min-h-screen bg-gray-100 p-8">
@@ -171,20 +189,10 @@ export default function UserDetailsPage() {
               Réinitialiser MDP
             </button>
 
-            <button
-              className="
-                bg-red-100
-                text-red-700
-                hover:bg-red-200
-                transition
-                px-5
-                py-3
-                rounded-full
-                font-semibold
-              "
-            >
-              Suspendre
-            </button>
+            <UserStatusButton
+              status={user.status}
+              onStatusChange={toggleUserStatus}
+            />
 
             <button
               className="

@@ -106,7 +106,7 @@ export default function InvoicesPage() {
 
         {/* Retour */}
         <div className="mb-6">
-          <BackButton href="/dashboard/solde" />
+          <BackButton href="/dashboard/balance" />
         </div>
 
         {/* Header */}

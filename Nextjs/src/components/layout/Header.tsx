@@ -1,6 +1,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import NotificationBell from
+"@/src/features/notifications/components/NotificationBell";
 
 export default function Header() {
   return (
@@ -27,7 +29,7 @@ export default function Header() {
         />
       </Link>
 
-      <nav className="flex gap-6">
+      <nav className="flex items-center gap-6">
         <Link href="/">Accueil</Link>
         <Link href="/dashboard/offers">Offres</Link>
         <Link href="/dashboard/favorites">Favoris</Link>
@@ -37,6 +39,7 @@ export default function Header() {
         <Link href="/dashboard/balance">Solde</Link>
         <Link href="/about-us">À propos</Link>
         <Link href="/contact">Contact</Link>
+        <NotificationBell />
         <Link href="/dashboard/profile">Profil</Link>
         <Link href="/login">Connexion</Link>
         <Link href="/register">Inscription</Link>

@@ -80,7 +80,7 @@ export default function BalancePage() {
         >
           {/* Envoyer / Demander */}
           <Link
-            href="/dashboard/transfert"
+            href="/dashboard/transfer"
             className="
               bg-blue-600
               hover:bg-blue-700
@@ -140,7 +140,7 @@ export default function BalancePage() {
 
           {/* Factures */}
           <Link
-            href="/dashboard/factures"
+            href="/dashboard/invoices"
             className="
               bg-white
               hover:bg-gray-100

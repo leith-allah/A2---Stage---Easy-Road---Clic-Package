@@ -2,8 +2,14 @@
 "use client";
 
 import Link from "next/link";
+import UserStatusButton from "@/src/features/admin/users/components/UserStatusButton";
+import { useState } from "react";
 
 export default function AgencyDetailsPage() {
+
+  type Status =
+  | "ACTIVE"
+  | "SUSPENDED";
 
   const agency = {
     id: 1,
@@ -23,10 +29,10 @@ export default function AgencyDetailsPage() {
     reservations: 182,
     revenue: 12500000,
     wallet: 884000,
-    status: "ACTIVE",
+    status: "ACTIVE" as Status,
   };
 
-  const users = [
+  const [users, setUsers] = useState([
     {
       id: 1,
       firstname: "Thomas",
@@ -35,7 +41,7 @@ export default function AgencyDetailsPage() {
         "thomas@travelhorizon.com",
       matricule: "USR-001",
       wallet: "WAL-001",
-      status: "ACTIVE",
+      status: "ACTIVE" as Status,
     },
 
     {
@@ -46,7 +52,7 @@ export default function AgencyDetailsPage() {
         "sarah@travelhorizon.com",
       matricule: "USR-002",
       wallet: "WAL-002",
-      status: "SUSPENDED",
+      status: "SUSPENDED" as Status,
     },
 
     {
@@ -57,9 +63,25 @@ export default function AgencyDetailsPage() {
         "lucas@travelhorizon.com",
       matricule: "USR-003",
       wallet: "WAL-003",
-      status: "ACTIVE",
+      status: "ACTIVE" as Status,
     },
-  ];
+  ]);
+
+  function toggleUserStatus(userId: number) {
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.id === userId
+          ? {
+              ...user,
+              status:
+                user.status === "ACTIVE"
+                  ? "SUSPENDED"
+                  : "ACTIVE",
+            }
+          : user
+      )
+    );
+  }
 
   return (
     <section className="min-h-screen bg-gray-100 p-8">
@@ -391,33 +413,12 @@ export default function AgencyDetailsPage() {
                 >
 
                   {/* STATUS */}
-                  <button
-                    className={`
-                      px-5
-                      py-3
-                      rounded-full
-                      font-semibold
-                      transition
-
-                      ${
-                        user.status ===
-                        "ACTIVE"
-                          ? `
-                            bg-green-100
-                            text-green-700
-                          `
-                          : `
-                            bg-red-100
-                            text-red-700
-                          `
-                      }
-                    `}
-                  >
-                    {user.status ===
-                    "ACTIVE"
-                      ? "ACTIF"
-                      : "SUSPENDU"}
-                  </button>
+                  <UserStatusButton
+                    status={user.status}
+                    onStatusChange={() =>
+                      toggleUserStatus(user.id)
+                    }
+                  />
 
                   {/* PROFILE */}
                   <Link
