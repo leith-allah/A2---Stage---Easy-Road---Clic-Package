@@ -93,6 +93,7 @@ export default function HotelSelector({
               name="hotelName"
               value={hotelData.hotelName}
               onChange={handleChange}
+              placeholder="Atlantis The Palm"
               className="w-full border rounded-2xl p-4"
             />
           </div>
@@ -107,6 +108,7 @@ export default function HotelSelector({
               name="stars"
               value={hotelData.stars}
               onChange={handleChange}
+              placeholder="5"
               className="w-full border rounded-2xl p-4"
             />
           </div>
@@ -122,6 +124,7 @@ export default function HotelSelector({
             name="hotelAddress"
             value={hotelData.hotelAddress}
             onChange={handleChange}
+            placeholder="Palm Jumeirah, Dubai"
             className="w-full border rounded-2xl p-4"
           />
         </div>

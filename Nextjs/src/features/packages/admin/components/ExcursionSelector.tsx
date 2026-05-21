@@ -12,7 +12,7 @@ export default function ExcursionSelector({
 }: Props) {
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     setExcursionData({
       ...excursionData,
@@ -58,6 +58,21 @@ export default function ExcursionSelector({
             className="w-full border rounded-2xl p-4"
           />
         </div>
+      </div>
+
+      <div className="mt-6 space-y-2">
+        <label className="font-semibold">
+          Description
+        </label>
+
+        <textarea
+          name="description"
+          value={excursionData.description}
+          onChange={handleChange}
+          rows={1}
+          placeholder="Découvrez les trésors du désert"
+          className="w-full border rounded-2xl p-4 resize-none"
+        />
       </div>
     </div>
   );

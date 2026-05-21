@@ -105,12 +105,24 @@ export default function CreatePackageLayout() {
 
 
         {/* Down */}
-        <div className="grid md:grid-cols-2 gap-8 items-start mt-8">
+        <div className="grid xl:grid-cols-2 gap-8 mt-8 items-start">
+
+          {/* LEFT COLUMN */}
+          <div className="space-y-8">
 
             <HotelSelector
               hotelData={hotelData}
               setHotelData={setHotelData}
             />
+
+            <PricingForm
+              pricingData={pricingData}
+              setPricingData={setPricingData}
+            />
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="space-y-8">
 
             <FlightSelector
               flightData={flightData}
@@ -126,13 +138,9 @@ export default function CreatePackageLayout() {
               excursionData={excursionData}
               setExcursionData={setExcursionData}
             />
-
-            <PricingForm
-              pricingData={pricingData}
-              setPricingData={setPricingData}
-            />
           </div>
         </div>
+      </div>
     </section>
   );
 }
