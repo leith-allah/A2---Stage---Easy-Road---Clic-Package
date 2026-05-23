@@ -1,11 +1,26 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import Link from "next/link";
 
-import { Bell } from "lucide-react";
+import {
+  Bell,
+  CheckCheck,
+  Trash2,
+} from "lucide-react";
+
+import { motion, AnimatePresence }
+from "framer-motion";
+
+import { Notification } from
+"../types/notification.types";
 
 import { mockNotifications } from
 "../data/mockNotifications";
@@ -15,15 +30,91 @@ export default function NotificationBell() {
   const [open, setOpen] =
     useState(false);
 
+  const [notifications, setNotifications] =
+    useState<Notification[]>(
+      mockNotifications
+    );
+
+  const dropdownRef =
+    useRef<HTMLDivElement>(null);
+
+  // CLOSE OUTSIDE
+  useEffect(() => {
+    function handleClickOutside(
+      event: MouseEvent
+    ) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(
+          event.target as Node
+        )
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
+  // UNREAD
   const unreadCount = useMemo(() => {
-    return mockNotifications.filter(
+    return notifications.filter(
       (notification) =>
         !notification.read
     ).length;
-  }, []);
+  }, [notifications]);
+
+  // MARK AS READ
+  const markAsRead = (id: number) => {
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification.id === id
+          ? {
+              ...notification,
+              read: true,
+            }
+          : notification
+      )
+    );
+  };
+
+  // MARK ALL
+  const markAllAsRead = () => {
+    setNotifications((prev) =>
+      prev.map((notification) => ({
+        ...notification,
+        read: true,
+      }))
+    );
+  };
+
+  // DELETE
+  const deleteNotification = (
+    id: number
+  ) => {
+    setNotifications((prev) =>
+      prev.filter(
+        (notification) =>
+          notification.id !== id
+      )
+    );
+  };
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      ref={dropdownRef}
+    >
 
       {/* BUTTON */}
       <button
@@ -38,7 +129,6 @@ export default function NotificationBell() {
       >
         <Bell size={24} />
 
-        {/* BADGE */}
         {unreadCount > 0 && (
           <div
             className="
@@ -64,116 +154,208 @@ export default function NotificationBell() {
       </button>
 
       {/* DROPDOWN */}
-      {open && (
-        <div
-          className="
-            absolute
-            right-0
-            mt-4
-            w-[380px]
-            bg-white
-            rounded-3xl
-            shadow-2xl
-            border
-            overflow-hidden
-            z-50
-          "
-        >
+      <AnimatePresence>
 
-          {/* HEADER */}
-          <div
+        {open && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: -10,
+              scale: 0.98,
+            }}
+
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+
+            exit={{
+              opacity: 0,
+              y: -10,
+              scale: 0.98,
+            }}
+
+            transition={{
+              duration: 0.2,
+            }}
+
             className="
-              p-5
-              border-b
-              flex
-              justify-between
-              items-center
+              absolute
+              right-0
+              mt-4
+              w-[420px]
+              bg-white
+              rounded-3xl
+              shadow-2xl
+              border
+              overflow-hidden
+              z-50
             "
           >
-            <h3 className="text-xl font-bold">
-              Notifications
-            </h3>
 
-            <Link
-              href="/dashboard/notifications"
+            {/* HEADER */}
+            <div
               className="
-                text-blue-600
-                font-semibold
-                text-sm
-                hover:underline
+                p-5
+                border-b
+                flex
+                justify-between
+                items-center
               "
             >
-              Voir tout
-            </Link>
-          </div>
+              <div>
+                <h3 className="text-xl font-bold">
+                  Notifications
+                </h3>
 
-          {/* LIST */}
-          <div className="max-h-[420px] overflow-y-auto">
+                <p className="text-sm text-gray-500">
+                  {unreadCount} non lue(s)
+                </p>
+              </div>
 
-            {mockNotifications.map(
-              (notification) => (
-                <div
-                  key={notification.id}
-                  className={`
-                    p-5
-                    border-b
-                    hover:bg-gray-50
+              <div className="flex gap-3">
+
+                <button
+                  onClick={markAllAsRead}
+                  className="
+                    text-blue-600
+                    hover:text-blue-700
                     transition
-
-                    ${
-                      !notification.read
-                        ? "bg-blue-50"
-                        : ""
-                    }
-                  `}
+                  "
                 >
-                  <div className="flex gap-3">
+                  <CheckCheck size={20} />
+                </button>
 
-                    {!notification.read && (
-                      <div
-                        className="
-                          w-2.5
-                          h-2.5
-                          rounded-full
-                          bg-blue-600
-                          mt-2
-                        "
-                      />
-                    )}
+                <Link
+                  href="/dashboard/notifications"
+                  className="
+                    text-sm
+                    font-semibold
+                    text-blue-600
+                    hover:underline
+                  "
+                >
+                  Voir tout
+                </Link>
+              </div>
+            </div>
 
-                    <div>
-                      <h4 className="font-bold">
-                        {notification.title}
-                      </h4>
+            {/* LIST */}
+            <div className="max-h-[450px] overflow-y-auto">
 
-                      <p
-                        className="
-                          text-sm
-                          text-gray-600
-                          mt-1
-                        "
-                      >
-                        {notification.message}
-                      </p>
+              {notifications.length === 0 && (
+                <div className="p-10 text-center">
+                  <p className="text-gray-500">
+                    Aucune notification.
+                  </p>
+                </div>
+              )}
 
-                      <p
-                        className="
-                          text-xs
-                          text-gray-400
-                          mt-2
-                        "
-                      >
-                        {notification.createdAt}
-                      </p>
+              {notifications.map(
+                (notification) => (
+                  <div
+                    key={notification.id}
+                    onClick={() =>
+                      markAsRead(
+                        notification.id
+                      )
+                    }
+                    className={`
+                      p-5
+                      border-b
+                      hover:bg-gray-50
+                      transition
+                      cursor-pointer
+
+                      ${
+                        !notification.read
+                          ? "bg-blue-50"
+                          : ""
+                      }
+                    `}
+                  >
+                    <div className="flex gap-4">
+
+                      {!notification.read && (
+                        <div
+                          className="
+                            w-2.5
+                            h-2.5
+                            rounded-full
+                            bg-blue-600
+                            mt-2
+                          "
+                        />
+                      )}
+
+                      <div className="flex-1">
+
+                        <div
+                          className="
+                            flex
+                            justify-between
+                            gap-4
+                          "
+                        >
+                          <h4 className="font-bold">
+                            {
+                              notification.title
+                            }
+                          </h4>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+
+                              deleteNotification(
+                                notification.id
+                              );
+                            }}
+                            className="
+                              text-gray-400
+                              hover:text-red-500
+                              transition
+                            "
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+
+                        <p
+                          className="
+                            text-sm
+                            text-gray-600
+                            mt-1
+                          "
+                        >
+                          {
+                            notification.message
+                          }
+                        </p>
+
+                        <p
+                          className="
+                            text-xs
+                            text-gray-400
+                            mt-2
+                          "
+                        >
+                          {
+                            notification.createdAt
+                          }
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            )}
+                )
+              )}
 
-          </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+
+      </AnimatePresence>
     </div>
   );
 }
