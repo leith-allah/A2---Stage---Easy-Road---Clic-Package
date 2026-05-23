@@ -1,210 +1,312 @@
 
 "use client";
 
+import { useParams } from "next/navigation";
+
 import Link from "next/link";
 
-export default function BookingDetailsPage() {
-  const booking = {
-    id: "RES-2026-001",
+import QRCode from "react-qr-code";
 
-    status: "Confirmée",
+import InvoicePDF from
+"@/src/features/reservations/components/InvoicePDF";
 
-    paymentStatus: "Payé",
+import {
+  Plane,
+  Hotel,
+  MapPin,
+  Calendar,
+  Users,
+  CreditCard,
+} from "lucide-react";
 
-    packageName: "Dubai Luxury Experience",
+import { mockBookings }
+from "@/src/features/reservations/data/mockBookings";
 
-    destination: "Dubai, Émirats Arabes Unis",
+import BookingStatusBadge
+from "@/src/features/reservations/components/BookingStatusBadge";
 
-    travelers: 2,
+export default function
+BookingDetailsPage() {
 
-    departureDate: "15 Juin 2026",
+  const params = useParams();
 
-    returnDate: "22 Juin 2026",
+  const booking = mockBookings.find(
+    (booking) =>
+      booking.id === Number(params.id)
+  );
 
-    airline: "Emirates",
-
-    flightNumber: "EK204",
-
-    departureAirport: "Aéroport d'Alger",
-
-    departureTime: "09:45",
-
-    arrivalTime: "18:20",
-
-    returnDepartureTime: "11:15",
-
-    returnArrivalTime: "16:40",
-
-    flightClass: "Business",
-
-    hotel: "Atlantis The Palm",
-
-    stars: 5,
-
-    roomType: "Suite Deluxe",
-
-    pension: "All Inclusive",
-
-    address:
-      "Crescent Rd - Palm Jumeirah - Dubai",
-
-    transport:
-      "Aéroport → Hôtel → Aéroport",
-
-    transportCompany: "Dubai Luxury Transport",
-
-    excursion: "Safari Premium Désert",
-
-    excursionLocation: "Dubai Desert",
-
-    excursionDescription:
-      "Safari VIP avec dîner gastronomique et spectacle.",
-
-    subtotal: 680000,
-
-    discount: 50000,
-
-    total: 630000,
-
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
-  };
-
-  const statusColor =
-    booking.status === "Confirmée"
-      ? "bg-green-100 text-green-700"
-      : "bg-orange-100 text-orange-700";
+  if (!booking) {
+    return (
+      <section className="p-10">
+        <h1 className="text-3xl font-bold">
+          Réservation introuvable
+        </h1>
+      </section>
+    );
+  }
 
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-6">
+    <section className="min-h-screen bg-gray-100 p-8">
 
       <div className="max-w-7xl mx-auto space-y-8">
 
-        {/* HEADER */}
+        {/* TOP */}
         <div
           className="
-            bg-white
-            rounded-3xl
-            shadow-lg
-            overflow-hidden
+            flex
+            flex-col
+            xl:flex-row
+            justify-between
+            gap-6
           "
         >
 
-          <div className="relative h-[350px]">
+          {/* LEFT */}
+          <div>
 
-            <img
-              src={booking.image}
-              alt={booking.packageName}
-              className="
-                w-full
-                h-full
-                object-cover
-              "
-            />
+            <div className="flex gap-4 items-center">
 
-            <div
-              className="
-                absolute
-                inset-0
-                bg-black/40
-              "
-            />
-
-            <div
-              className="
-                absolute
-                bottom-0
-                left-0
-                p-10
-                text-white
-              "
-            >
-
-              <p className="text-sm opacity-80">
-                {booking.id}
-              </p>
-
-              <h1 className="text-5xl font-bold mt-2">
-                {booking.packageName}
+              <h1
+                className="
+                  text-5xl
+                  font-bold
+                  text-blue-600
+                "
+              >
+                {booking.packageTitle}
               </h1>
 
-              <p className="mt-3 text-xl opacity-90">
-                {booking.destination}
-              </p>
+              <BookingStatusBadge
+                status={booking.status}
+              />
+            </div>
 
-              <div className="flex gap-4 mt-6">
+            <p
+              className="
+                text-gray-600
+                mt-3
+                text-lg
+              "
+            >
+              {booking.destination}
+            </p>
+
+            <p
+              className="
+                text-gray-500
+                mt-2
+              "
+            >
+              🎫 {booking.bookingNumber}
+            </p>
+          </div>
+
+          {/* ACTIONS */}
+          <div className="flex gap-4">
+
+            <button
+              className="
+                bg-red-100
+                text-red-600
+                hover:bg-red-200
+                transition
+                px-6
+                py-3
+                rounded-full
+                font-semibold
+              "
+            >
+              Annuler
+            </button>
+
+            <InvoicePDF booking={booking} />
+          </div>
+        </div>
+
+        {/* MAIN */}
+        <div
+          className="
+            grid
+            xl:grid-cols-[1fr_350px]
+            gap-8
+            items-start
+          "
+        >
+
+          {/* LEFT */}
+          <div className="space-y-8">
+
+            {/* IMAGE */}
+            <div
+              className="
+                bg-white
+                rounded-3xl
+                overflow-hidden
+                shadow-lg
+              "
+            >
+              <img
+                src={booking.image}
+                alt={booking.packageTitle}
+                className="
+                  w-full
+                  h-[450px]
+                  object-cover
+                "
+              />
+            </div>
+
+            {/* TRAVEL INFO */}
+            <div
+              className="
+                bg-white
+                rounded-3xl
+                shadow-lg
+                p-8
+              "
+            >
+              <h2
+                className="
+                  text-3xl
+                  font-bold
+                  mb-8
+                "
+              >
+                Informations Voyage
+              </h2>
+
+              <div
+                className="
+                  grid
+                  md:grid-cols-2
+                  gap-6
+                "
+              >
 
                 <div
-                  className={`
-                    px-5
-                    py-2
-                    rounded-full
-                    font-semibold
-                    ${statusColor}
-                  `}
+                  className="
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
+                  "
                 >
-                  {booking.status}
+                  <Plane
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Compagnie
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    Emirates
+                  </h3>
                 </div>
 
                 <div
                   className="
-                    bg-blue-100
-                    text-blue-700
-                    px-5
-                    py-2
-                    rounded-full
-                    font-semibold
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
                   "
                 >
-                  {booking.paymentStatus}
+                  <Hotel
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Hôtel
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    Atlantis The Palm
+                  </h3>
+                </div>
+
+                <div
+                  className="
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
+                  "
+                >
+                  <Calendar
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Départ
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    {
+                      booking.departureDate
+                    }
+                  </h3>
+                </div>
+
+                <div
+                  className="
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
+                  "
+                >
+                  <Calendar
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Retour
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    {booking.returnDate}
+                  </h3>
+                </div>
+
+                <div
+                  className="
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
+                  "
+                >
+                  <Users
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Voyageurs
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    {booking.travelers}
+                  </h3>
+                </div>
+
+                <div
+                  className="
+                    bg-gray-50
+                    rounded-2xl
+                    p-5
+                  "
+                >
+                  <MapPin
+                    className="mb-4"
+                  />
+
+                  <p className="text-gray-500">
+                    Destination
+                  </p>
+
+                  <h3 className="font-bold text-lg">
+                    {booking.destination}
+                  </h3>
                 </div>
 
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* GRID */}
-        <div className="grid xl:grid-cols-3 gap-8 items-start">
-
-          {/* LEFT */}
-          <div className="xl:col-span-2 space-y-8">
-
-            {/* VOYAGE */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-
-              <h2 className="text-3xl font-bold mb-8">
-                Informations Voyage
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-8">
-
-                <Info
-                  label="Date Départ"
-                  value={booking.departureDate}
-                />
-
-                <Info
-                  label="Date Retour"
-                  value={booking.returnDate}
-                />
-
-                <Info
-                  label="Voyageurs"
-                  value={booking.travelers}
-                />
-
-                <Info
-                  label="Destination"
-                  value={booking.destination}
-                />
-
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT */}
-          <div className="space-y-8">
 
             {/* PAYMENT */}
             <div
@@ -213,311 +315,229 @@ export default function BookingDetailsPage() {
                 rounded-3xl
                 shadow-lg
                 p-8
-                sticky
-                top-8
               "
             >
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-4
+                  mb-8
+                "
+              >
+                <CreditCard />
 
-              <h2 className="text-3xl font-bold mb-8">
-                Paiement
-              </h2>
-
-              <div className="space-y-5">
-
-                <Price
-                  label="Sous-total"
-                  value={booking.subtotal}
-                />
-
-                <Price
-                  label="Remise"
-                  value={-booking.discount}
-                />
-
-                <div className="border-t pt-5">
-
-                  <div className="flex justify-between items-center">
-
-                    <span className="text-lg font-semibold">
-                      Total Final
-                    </span>
-
-                    <span
-                      className="
-                        text-3xl
-                        font-bold
-                        text-blue-600
-                      "
-                    >
-                      {booking.total.toLocaleString()} DZD
-                    </span>
-                  </div>
-                </div>
+                <h2
+                  className="
+                    text-3xl
+                    font-bold
+                  "
+                >
+                  Paiement
+                </h2>
               </div>
 
-              {/* ACTIONS */}
-              <div className="space-y-4 mt-10">
+              <div
+                className="
+                  flex
+                  justify-between
+                  items-center
+                "
+              >
+                <div>
+                  <p className="text-gray-500">
+                    Montant payé
+                  </p>
 
-                <button
+                  <h3
+                    className="
+                      text-4xl
+                      font-bold
+                      text-blue-600
+                    "
+                  >
+                    {
+                      booking.totalPrice
+                        .toLocaleString()
+                    }
+                    {" "}
+                    DZD
+                  </h3>
+                </div>
+
+                <div
                   className="
-                    w-full
-                    bg-blue-600
-                    hover:bg-blue-700
-                    transition
-                    text-white
-                    py-4
+                    bg-green-100
+                    text-green-700
+                    px-5
+                    py-3
                     rounded-full
                     font-semibold
                   "
                 >
-                  Télécharger Facture
-                </button>
-
-                <button
-                  className="
-                    w-full
-                    border
-                    border-gray-300
-                    hover:bg-gray-100
-                    transition
-                    py-4
-                    rounded-full
-                    font-semibold
-                  "
-                >
-                  Imprimer
-                </button>
-
-                <button
-                  className="
-                    w-full
-                    border
-                    border-red-300
-                    text-red-500
-                    hover:bg-red-50
-                    transition
-                    py-4
-                    rounded-full
-                    font-semibold
-                  "
-                >
-                  Annuler Réservation
-                </button>
-
+                  PAYÉ
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
+          {/* RIGHT */}
+          <div className="space-y-8">
 
-        {/* Down */}
-        <div className="grid md:grid-cols-2 gap-8 items-start mt-8">
-
-            {/* FLIGHT */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-
-              <h2 className="text-3xl font-bold mb-8">
-                Vol
+            {/* QR */}
+            <div
+              className="
+                bg-white
+                rounded-3xl
+                shadow-lg
+                p-8
+                text-center
+              "
+            >
+              <h2
+                className="
+                  text-2xl
+                  font-bold
+                  mb-6
+                "
+              >
+                QR Ticket
               </h2>
 
-              <div className="grid md:grid-cols-2 gap-8">
-
-                <Info
-                  label="Compagnie"
-                  value={booking.airline}
+              <div
+                className="
+                  bg-white
+                  p-5
+                  rounded-2xl
+                  inline-block
+                "
+              >
+                <QRCode
+                  value={booking.bookingNumber}
+                  size={220}
                 />
-
-                <Info
-                  label="Numéro Vol"
-                  value={booking.flightNumber}
-                />
-
-                <Info
-                  label="Départ"
-                  value={booking.departureTime}
-                />
-
-                <Info
-                  label="Arrivée"
-                  value={booking.arrivalTime}
-                />
-
-                <Info
-                  label="Retour Départ"
-                  value={booking.returnDepartureTime}
-                />
-
-                <Info
-                  label="Retour Arrivée"
-                  value={booking.returnArrivalTime}
-                />
-
-                <Info
-                  label="Classe"
-                  value={booking.flightClass}
-                />
-
-                <Info
-                  label="Aéroport"
-                  value={booking.departureAirport}
-                />
-
               </div>
+
+              <p
+                className="
+                  text-gray-500
+                  mt-5
+                "
+              >
+                Présentez ce QR code
+                lors du check-in.
+              </p>
             </div>
 
-            {/* HOTEL */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-
-              <h2 className="text-3xl font-bold mb-8">
-                Hôtel
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-8">
-
-                <Info
-                  label="Nom Hôtel"
-                  value={booking.hotel}
-                />
-
-                <Info
-                  label="Étoiles"
-                  value={`${booking.stars} ★`}
-                />
-
-                <Info
-                  label="Chambre"
-                  value={booking.roomType}
-                />
-
-                <Info
-                  label="Pension"
-                  value={booking.pension}
-                />
-
-                <Info
-                  label="Adresse"
-                  value={booking.address}
-                />
-
-              </div>
-            </div>
-          
-            {/* TRANSPORT */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-
-              <h2 className="text-3xl font-bold mb-8">
-                Transport
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-8">
-
-                <Info
-                  label="Société"
-                  value={booking.transportCompany}
-                />
-
-                <Info
-                  label="Trajet"
-                  value={booking.transport}
-                />
-
-              </div>
-            </div>
-
-            {/* EXCURSION */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-
-              <h2 className="text-3xl font-bold mb-8">
-                Excursion
+            {/* TIMELINE */}
+            <div
+              className="
+                bg-white
+                rounded-3xl
+                shadow-lg
+                p-8
+              "
+            >
+              <h2
+                className="
+                  text-2xl
+                  font-bold
+                  mb-8
+                "
+              >
+                Historique
               </h2>
 
               <div className="space-y-6">
 
-                <Info
-                  label="Nom"
-                  value={booking.excursion}
-                />
+                <div className="flex gap-4">
+                  <div
+                    className="
+                      w-4
+                      h-4
+                      rounded-full
+                      bg-green-500
+                      mt-1
+                    "
+                  />
 
-                <Info
-                  label="Lieu"
-                  value={booking.excursionLocation}
-                />
+                  <div>
+                    <h3 className="font-bold">
+                      Réservation confirmée
+                    </h3>
 
-                <div>
-                  <p className="text-gray-500 text-sm">
-                    Description
-                  </p>
+                    <p className="text-gray-500 text-sm">
+                      21 Mai 2026
+                    </p>
+                  </div>
+                </div>
 
-                  <p className="font-semibold mt-2">
-                    {booking.excursionDescription}
-                  </p>
+                <div className="flex gap-4">
+                  <div
+                    className="
+                      w-4
+                      h-4
+                      rounded-full
+                      bg-blue-500
+                      mt-1
+                    "
+                  />
+
+                  <div>
+                    <h3 className="font-bold">
+                      Paiement reçu
+                    </h3>
+
+                    <p className="text-gray-500 text-sm">
+                      21 Mai 2026
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div
+                    className="
+                      w-4
+                      h-4
+                      rounded-full
+                      bg-yellow-500
+                      mt-1
+                    "
+                  />
+
+                  <div>
+                    <h3 className="font-bold">
+                      Ticket généré
+                    </h3>
+
+                    <p className="text-gray-500 text-sm">
+                      22 Mai 2026
+                    </p>
+                  </div>
                 </div>
 
               </div>
             </div>
+
+            {/* BACK */}
+            <Link
+              href="/dashboard/bookings"
+              className="
+                block
+                bg-gray-200
+                hover:bg-gray-300
+                transition
+                text-center
+                py-4
+                rounded-full
+                font-semibold
+              "
+            >
+              Retour Réservations
+            </Link>
+          </div>
         </div>
-
-
-        {/* BACK */}
-        <Link
-          href="/dashboard/bookings"
-          className="
-            inline-flex
-            items-center
-            gap-2
-            text-blue-600
-            hover:underline
-            font-semibold
-          "
-        >
-          ← Retour aux réservations
-        </Link>
-
       </div>
     </section>
-  );
-}
-
-/* INFO */
-function Info({
-  label,
-  value,
-}: {
-  label: string;
-  value: string | number;
-}) {
-  return (
-    <div>
-      <p className="text-gray-500 text-sm">
-        {label}
-      </p>
-
-      <p className="font-semibold text-lg mt-1">
-        {value}
-      </p>
-    </div>
-  );
-}
-
-/* PRICE */
-function Price({
-  label,
-  value,
-}: {
-  label: string;
-  value: number;
-}) {
-  return (
-    <div className="flex justify-between items-center">
-
-      <span className="text-gray-600">
-        {label}
-      </span>
-
-      <span className="font-semibold">
-        {value.toLocaleString()} DZD
-      </span>
-
-    </div>
   );
 }

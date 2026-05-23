@@ -7,6 +7,8 @@ import Link from "next/link";
 
 import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
 
+import ReserveButton from "@/src/features/offers/components/ReserveButton";
+
 export default function PackageDetailsPage() {
   const packageData = {
     id: 1,
@@ -554,22 +556,9 @@ export default function PackageDetailsPage() {
               </div>
 
               {/* CTA */}
-              <button
-                className="
-                  w-full
-                  mt-10
-                  bg-blue-600
-                  hover:bg-blue-700
-                  transition
-                  text-white
-                  py-5
-                  rounded-2xl
-                  text-lg
-                  font-bold
-                "
-              >
-                Réserver Maintenant
-              </button>
+              <ReserveButton
+                total={finalPrice}
+              />
 
               <Link
                 href="/dashboard/offers"
