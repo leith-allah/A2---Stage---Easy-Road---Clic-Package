@@ -1,30 +1,24 @@
 
 export type BookingStatus =
-  | "PENDING"
   | "CONFIRMED"
+  | "PENDING"
   | "CANCELLED"
   | "REFUNDED";
 
 export type Booking = {
   id: number;
 
-  bookingNumber: string;
+  packageId: number;
 
   packageTitle: string;
 
-  destination: string;
-
-  image: string;
-
   travelers: number;
 
-  totalPrice: number;
-
-  departureDate: string;
-
-  returnDate: string;
+  total: number;
 
   createdAt: string;
+
+  departureDate: string;
 
   status: BookingStatus;
 };

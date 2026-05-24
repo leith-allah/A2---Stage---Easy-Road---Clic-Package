@@ -68,7 +68,7 @@ export default function ReserveButton({
     <>
       <button
         onClick={handleReserve}
-        disabled={loading}
+        disabled={loading || !wallet}
         className="
           w-full
           bg-blue-600
