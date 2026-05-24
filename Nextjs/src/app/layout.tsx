@@ -17,6 +17,10 @@ import {TransactionProvider} from "@/src/providers/TransactionProvider";
 
 import {PackageProvider} from "@/src/providers/PackageProvider";
 
+import {AuthProvider} from "@/src/providers/AuthProvider";
+
+import RoleSwitcher from "@/src/components/dev/RoleSwitcher";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,21 +52,25 @@ export default function RootLayout({
         antialiased
       `}
     >
+
       <body className="min-h-full flex flex-col">
         <Header />
 
         <main className="flex-1 p-6">
-          <WalletProvider>
-            <NotificationProvider>
-              <BookingProvider>
-                <TransactionProvider>
-                  <PackageProvider>
-                    {children}
-                  </PackageProvider>
-                </TransactionProvider>
-              </BookingProvider>
-            </NotificationProvider>
-          </WalletProvider>
+          <AuthProvider>
+            <WalletProvider>
+              <NotificationProvider>
+                <BookingProvider>
+                  <TransactionProvider>
+                    <PackageProvider>
+                      {children}
+                      <RoleSwitcher />
+                    </PackageProvider>
+                  </TransactionProvider>
+                </BookingProvider>
+              </NotificationProvider>
+            </WalletProvider>
+          </AuthProvider>
         </main>
 
         <Footer />

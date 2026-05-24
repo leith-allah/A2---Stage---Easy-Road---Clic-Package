@@ -1,6 +1,11 @@
 
 import Sidebar from "@/src/features/dashboard/components/Sidebar";
 
+import ProtectedRoute from "@/src/components/auth/ProtectedRoute";
+
+import {ROLES} from "@/src/constants/roles";
+
+
 export default function DashboardLayout({
   children,
 }: {
@@ -11,7 +16,14 @@ export default function DashboardLayout({
       {/* <Sidebar /> */}
 
       <main className="flex-1 p-6 overflow-y-auto">
-        {children}
+        <ProtectedRoute
+          allowedRoles={[
+            ROLES.CLIENT,
+            ROLES.AGENCY,
+          ]}
+        >
+          {children}
+        </ProtectedRoute>
       </main>
     </div>
   );

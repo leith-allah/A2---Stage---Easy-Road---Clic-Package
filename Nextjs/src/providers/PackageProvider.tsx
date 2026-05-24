@@ -9,7 +9,7 @@ import {
 } from "react";
 
 import {
-  getPackages,
+  fetchPackages,
 } from "@/src/features/packages/services/package.service";
 
 import {
@@ -47,7 +47,7 @@ PackageProvider({
   async function refresh() {
 
     const data =
-      await getPackages();
+      await fetchPackages();
 
     setPackages([...data]);
   }

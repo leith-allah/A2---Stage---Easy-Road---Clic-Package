@@ -1,4 +1,6 @@
 
+import {api} from "@/src/lib/api";
+
 export type Package = {
   id: number;
 
@@ -57,4 +59,20 @@ decreasePackageStock(
           quantity,
       };
     });
+}
+
+export async function
+fetchPackages() {
+
+  try {
+
+    return await api(
+      "/packages"
+    );
+
+  } catch {
+
+    // FALLBACK MOCK
+    return mockPackages;
+  }
 }
