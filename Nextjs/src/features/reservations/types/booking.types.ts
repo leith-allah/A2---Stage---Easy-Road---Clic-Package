@@ -5,6 +5,7 @@ export type BookingStatus =
   | "CANCELLED"
   | "REFUNDED";
 
+
 export type Booking = {
   id: number;
 
