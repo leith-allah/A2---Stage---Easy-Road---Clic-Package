@@ -8,7 +8,7 @@ import Link from "next/link";
 import QRCode from "react-qr-code";
 
 import InvoicePDF from
-"@/src/features/reservations/components/InvoicePDF";
+"@/src/features/bookings/components/InvoicePDF";
 
 import {
   Plane,
@@ -20,10 +20,10 @@ import {
 } from "lucide-react";
 
 import { mockBookings }
-from "@/src/features/reservations/data/mockBookings";
+from "@/src/features/bookings/data/mockBookings";
 
 import BookingStatusBadge
-from "@/src/features/reservations/components/BookingStatusBadge";
+from "@/src/features/bookings/components/BookingStatusBadge";
 
 export default function
 BookingDetailsPage() {

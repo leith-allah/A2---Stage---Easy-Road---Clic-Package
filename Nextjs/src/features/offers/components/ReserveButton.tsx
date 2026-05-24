@@ -9,6 +9,10 @@ import useWallet from
 import InsufficientFundsModal from
 "@/src/features/wallet/components/InsufficientFundsModal";
 
+import {createBookingFlow} from 
+"@/src/features/bookings/services/bookingFlow.service";
+
+
 type Props = {
   total: number;
 };
@@ -44,24 +48,38 @@ export default function ReserveButton({
     }
 
     try {
+
       setLoading(true);
 
-      if (wallet.balance < total) {
-        setError(true);
+      await createBookingFlow({
+        packageId: 1,
 
-        return;
-      }
+        packageTitle:
+          "Dubai Luxury",
 
-      await pay(total);
+        travelers: 2,
+
+        total,
+
+        departureDate:
+          "2026-08-12",
+
+        remainingTickets: 12,
+      });
 
       setSuccess(true);
 
-    } catch {
+    } catch (error) {
+
+      console.log(error);
+
       setError(true);
 
     } finally {
+
       setLoading(false);
     }
+
   }
 
   return (

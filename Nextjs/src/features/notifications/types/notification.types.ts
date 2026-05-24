@@ -1,16 +1,9 @@
 
 export type NotificationType =
   | "SUCCESS"
+  | "INFO"
   | "WARNING"
-  | "ERROR"
-  | "INFO";
-
-export type NotificationCategory =
-  | "BOOKING"
-  | "PAYMENT"
-  | "ACCOUNT"
-  | "PACKAGE"
-  | "SYSTEM";
+  | "ERROR";
 
 export type Notification = {
   id: number;
@@ -21,9 +14,7 @@ export type Notification = {
 
   type: NotificationType;
 
-  category: NotificationCategory;
+  createdAt: string;
 
   read: boolean;
-
-  createdAt: string;
 };

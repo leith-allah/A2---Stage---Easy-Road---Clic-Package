@@ -7,6 +7,17 @@ import "./globals.css";
 import Header from "@/src/components/layout/Header";
 import Footer from "@/src/components/layout/Footer";
 
+import {WalletProvider} from "@/src/providers/WalletProvider";
+
+import {NotificationProvider} from "@/src/providers/NotificationProvider";
+
+import {BookingProvider} from "@/src/providers/BookingProvider";
+
+import {TransactionProvider} from "@/src/providers/TransactionProvider";
+
+import {PackageProvider} from "@/src/providers/PackageProvider";
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -41,7 +52,17 @@ export default function RootLayout({
         <Header />
 
         <main className="flex-1 p-6">
-          {children}
+          <WalletProvider>
+            <NotificationProvider>
+              <BookingProvider>
+                <TransactionProvider>
+                  <PackageProvider>
+                    {children}
+                  </PackageProvider>
+                </TransactionProvider>
+              </BookingProvider>
+            </NotificationProvider>
+          </WalletProvider>
         </main>
 
         <Footer />
