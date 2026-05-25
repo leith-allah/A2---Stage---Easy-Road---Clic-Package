@@ -21,6 +21,12 @@ import {AuthProvider} from "@/src/providers/AuthProvider";
 
 import RoleSwitcher from "@/src/components/dev/RoleSwitcher";
 
+import {Toaster} from "sonner";
+
+import {LoadingProvider} from "@/src/providers/LoadingProvider";
+
+import GlobalLoader from "@/src/components/ui/GlobalLoader";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,20 +63,26 @@ export default function RootLayout({
         <Header />
 
         <main className="flex-1 p-6">
-          <AuthProvider>
-            <WalletProvider>
-              <NotificationProvider>
-                <BookingProvider>
-                  <TransactionProvider>
-                    <PackageProvider>
-                      {children}
-                      <RoleSwitcher />
-                    </PackageProvider>
-                  </TransactionProvider>
-                </BookingProvider>
-              </NotificationProvider>
-            </WalletProvider>
-          </AuthProvider>
+            <LoadingProvider>
+              <AuthProvider>
+                <WalletProvider>
+                  <NotificationProvider>
+                    <BookingProvider>
+                      <TransactionProvider>
+                        <PackageProvider>
+                          {children}
+                          <RoleSwitcher />
+                        </PackageProvider>
+                      </TransactionProvider>
+                    </BookingProvider>
+                  </NotificationProvider>
+                </WalletProvider>
+              </AuthProvider>
+            </LoadingProvider>
+          <Toaster
+            position="top-right"
+            richColors
+          />
         </main>
 
         <Footer />

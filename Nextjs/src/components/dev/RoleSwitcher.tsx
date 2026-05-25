@@ -1,8 +1,17 @@
 
 "use client";
 
-import useAuth
-  from "@/src/features/auth/hooks/useAuth";
+import useAuth from "@/src/features/auth/hooks/useAuth";
+
+import {toast} from "sonner";
+
+import useLoading from "@/src/hooks/useLoading";
+
+
+const {
+  startLoading,
+  stopLoading,
+} = useLoading();
 
 export default function
 RoleSwitcher() {
@@ -69,7 +78,18 @@ RoleSwitcher() {
       <div className="space-y-3">
 
         <button
-          onClick={loginAsAdmin}
+          onClick={() => {
+
+                startLoading();
+
+                setTimeout(() => {
+
+                    loginAsAdmin();
+
+                    stopLoading();
+
+                }, 1500);
+          }}
           className="
             w-full
             bg-red-500
@@ -86,7 +106,18 @@ RoleSwitcher() {
         </button>
 
         <button
-          onClick={loginAsAgency}
+          onClick={() => {
+
+                startLoading();
+
+                setTimeout(() => {
+
+                    loginAsAgency();
+
+                    stopLoading();
+
+                }, 1500);
+          }}
           className="
             w-full
             bg-blue-500
@@ -103,7 +134,18 @@ RoleSwitcher() {
         </button>
 
         <button
-          onClick={loginAsClient}
+          onClick={() => {
+
+                startLoading();
+
+                setTimeout(() => {
+
+                    loginAsClient();
+
+                    stopLoading();
+
+                }, 1500);
+          }}
           className="
             w-full
             bg-green-500
@@ -120,7 +162,18 @@ RoleSwitcher() {
         </button>
 
         <button
-          onClick={logout}
+          onClick={() => {
+
+                startLoading();
+
+                setTimeout(() => {
+
+                    logout();
+
+                    stopLoading();
+
+                }, 1500);
+          }}
           className="
             w-full
             border

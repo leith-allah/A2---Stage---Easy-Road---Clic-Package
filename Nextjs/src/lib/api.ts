@@ -1,4 +1,6 @@
 
+import {ApiError} from "./api-error";
+
 const API_URL =
   process.env
     .NEXT_PUBLIC_API_URL ||
@@ -55,9 +57,10 @@ export async function api(
     const error =
       await response.json();
 
-    throw new Error(
+    throw new ApiError(
       error.message ||
-      "Erreur API"
+      "Erreur API",
+      response.status
     );
   }
 
