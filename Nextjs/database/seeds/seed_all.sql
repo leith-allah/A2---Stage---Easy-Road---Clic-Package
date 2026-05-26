@@ -25,3 +25,29 @@
 \i reference/types_notification.sql
 \i reference/types_reduction.sql
 \i reference/types_transaction.sql
+
+
+
+-- =========================
+-- REFERENCE
+-- =========================
+
+\i reference/roles.sql
+\i reference/pensions.sql
+
+-- =========================
+-- CATALOG
+-- =========================
+
+\i catalog/hotels.sql
+\i catalog/excursions.sql
+\i catalog/packages.sql
+\i catalog/transports.sql
+\i catalog/flights.sql
+\i catalog/promotions.sql
+
+-- =========================
+-- DEMO
+-- =========================
+
+\i demo/fake_users.sql
