@@ -3,7 +3,7 @@ import {
   FlightClass,
   PensionType,
   RoomType,
-} from "../types/offer.types";
+} from "@/types/offer.types";
 
 type Params = {
   basePrice: number;

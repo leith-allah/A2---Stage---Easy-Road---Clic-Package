@@ -20,10 +20,10 @@ import { motion, AnimatePresence }
 from "framer-motion";
 
 import { Notification } from
-"../types/notification.types";
+"@/types/notification.types";
 
 import { mockNotifications } from
-"../data/mockNotifications";
+"@/data/mockNotifications";
 
 export default function NotificationBell() {
 

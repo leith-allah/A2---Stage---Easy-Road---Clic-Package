@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Notification } from "../types/notification.types";
+import { Notification } from "@/types/notification.types";
 
 type Props = {
   notification: Notification;

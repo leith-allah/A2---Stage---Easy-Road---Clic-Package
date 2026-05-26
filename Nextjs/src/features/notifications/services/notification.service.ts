@@ -1,7 +1,7 @@
 
 import {
   Notification,
-} from "../types/notification.types";
+} from "@/types/notification.types";
 
 export let mockNotifications:
   Notification[] = [

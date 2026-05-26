@@ -8,7 +8,7 @@ import html2canvas from "html2canvas-pro";
 import QRCode from "react-qr-code";
 
 import { Booking }
-from "../types/booking.types";
+from "@/types/booking.types";
 
 type Props = {
   booking: Booking;

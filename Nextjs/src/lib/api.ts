@@ -2,9 +2,8 @@
 import {ApiError} from "./api-error";
 
 const API_URL =
-  process.env
-    .NEXT_PUBLIC_API_URL ||
-  "http://localhost:3001";
+  process.env.NEXT_PUBLIC_API_URL ||
+  "/api";
 
 type ApiOptions = {
   method?: string;
@@ -33,6 +32,8 @@ export async function api(
       `${API_URL}${endpoint}`,
       {
         method,
+
+        credentials: "include",
 
         headers: {
           "Content-Type":

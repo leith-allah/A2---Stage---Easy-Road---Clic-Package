@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 import { Booking }
-from "../types/booking.types";
+from "@/types/booking.types";
 
 import BookingStatusBadge
 from "./BookingStatusBadge";

@@ -1,7 +1,7 @@
 
 import {
   Booking,
-} from "../types/booking.types";
+} from "@/types/booking.types";
 
 export let mockBookings:
   Booking[] = [

@@ -1,5 +1,5 @@
 
-import { Wallet } from "../types/wallet.types";
+import { Wallet } from "@/types/wallet.types";
 
 export const mockWallet: Wallet = {
   id: 1,
