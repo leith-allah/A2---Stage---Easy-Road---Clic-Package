@@ -2,7 +2,7 @@
 {
   "js/ts.preferences.importModuleSpecifier": "non-relative",
 
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit"
-  }
+  "typescript.preferences.importModuleSpecifierEnding": "minimal",
+
+  "javascript.preferences.importModuleSpecifierEnding": "minimal"
 }
