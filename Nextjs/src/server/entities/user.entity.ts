@@ -1,0 +1,16 @@
+
+export interface User {
+
+  id: number;
+
+  email: string;
+
+  password: string;
+
+  role: string;
+
+  suspended: boolean;
+
+  createdAt: Date;
+
+}

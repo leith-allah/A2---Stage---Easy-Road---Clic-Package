@@ -18,10 +18,8 @@ export interface AuthUser {
   suspended: boolean;
 }
 
-export interface JwtPayload {
+export interface AuthJwtPayload {
   sub: number;
-
   email: string;
-
   role: UserRole;
 }

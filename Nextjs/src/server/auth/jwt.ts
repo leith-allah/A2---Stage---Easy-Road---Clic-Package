@@ -1,16 +1,15 @@
 
 import jwt from "jsonwebtoken";
 
-import {
-  JwtPayload,
-} from "@/server/types/auth.types";
+import {AuthJwtPayload} from "@/server/types/auth.types";
+
 
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "dev-secret";
 
 export function signToken(
-  payload: JwtPayload
+  payload: AuthJwtPayload
 ) {
   return jwt.sign(
     payload,
@@ -23,9 +22,35 @@ export function signToken(
 
 export function verifyToken(
   token: string
-) {
-  return jwt.verify(
-    token,
-    JWT_SECRET
-  ) as JwtPayload;
+): AuthJwtPayload {
+
+  const payload =
+    jwt.verify(
+      token,
+      JWT_SECRET
+    );
+
+  if (
+    typeof payload === "string"
+  ) {
+    throw new Error(
+      "Invalid token payload"
+    );
+  }
+
+  if (
+    !payload.email ||
+    !payload.role ||
+    !payload.sub
+  ) {
+    throw new Error(
+      "Invalid token structure"
+    );
+  }
+
+  return {
+    sub: Number(payload.sub),
+    email: payload.email,
+    role: payload.role,
+  };
 }
