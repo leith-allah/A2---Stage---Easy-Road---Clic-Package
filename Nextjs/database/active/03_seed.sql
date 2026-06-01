@@ -130,3 +130,89 @@ INSERT INTO favorise (id_user, id_pack, date_ajout_fav)
 VALUES 
 (2,1,NOW()),
 (3,1,NOW());
+
+-- =========================
+-- DEMANDES DE RECHARGEMENT
+-- =========================
+
+INSERT INTO demande_rechargement (
+    statut_demande_recharge,
+    montant_demande_recharge,
+    date_heure_demande_recharge,
+    comment_demande_recharge,
+    id_user
+)
+VALUES
+(
+    'VALIDEE',
+    20000,
+    NOW(),
+    'Recharge initiale',
+    2
+);
+
+-- =========================
+-- TRANSACTIONS
+-- =========================
+
+INSERT INTO transactions (
+    ref_transac,
+    type_transac,
+    statut_transac,
+    montant_transac,
+    description_transac,
+    date_heure_transac,
+    id_demande_recharge,
+    id_user,
+    id_portefeuille_source,
+    id_portefeuille_dest
+)
+VALUES
+(
+    'TRX001',
+    'RECHARGE',
+    'SUCCESS',
+    20000,
+    'Recharge portefeuille',
+    NOW(),
+    1,
+    2,
+    1,
+    2
+);
+
+-- =========================
+-- ACHATS PACKAGE
+-- =========================
+
+INSERT INTO achat_package (
+    ref_achat_pack,
+    nb_voyageurs,
+    classe_vol_achat_pack,
+    type_chambre_achat_pack,
+    pension_achat_pack,
+    prix_achat_pack,
+    remise_achat_pack,
+    total_achat_pack,
+    date_heure_achat_pack,
+    statut_achat_pack,
+    id_transac,
+    id_pack,
+    id_user
+)
+VALUES
+(
+    'ACH001',
+    2,
+    'ECONOMY',
+    'DOUBLE',
+    'ALL_IN',
+    120000,
+    10,
+    108000,
+    NOW(),
+    'CONFIRMED',
+    1,
+    1,
+    2
+);
