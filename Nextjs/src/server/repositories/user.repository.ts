@@ -1,79 +1,44 @@
 
-import { BaseRepository } from "@/server/repositories/base.repository";
+import { prisma }
+  from "@/server/db/prisma";
 
-import { User } from "@/server/entities/user.entity";
+export const userRepository = {
 
-import { users } from "@/server/mock-data/users";
+  findAll() {
+    return prisma.user.findMany();
+  },
 
-export class UserRepository
-  extends BaseRepository<User> {
+  findById(id: number) {
+    return prisma.user.findUnique({
+      where: { id },
+    });
+  },
 
-  async findById(
-    id: number
-  ): Promise<User | null> {
+  findByEmail(email: string) {
+    return prisma.user.findUnique({
+      where: { email },
+    });
+  },
 
-    return (
-      users.find(
-        user => user.id === id
-      ) || null
-    );
-  }
+  create(data: any) {
+    return prisma.user.create({
+      data,
+    });
+  },
 
-  async findAll(): Promise<User[]> {
-    return users;
-  }
-
-  async create(
-    data: Partial<User>
-  ): Promise<User> {
-
-    const user: User = {
-      id: users.length + 1,
-      email: data.email || "",
-      password: data.password || "",
-      role: data.role || "CLIENT",
-      suspended: false,
-      createdAt: new Date(),
-    };
-
-    users.push(user);
-
-    return user;
-  }
-
-  async update(
+  update(
     id: number,
-    data: Partial<User>
-  ): Promise<User> {
+    data: any
+  ) {
+    return prisma.user.update({
+      where: { id },
+      data,
+    });
+  },
 
-    const user =
-      await this.findById(id);
-
-    if (!user) {
-      throw new Error(
-        "User not found"
-      );
-    }
-
-    Object.assign(
-      user,
-      data
-    );
-
-    return user;
-  }
-
-  async delete(
-    id: number
-  ): Promise<void> {
-
-    const index =
-      users.findIndex(
-        user => user.id === id
-      );
-
-    if (index >= 0) {
-      users.splice(index, 1);
-    }
-  }
-}
+  delete(id: number) {
+    return prisma.user.delete({
+      where: { id },
+    });
+  },
+};

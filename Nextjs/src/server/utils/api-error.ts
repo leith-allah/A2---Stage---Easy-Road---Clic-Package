@@ -1,21 +1,14 @@
 
-export class ApiError extends Error {
-  public statusCode: number;
-  public code: string;
-  public details?: unknown;
+export class NotFoundException
+  extends Error {
 
   constructor(
-    statusCode: number,
-    message: string,
-    code: string,
-    details?: unknown
+    message: string
   ) {
+
     super(message);
 
-    this.statusCode = statusCode;
-    this.code = code;
-    this.details = details;
-
-    Error.captureStackTrace(this, this.constructor);
+    this.name =
+      "NotFoundException";
   }
 }

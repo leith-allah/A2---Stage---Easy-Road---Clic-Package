@@ -1,51 +1,82 @@
 
-import { NextResponse }
-  from "next/server";
+import {
+  successResponse,
+} from "@/server/api/responses/success";
 
-import { UserService }
-  from "@/server/services/user.service";
+import {
+  validateBody,
+} from "@/server/validations/validate-request";
 
-const userService =
-  new UserService();
+import {
+  updateUserSchema,
+} from "@/server/validations/user/update-user.validation";
+
+import {
+  userService,
+} from "@/server/services/user.service";
+
+type Params = {
+  params: Promise<{
+    id: string;
+  }>;
+};
 
 export async function GET(
-  request: Request,
-
-  {
-    params,
-  }: {
-    params: Promise<{
-      id: string;
-    }>;
-  }
+  _: Request,
+  { params }: Params
 ) {
 
-  try {
+  const { id } =
+    await params;
 
-    const { id } =
-      await params;
-
-    const user =
-      await userService.getUserById(
-        Number(id)
-      );
-
-    return NextResponse.json(
-      user
+  const user =
+    await userService.getUserById(
+      Number(id)
     );
 
-  } catch (error) {
+  return successResponse(
+    user
+  );
+}
 
-    return NextResponse.json(
-      {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Unknown error",
-      },
-      {
-        status: 404,
-      }
+export async function PATCH(
+  request: Request,
+  { params }: Params
+) {
+
+  const { id } =
+    await params;
+
+  const data =
+    await validateBody(
+      request,
+      updateUserSchema
     );
-  }
+
+  const user =
+    await userService.updateUser(
+      Number(id),
+      data
+    );
+
+  return successResponse(
+    user
+  );
+}
+
+export async function DELETE(
+  _: Request,
+  { params }: Params
+) {
+
+  const { id } =
+    await params;
+
+  await userService.deleteUser(
+    Number(id)
+  );
+
+  return successResponse({
+    deleted: true,
+  });
 }

@@ -1,42 +1,66 @@
 
-import { UserRepository }
-from "@/server/repositories/user.repository";
+import { userRepository }
+  from "@/server/repositories/user.repository";
 
-import { UserMapper }
-from "@/server/mappers/user.mapper";
+import {
+  NotFoundException,
+} from "@/server/utils/api-error";
 
-import { NotFoundException }
-from "@/server/exceptions/not-found.exception";
+export const userService = {
 
-export class UserService {
+  async getAllUsers() {
 
-  private repository =
-    new UserRepository();
+    return userRepository.findAll();
+  },
 
   async getUserById(
     id: number
   ) {
 
     const user =
-      await this.repository.findById(id);
+      await userRepository.findById(
+        id
+      );
 
     if (!user) {
       throw new NotFoundException(
-        "User not found"
+        "Utilisateur introuvable"
       );
     }
 
-    return UserMapper.toDto(user);
-  }
+    return user;
+  },
 
-  async getUsers() {
+  async createUser(
+    data: any
+  ) {
 
-    const users =
-      await this.repository.findAll();
-
-    return users.map(
-      UserMapper.toDto
+    return userRepository.create(
+      data
     );
-  }
+  },
 
-}
+  async updateUser(
+    id: number,
+    data: any
+  ) {
+
+    await this.getUserById(id);
+
+    return userRepository.update(
+      id,
+      data
+    );
+  },
+
+  async deleteUser(
+    id: number
+  ) {
+
+    await this.getUserById(id);
+
+    return userRepository.delete(
+      id
+    );
+  },
+};

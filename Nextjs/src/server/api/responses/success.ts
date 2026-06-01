@@ -1,10 +1,11 @@
 
-import { NextResponse } from "next/server";
+import { NextResponse }
+  from "next/server";
 
 export function successResponse<T>(
   data: T,
-  message = "Success",
-  status = 200
+  status = 200,
+  message = "Success"
 ) {
   return NextResponse.json(
     {
@@ -12,6 +13,8 @@ export function successResponse<T>(
       message,
       data,
     },
-    { status }
+    {
+      status,
+    }
   );
 }

@@ -1,18 +1,48 @@
 
-import { NextResponse } from "next/server";
+import {
+  successResponse,
+} from "@/server/api/responses/success";
 
-import { UserService }
-  from "@/server/services/user.service";
+import {
+  validateBody,
+} from "@/server/validations/validate-request";
 
-const userService =
-  new UserService();
+import {
+  createUserSchema,
+} from "@/server/validations/user/create-user.validation";
+
+import {
+  userService,
+} from "@/server/services/user.service";
 
 export async function GET() {
 
   const users =
-    await userService.getUsers();
+    await userService.getAllUsers();
 
-  return NextResponse.json(
+  return successResponse(
     users
+  );
+}
+
+export async function POST(
+  request: Request
+) {
+
+  const data =
+    await validateBody(
+      request,
+      createUserSchema
+    );
+
+  const user =
+    await userService.createUser(
+      data
+    );
+
+  return successResponse(
+    user,
+    201,
+    "Utilisateur créé"
   );
 }
