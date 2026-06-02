@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,106 +7,244 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  password    String
+model achat_package {
+  id_achat_pack           BigInt         @id @default(autoincrement())
+  ref_achat_pack          String         @unique @db.VarChar(255)
+  nb_voyageurs            Int            @db.SmallInt
+  classe_vol_achat_pack   String         @db.VarChar(50)
+  type_chambre_achat_pack String         @db.VarChar(50)
+  pension_achat_pack      String         @db.VarChar(50)
+  prix_achat_pack         Decimal        @db.Decimal(10, 2)
+  remise_achat_pack       Decimal?       @default(0) @db.Decimal(5, 2)
+  total_achat_pack        Decimal        @db.Decimal(10, 2)
+  date_heure_achat_pack   DateTime       @db.Timestamp(6)
+  statut_achat_pack       String         @db.VarChar(50)
+  id_transac              BigInt?        @unique
+  id_pack                 BigInt
+  id_user                 BigInt
+  package_voyage          package_voyage @relation(fields: [id_pack], references: [id_pack], onUpdate: NoAction)
+  transactions            transactions?  @relation(fields: [id_transac], references: [id_transac], onDelete: Restrict, onUpdate: NoAction)
+  utilisateur             utilisateur    @relation(fields: [id_user], references: [id_user], onUpdate: NoAction)
 
-  firstName   String
-  lastName    String
-
-  role        String
-
-  suspended   Boolean  @default(false)
-
-  createdAt   DateTime @default(now())
-
-  wallet      Wallet?
-
-  bookings    Booking[]
-
-  transactions Transaction[]
+  @@index([id_pack], map: "idx_achat_pack")
+  @@index([id_user], map: "idx_achat_user")
 }
 
-model Wallet {
-  id          Int      @id @default(autoincrement())
-
-  balance     Float    @default(0)
-
-  updatedAt   DateTime @updatedAt
-
-  userId      Int      @unique
-
-  user        User     @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade
-  )
+model agence {
+  id_agence     BigInt          @id @default(autoincrement())
+  mle_agence    String          @unique @db.VarChar(255)
+  nom_agence    String          @db.VarChar(50)
+  dc_agence     DateTime        @db.Date
+  sj_agence     String          @db.VarChar(30)
+  bureau_agence bureau_agence[]
 }
 
-model Transaction {
-  id          Int      @id @default(autoincrement())
-
-  amount      Float
-
-  type        String
-
-  status      String
-
-  description String?
-
-  createdAt   DateTime @default(now())
-
-  userId      Int
-
-  user        User @relation(
-    fields: [userId],
-    references: [id]
-  )
+model bureau_agence {
+  id_bureau      BigInt        @id @default(autoincrement())
+  mle_bureau     String        @unique @db.VarChar(255)
+  type_bureau    String        @db.VarChar(50)
+  dc_bureau      DateTime      @db.Date
+  pays_bureau    String        @db.VarChar(50)
+  ville_bureau   String        @db.VarChar(50)
+  adresse_bureau String        @db.VarChar(255)
+  num_agr_bureau String        @unique @db.VarChar(50)
+  rib_agence     String?       @db.VarChar(30)
+  iban_agence    String?       @db.VarChar(34)
+  dcc_bureau     DateTime      @db.Date
+  id_agence      BigInt
+  agence         agence        @relation(fields: [id_agence], references: [id_agence], onDelete: Cascade, onUpdate: NoAction)
+  utilisateur    utilisateur[]
 }
 
-model PackageVoyage {
-  id          Int      @id @default(autoincrement())
-
-  name        String
-
-  destination String
-
-  price       Float
-
-  stock       Int
-
-  image       String?
-
-  description String?
-
-  createdAt   DateTime @default(now())
-
-  bookings    Booking[]
+model demande_rechargement {
+  id_demande_recharge         BigInt        @id @default(autoincrement())
+  statut_demande_recharge     String        @db.VarChar(50)
+  montant_demande_recharge    Decimal       @db.Decimal(10, 2)
+  date_heure_demande_recharge DateTime      @db.Timestamp(6)
+  comment_demande_recharge    String?
+  id_user                     BigInt
+  utilisateur                 utilisateur   @relation(fields: [id_user], references: [id_user], onUpdate: NoAction)
+  transactions                transactions?
 }
 
-model Booking {
-  id          Int      @id @default(autoincrement())
+model excursion {
+  id_exc          BigInt    @id @default(autoincrement())
+  nom_exc         String    @db.VarChar(255)
+  lieu_exc        String    @db.VarChar(50)
+  description_exc String
+  propose         propose[]
+}
 
-  travelers   Int
+model favorise {
+  id_user        BigInt
+  id_pack        BigInt
+  date_ajout_fav DateTime       @db.Timestamp(6)
+  package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
+  utilisateur    utilisateur    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: NoAction)
 
-  totalPrice  Float
+  @@id([id_user, id_pack])
+}
 
-  status      String
+model heberge {
+  id_hot         BigInt
+  id_pack        BigInt
+  hotel          hotel          @relation(fields: [id_hot], references: [id_hot], onDelete: Cascade, onUpdate: NoAction)
+  package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
 
-  createdAt   DateTime @default(now())
+  @@id([id_hot, id_pack])
+}
 
-  userId      Int
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model hotel {
+  id_hot         BigInt    @id @default(autoincrement())
+  nom_hot        String    @db.VarChar(100)
+  nb_etoiles_hot Int       @db.SmallInt
+  pays_hot       String    @db.VarChar(50)
+  ville_hot      String    @db.VarChar(50)
+  adresse_hot    String    @db.VarChar(255)
+  heberge        heberge[]
+}
 
-  packageId   Int
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model package_voyage {
+  id_pack                  BigInt          @id @default(autoincrement())
+  mle_pack                 String          @unique @db.VarChar(255)
+  statut_pack              String          @db.VarChar(100)
+  nom_pack                 String          @db.VarChar(255)
+  pays_pack                String          @db.VarChar(50)
+  destination_pack         String          @db.VarChar(50)
+  image_pack               String?         @db.VarChar(255)
+  description_pack         String?
+  date_depart_pack         DateTime        @db.Date
+  date_retour_pack         DateTime        @db.Date
+  prix_base_pack           Decimal         @db.Decimal(10, 2)
+  stock_total_pack         Int
+  stock_dispo_pack         Int
+  date_heure_creation_pack DateTime        @db.Timestamp(6)
+  achat_package            achat_package[]
+  favorise                 favorise[]
+  heberge                  heberge[]
+  possede                  possede[]
+  propose                  propose[]
+  utilise                  utilise[]
 
-  user         User @relation(
-    fields: [userId],
-    references: [id]
-  )
+  @@index([destination_pack], map: "idx_package_destination")
+  @@index([statut_pack], map: "idx_package_statut")
+}
 
-  package      PackageVoyage @relation(
-    fields: [packageId],
-    references: [id]
-  )
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model portefeuille {
+  id_prtfl                                                       BigInt         @id @default(autoincrement())
+  num_prtfl                                                      String         @unique @db.VarChar(255)
+  solde_total_prtfl                                              Decimal        @default(0) @db.Decimal(10, 2)
+  derniere_maj_prtfl                                             DateTime       @db.Timestamp(6)
+  id_user                                                        BigInt         @unique
+  utilisateur                                                    utilisateur    @relation(fields: [id_user], references: [id_user], onDelete: Cascade, onUpdate: NoAction)
+  transactions_transactions_id_portefeuille_destToportefeuille   transactions[] @relation("transactions_id_portefeuille_destToportefeuille")
+  transactions_transactions_id_portefeuille_sourceToportefeuille transactions[] @relation("transactions_id_portefeuille_sourceToportefeuille")
+}
+
+model possede {
+  id_vol         BigInt
+  id_pack        BigInt
+  package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
+  vol            vol            @relation(fields: [id_vol], references: [id_vol], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id_vol, id_pack])
+}
+
+model propose {
+  id_exc         BigInt
+  id_pack        BigInt
+  excursion      excursion      @relation(fields: [id_exc], references: [id_exc], onDelete: Cascade, onUpdate: NoAction)
+  package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id_exc, id_pack])
+}
+
+model role {
+  id_role     BigInt        @id @default(autoincrement())
+  nom_role    String        @unique @db.VarChar(100)
+  utilisateur utilisateur[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model transactions {
+  id_transac                                                     BigInt                @id @default(autoincrement())
+  ref_transac                                                    String                @unique @db.VarChar(255)
+  type_transac                                                   String                @db.VarChar(50)
+  statut_transac                                                 String                @db.VarChar(50)
+  montant_transac                                                Decimal               @db.Decimal(10, 2)
+  description_transac                                            String?
+  date_heure_transac                                             DateTime              @db.Timestamp(6)
+  id_demande_recharge                                            BigInt?               @unique
+  id_user                                                        BigInt?
+  id_portefeuille_source                                         BigInt
+  id_portefeuille_dest                                           BigInt
+  achat_package                                                  achat_package?
+  demande_rechargement                                           demande_rechargement? @relation(fields: [id_demande_recharge], references: [id_demande_recharge], onDelete: Restrict, onUpdate: NoAction)
+  portefeuille_transactions_id_portefeuille_destToportefeuille   portefeuille          @relation("transactions_id_portefeuille_destToportefeuille", fields: [id_portefeuille_dest], references: [id_prtfl], onUpdate: NoAction)
+  portefeuille_transactions_id_portefeuille_sourceToportefeuille portefeuille          @relation("transactions_id_portefeuille_sourceToportefeuille", fields: [id_portefeuille_source], references: [id_prtfl], onUpdate: NoAction)
+  utilisateur                                                    utilisateur?          @relation(fields: [id_user], references: [id_user], onDelete: Restrict, onUpdate: NoAction)
+
+  @@index([id_portefeuille_dest], map: "idx_trans_port_dest")
+  @@index([id_portefeuille_source], map: "idx_trans_port_src")
+  @@index([id_user], map: "idx_trans_user")
+}
+
+model transport {
+  id_transp      BigInt    @id @default(autoincrement())
+  trajet_transp  String    @db.VarChar(50)
+  societe_transp String?   @db.VarChar(50)
+  utilise        utilise[]
+}
+
+model utilisateur {
+  id_user              BigInt                 @id @default(autoincrement())
+  mle_user             String                 @unique @db.VarChar(255)
+  nin_user             String                 @unique @db.VarChar(30)
+  nom_user             String                 @db.VarChar(50)
+  prenom_user          String                 @db.VarChar(50)
+  ddn_user             DateTime               @db.Date
+  nat_user             String                 @db.VarChar(50)
+  statut_user          String                 @db.VarChar(50)
+  email_pro_user       String                 @unique @db.VarChar(50)
+  mdp_user             String
+  dcc_user             DateTime               @db.Date
+  id_role              BigInt
+  id_bureau            BigInt
+  achat_package        achat_package[]
+  demande_rechargement demande_rechargement[]
+  favorise             favorise[]
+  portefeuille         portefeuille?
+  transactions         transactions[]
+  bureau_agence        bureau_agence          @relation(fields: [id_bureau], references: [id_bureau], onDelete: NoAction, onUpdate: NoAction)
+  role                 role                   @relation(fields: [id_role], references: [id_role], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([id_bureau], map: "idx_user_bureau")
+  @@index([id_role], map: "idx_user_role")
+}
+
+model utilise {
+  id_transp      BigInt
+  id_pack        BigInt
+  package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
+  transport      transport      @relation(fields: [id_transp], references: [id_transp], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([id_transp, id_pack])
+}
+
+model vol {
+  id_vol                   BigInt    @id @default(autoincrement())
+  compagnie_vol            String    @db.VarChar(50)
+  lieu_depart_vol          String    @db.VarChar(50)
+  destination_vol          String    @db.VarChar(50)
+  date_aller_vol           DateTime  @db.Date
+  heure_depart_aller_vol   DateTime  @db.Time(6)
+  heure_arrivee_aller_vol  DateTime  @db.Time(6)
+  date_retour_vol          DateTime? @db.Date
+  heure_depart_retour_vol  DateTime? @db.Time(6)
+  heure_arrivee_retour_vol DateTime? @db.Time(6)
+  num_vol                  String    @unique @db.VarChar(50)
+  possede                  possede[]
 }
