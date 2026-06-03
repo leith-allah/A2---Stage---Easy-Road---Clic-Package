@@ -3,10 +3,10 @@
 
 import { useMemo, useState } from "react";
 
-import BackButton from "@/src/components/navigation/BackButton";
+import BackButton from "@/components/navigation/BackButton";
 
-import SearchBar from "@/src/components/ui/SearchBar";
-import FilterBar from "@/src/components/ui/FilterBar";
+import SearchBar from "@/components/ui/SearchBar";
+import FilterBar from "@/components/ui/FilterBar";
 
 export default function InvoicesPage() {
   const [search, setSearch] = useState("");

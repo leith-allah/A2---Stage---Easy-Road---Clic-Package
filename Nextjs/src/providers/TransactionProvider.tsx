@@ -11,11 +11,11 @@ import {
 import {
   getTransactions,
   createTransaction,
-} from "@/src/features/transactions/services/transaction.service";
+} from "@/features/transactions/services/transaction.service";
 
 import {
   Transaction,
-} from "@/src/features/transactions/types/transaction.types";
+} from "@/features/transactions/types/transaction.types";
 
 type TransactionContextType = {
   transactions:

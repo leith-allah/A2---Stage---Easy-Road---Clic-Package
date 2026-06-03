@@ -1,4 +1,4 @@
 
 export {
   useAuthContext as default,
-} from "@/src/providers/AuthProvider";
+} from "@/providers/AuthProvider";

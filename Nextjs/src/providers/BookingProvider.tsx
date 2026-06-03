@@ -11,11 +11,11 @@ import {
 import {
   createBooking,
   getBookings,
-} from "@/src/features/bookings/services/booking.service";
+} from "@/features/bookings/services/booking.service";
 
 import {
   Booking,
-} from "@/src/features/bookings/types/booking.types";
+} from "@/features/bookings/types/booking.types";
 
 type BookingContextType = {
   bookings: Booking[];

@@ -7,11 +7,11 @@ import html2canvas from "html2canvas-pro";
 
 import QRCode from "react-qr-code";
 
-import { Booking }
-from "@/types/booking.types";
+import { BookingCardData }
+from "@/features/bookings/types/booking-card.types";
 
 type Props = {
-  booking: Booking;
+  booking: BookingCardData;
 };
 
 export default function InvoicePDF({
@@ -274,8 +274,7 @@ export default function InvoicePDF({
                 <p>Prix package</p>
 
                 <p>
-                  {booking.totalPrice
-                    .toLocaleString()}
+                  {(booking.total ?? booking.total).toLocaleString()}
                   {" "}
                   DZD
                 </p>
@@ -306,8 +305,7 @@ export default function InvoicePDF({
                 <p>Total</p>
 
                 <p>
-                  {booking.totalPrice
-                    .toLocaleString()}
+                  {(booking.total ?? booking.total).toLocaleString()}
                   {" "}
                   DZD
                 </p>
@@ -332,7 +330,7 @@ export default function InvoicePDF({
 
               <QRCode
                 value={
-                  booking.bookingNumber
+                  booking.bookingNumber ?? "-"
                 }
                 size={120}
               />

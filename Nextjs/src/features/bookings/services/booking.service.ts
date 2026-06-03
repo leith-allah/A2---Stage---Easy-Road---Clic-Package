@@ -1,7 +1,7 @@
 
 import {
   Booking,
-} from "@/types/booking.types";
+} from "@/features/bookings/types/booking.types";
 
 export let mockBookings:
   Booking[] = [
@@ -10,8 +10,7 @@ export let mockBookings:
 
     packageId: 2,
 
-    packageTitle:
-      "Istanbul Premium",
+    packageTitle: "Istanbul Premium",
 
     travelers: 2,
 
@@ -19,10 +18,10 @@ export let mockBookings:
 
     createdAt: "2026-05-20",
 
-    departureDate:
-      "2026-07-15",
+    departureDate: "2026-07-15",
 
     status: "CONFIRMED",
+    bookingNumber: "",
   },
 ];
 
@@ -50,6 +49,9 @@ createBooking(
 
   const booking: Booking = {
     id: Date.now(),
+
+    bookingNumber:
+      `BK-${Date.now()}`,
 
     packageId: data.packageId,
 

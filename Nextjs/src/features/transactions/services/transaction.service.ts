@@ -1,7 +1,7 @@
 
 import {
   Transaction,
-} from "@/types/transaction.types";
+} from "@/features/transactions/types/transaction.types";
 
 export let mockTransactions:
   Transaction[] = [

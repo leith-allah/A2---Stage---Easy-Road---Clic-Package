@@ -1,7 +1,7 @@
 
 import {
   Notification,
-} from "@/types/notification.types";
+} from "@/features/notifications/types/notification.types";
 
 export let mockNotifications:
   Notification[] = [
@@ -15,6 +15,8 @@ export let mockNotifications:
       "Votre compte a été créé.",
 
     type: "SUCCESS",
+
+    category: "SYSTEM",
 
     createdAt: "2026-05-20",
 
@@ -33,6 +35,8 @@ type CreateNotificationData = {
   message: string;
 
   type: Notification["type"];
+
+  category: Notification["category"],
 };
 
 export async function
@@ -50,6 +54,8 @@ createNotification(
         data.message,
 
       type: data.type,
+
+      category: data.category,
 
       createdAt:
         new Date().toISOString(),

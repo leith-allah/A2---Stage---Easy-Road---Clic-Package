@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { ApiError } from "@/utils/api-error";
+import { ApiError } from "@/server/utils/api-error";
 
 export function errorResponse(error: unknown) {
   console.error(error);

@@ -1,5 +1,5 @@
 
-import BackButton from "@/src/components/navigation/BackButton";
+import BackButton from "@/components/navigation/BackButton";
 
 export default function TransactionsPage() {
   const transactions = [

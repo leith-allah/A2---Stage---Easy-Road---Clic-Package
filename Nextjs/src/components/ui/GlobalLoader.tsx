@@ -2,7 +2,7 @@
 "use client";
 
 import useLoading
-  from "@/src/hooks/useLoading";
+  from "@/hooks/useLoading";
 
 export default function
 GlobalLoader() {

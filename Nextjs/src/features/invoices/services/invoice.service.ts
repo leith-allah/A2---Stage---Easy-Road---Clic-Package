@@ -1,7 +1,7 @@
 
 import {
   Invoice,
-} from "@/types/invoice.types";
+} from "@/features/invoices/types/invoice.types";
 
 export let mockInvoices:
   Invoice[] = [

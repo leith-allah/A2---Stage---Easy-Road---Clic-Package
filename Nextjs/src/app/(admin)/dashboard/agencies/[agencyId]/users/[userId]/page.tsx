@@ -1,7 +1,7 @@
 
 "use client";
 
-import UserStatusButton from "@/src/features/admin/users/components/UserStatusButton";
+import UserStatusButton from "@/features/admin/users/components/UserStatusButton";
 import { useState } from "react";
 
 export default function UserDetailsPage() {

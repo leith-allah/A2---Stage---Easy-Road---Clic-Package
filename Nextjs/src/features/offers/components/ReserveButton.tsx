@@ -4,13 +4,13 @@
 import { useState } from "react";
 
 import useWallet from
-"@/src/features/wallet/hooks/useWallet";
+"@/features/wallet/hooks/useWallet";
 
 import InsufficientFundsModal from
-"@/src/features/wallet/components/InsufficientFundsModal";
+"@/features/wallet/components/InsufficientFundsModal";
 
 import {createBookingFlow} from 
-"@/src/features/bookings/services/bookingFlow.service";
+"@/features/bookings/services/bookingFlow.service";
 
 
 type Props = {

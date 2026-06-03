@@ -5,6 +5,13 @@ export type NotificationType =
   | "WARNING"
   | "ERROR";
 
+export type NotificationCategory =
+  | "BOOKING"
+  | "PAYMENT"
+  | "PACKAGE"
+  | "WALLET"
+  | "SYSTEM";
+
 export type Notification = {
   id: number;
 
@@ -13,6 +20,8 @@ export type Notification = {
   message: string;
 
   type: NotificationType;
+
+  category: NotificationCategory;
 
   createdAt: string;
 

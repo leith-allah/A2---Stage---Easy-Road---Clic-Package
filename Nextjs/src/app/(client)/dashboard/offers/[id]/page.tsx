@@ -5,9 +5,9 @@ import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
+import FavoriteButton from "@/features/favorites/components/FavoriteButton";
 
-import ReserveButton from "@/src/features/offers/components/ReserveButton";
+import ReserveButton from "@/features/offers/components/ReserveButton";
 
 export default function PackageDetailsPage() {
   const packageData = {

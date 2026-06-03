@@ -2,4 +2,4 @@
 export {
   useLoadingContext
     as default,
-} from "@/src/providers/LoadingProvider";
+} from "@/providers/LoadingProvider";

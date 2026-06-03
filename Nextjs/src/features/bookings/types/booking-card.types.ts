@@ -1,11 +1,8 @@
 
-export type BookingStatus =
-  | "CONFIRMED"
-  | "PENDING"
-  | "CANCELLED"
-  | "REFUNDED";
+import { BookingStatus }
+from "./booking.types";
 
-export type Booking = {
+export type BookingCardData = {
   id: number;
 
   bookingNumber: string;
@@ -14,11 +11,17 @@ export type Booking = {
 
   packageTitle: string;
 
+  destination: string;
+
+  image: string;
+
   travelers: number;
 
   total: number;
 
   departureDate: string;
+
+  returnDate: string;
 
   createdAt: string;
 

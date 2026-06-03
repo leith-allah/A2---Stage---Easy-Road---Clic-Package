@@ -1,27 +1,27 @@
 
 import {
   createBooking,
-} from "./booking.service";
+} from "@/features/bookings/services/booking.service";
 
 import {
   debitWallet,
-} from "@/src/features/wallet/services/wallet.service";
+} from "@/features/wallet/services/wallet.service";
 
 import {
   createTransaction,
-} from "@/src/features/transactions/services/transaction.service";
+} from "@/features/transactions/services/transaction.service";
 
 import {
   createNotification,
-} from "@/src/features/notifications/services/notification.service";
+} from "@/features/notifications/services/notification.service";
 
 import {
   createInvoice,
-} from "@/src/features/invoices/services/invoice.service";
+} from "@/features/invoices/services/invoice.service";
 
 import {
   decreasePackageStock,
-} from "@/src/features/packages/services/package.service";
+} from "@/features/packages/services/package.service";
 
 
 type BookingFlowData = {
@@ -64,6 +64,8 @@ createBookingFlow(
     `Votre réservation pour ${data.packageTitle} a été confirmée.`,
 
   type: "SUCCESS",
+
+  category: "BOOKING",
   });
 
 

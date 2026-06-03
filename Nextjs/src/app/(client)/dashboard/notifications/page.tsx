@@ -4,10 +4,10 @@
 import { useState } from "react";
 
 import NotificationCard from
-"@/src/features/notifications/components/NotificationCard";
+"@/features/notifications/components/NotificationCard";
 
 import { mockNotifications } from
-"@/src/features/notifications/data/mockNotifications";
+"@/features/notifications/data/mockNotifications";
 
 export default function NotificationsPage() {
 

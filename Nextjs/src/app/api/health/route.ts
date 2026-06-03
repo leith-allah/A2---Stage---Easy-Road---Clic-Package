@@ -8,6 +8,7 @@ export const GET = asyncHandler(async () => {
       status: "OK",
       timestamp: new Date().toISOString(),
     },
-    "API is running"
+    200,
+    "Validation successful"
   );
 });

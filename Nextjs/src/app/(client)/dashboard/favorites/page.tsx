@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
-import SearchBar from "@/src/components/ui/SearchBar";
-import FilterBar from "@/src/components/ui/FilterBar";
+import SearchBar from "@/components/ui/SearchBar";
+import FilterBar from "@/components/ui/FilterBar";
 
-import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
+import FavoriteButton from "@/features/favorites/components/FavoriteButton";
 
 export default function FavoritesPage() {
   const [search, setSearch] = useState("");

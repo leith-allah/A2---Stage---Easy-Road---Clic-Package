@@ -3,9 +3,9 @@
 
   import { useMemo, useState } from "react";
 
-  import SearchBar from "@/src/components/ui/SearchBar";
-  import FilterBar from "@/src/components/ui/FilterBar";
-  import UserStatusButton from "@/src/features/admin/users/components/UserStatusButton";
+  import SearchBar from "@/components/ui/SearchBar";
+  import FilterBar from "@/components/ui/FilterBar";
+  import UserStatusButton from "@/features/admin/users/components/UserStatusButton";
 
   import Link from "next/link";
 

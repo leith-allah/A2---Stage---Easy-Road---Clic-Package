@@ -1,5 +1,5 @@
 
-import {api} from "@/src/lib/api";
+import {api} from "@/lib/api";
 
 export type Package = {
   id: number;

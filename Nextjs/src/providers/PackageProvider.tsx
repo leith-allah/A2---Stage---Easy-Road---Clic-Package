@@ -10,11 +10,11 @@ import {
 
 import {
   fetchPackages,
-} from "@/src/features/packages/services/package.service";
+} from "@/features/packages/services/package.service";
 
 import {
   Package,
-} from "@/src/features/packages/services/package.service";
+} from "@/features/packages/services/package.service";
 
 type PackageContextType = {
   packages: Package[];

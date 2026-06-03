@@ -5,9 +5,9 @@ export const packageRepository = {
 
   async findAll() {
 
-    return prisma.packageVoyage.findMany({
+    return prisma.package_voyage.findMany({
       orderBy: {
-        id: "desc",
+        id_pack: "desc",
       },
     });
   },
@@ -16,9 +16,9 @@ export const packageRepository = {
     id: number
   ) {
 
-    return prisma.packageVoyage.findUnique({
+    return prisma.package_voyage.findUnique({
       where: {
-        id,
+        id_pack: BigInt(id),
       },
     });
   },

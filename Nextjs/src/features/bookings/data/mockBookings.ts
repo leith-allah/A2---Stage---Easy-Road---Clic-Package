@@ -1,14 +1,16 @@
 
-import { Booking }
-from "@/types/booking.types";
+import { BookingCardData }
+from "@/features/bookings/types/booking-card.types";
 
-export const mockBookings: Booking[] =
+export const mockBookings: BookingCardData[] =
   [
     {
       id: 1,
 
       bookingNumber:
         "BK-2026-0001",
+
+      packageId: 1,
 
       packageTitle:
         "Dubai Luxury",
@@ -21,7 +23,7 @@ export const mockBookings: Booking[] =
 
       travelers: 2,
 
-      totalPrice: 780000,
+      total: 780000,
 
       departureDate:
         "2026-07-12",
@@ -42,6 +44,8 @@ export const mockBookings: Booking[] =
       bookingNumber:
         "BK-2026-0002",
 
+      packageId: 2,
+
       packageTitle:
         "Istanbul Premium",
 
@@ -53,7 +57,7 @@ export const mockBookings: Booking[] =
 
       travelers: 1,
 
-      totalPrice: 210000,
+      total: 210000,
 
       departureDate:
         "2026-08-02",

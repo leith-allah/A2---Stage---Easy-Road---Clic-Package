@@ -1,20 +1,20 @@
 
 "use client";
 
-import useAuth from "@/src/features/auth/hooks/useAuth";
+import useAuth from "@/features/auth/hooks/useAuth";
 
 import {toast} from "sonner";
 
-import useLoading from "@/src/hooks/useLoading";
+import useLoading from "@/hooks/useLoading";
 
-
-const {
-  startLoading,
-  stopLoading,
-} = useLoading();
 
 export default function
 RoleSwitcher() {
+
+  const {
+    startLoading,
+    stopLoading,
+  } = useLoading();
 
   const {
     user,

@@ -2,10 +2,10 @@
 "use client";
 
 import BookingCard from
-"@/src/features/bookings/components/BookingCard";
+"@/features/bookings/components/BookingCard";
 
 import { mockBookings }
-from "@/src/features/bookings/data/mockBookings";
+from "@/features/bookings/data/mockBookings";
 
 export default function BookingsPage() {
   return (

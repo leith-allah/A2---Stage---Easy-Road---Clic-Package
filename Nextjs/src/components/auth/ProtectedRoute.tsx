@@ -10,11 +10,11 @@ import {
 } from "next/navigation";
 
 import useAuth
-  from "@/src/features/auth/hooks/useAuth";
+  from "@/features/auth/hooks/useAuth";
 
 import {
   Role,
-} from "@/src/constants/roles";
+} from "@/constants/roles";
 
 type Props = {
   children:

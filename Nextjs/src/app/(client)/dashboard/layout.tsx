@@ -1,9 +1,9 @@
 
-import Sidebar from "@/src/features/dashboard/components/Sidebar";
+import Sidebar from "@/features/dashboard/components/Sidebar";
 
-import ProtectedRoute from "@/src/components/auth/ProtectedRoute";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-import {ROLES} from "@/src/constants/roles";
+import {ROLES} from "@/constants/roles";
 
 
 export default function DashboardLayout({

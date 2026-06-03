@@ -4,28 +4,28 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
-import Header from "@/src/components/layout/Header";
-import Footer from "@/src/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
-import {WalletProvider} from "@/src/providers/WalletProvider";
+import {WalletProvider} from "@/providers/WalletProvider";
 
-import {NotificationProvider} from "@/src/providers/NotificationProvider";
+import {NotificationProvider} from "@/providers/NotificationProvider";
 
-import {BookingProvider} from "@/src/providers/BookingProvider";
+import {BookingProvider} from "@/providers/BookingProvider";
 
-import {TransactionProvider} from "@/src/providers/TransactionProvider";
+import {TransactionProvider} from "@/providers/TransactionProvider";
 
-import {PackageProvider} from "@/src/providers/PackageProvider";
+import {PackageProvider} from "@/providers/PackageProvider";
 
-import {AuthProvider} from "@/src/providers/AuthProvider";
+import {AuthProvider} from "@/providers/AuthProvider";
 
-import RoleSwitcher from "@/src/components/dev/RoleSwitcher";
+import RoleSwitcher from "@/components/dev/RoleSwitcher";
 
 import {Toaster} from "sonner";
 
-import {LoadingProvider} from "@/src/providers/LoadingProvider";
+import {LoadingProvider} from "@/providers/LoadingProvider";
 
-import GlobalLoader from "@/src/components/ui/GlobalLoader";
+import GlobalLoader from "@/components/ui/GlobalLoader";
 
 
 const geistSans = Geist({
@@ -60,7 +60,7 @@ export default function RootLayout({
     >
 
       <body className="min-h-full flex flex-col">
-        <Header />
+        {/* <Header /> */}
 
         <main className="flex-1 p-6">
             <LoadingProvider>
@@ -71,7 +71,7 @@ export default function RootLayout({
                       <TransactionProvider>
                         <PackageProvider>
                           {children}
-                          <RoleSwitcher />
+                          {/* <RoleSwitcher /> */}
                         </PackageProvider>
                       </TransactionProvider>
                     </BookingProvider>
@@ -85,7 +85,7 @@ export default function RootLayout({
           />
         </main>
 
-        <Footer />
+        {/* <Footer /> */}
       </body>
     </html>
   );

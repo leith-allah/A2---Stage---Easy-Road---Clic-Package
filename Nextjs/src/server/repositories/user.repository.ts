@@ -5,23 +5,27 @@ import { prisma }
 export const userRepository = {
 
   findAll() {
-    return prisma.user.findMany();
+    return prisma.utilisateur.findMany();
   },
 
   findById(id: number) {
-    return prisma.user.findUnique({
-      where: { id },
+    return prisma.utilisateur.findUnique({
+      where: {
+        id_user: BigInt(id),
+      },
     });
   },
 
   findByEmail(email: string) {
-    return prisma.user.findUnique({
-      where: { email },
+    return prisma.utilisateur.findUnique({
+      where: {
+        email_pro_user: email,
+      },
     });
   },
 
   create(data: any) {
-    return prisma.user.create({
+    return prisma.utilisateur.create({
       data,
     });
   },
@@ -30,15 +34,19 @@ export const userRepository = {
     id: number,
     data: any
   ) {
-    return prisma.user.update({
-      where: { id },
+    return prisma.utilisateur.update({
+      where: {
+        id_user: BigInt(id),
+      },
       data,
     });
   },
 
   delete(id: number) {
-    return prisma.user.delete({
-      where: { id },
+    return prisma.utilisateur.delete({
+      where: {
+        id_user: BigInt(id),
+      },
     });
   },
 };

@@ -1,5 +1,5 @@
 
-import { errorResponse } from "@/api/responses/error";
+import { errorResponse } from "@/server/api/responses/error";
 
 export function asyncHandler(
   handler: (...args: any[]) => Promise<Response>

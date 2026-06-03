@@ -1,14 +1,14 @@
 
 import Link from "next/link";
 
-import { Booking }
-from "@/types/booking.types";
+import { BookingCardData }
+from "@/features/bookings/types/booking-card.types";
 
 import BookingStatusBadge
 from "./BookingStatusBadge";
 
 type Props = {
-  booking: Booking;
+  booking: BookingCardData;
 };
 
 export default function BookingCard({
@@ -28,7 +28,7 @@ export default function BookingCard({
       {/* IMAGE */}
       <div className="h-60">
         <img
-          src={booking.image}
+          src={booking.image ?? "/placeholder.jpg"}
           alt={booking.packageTitle}
           className="
             w-full
@@ -49,7 +49,7 @@ export default function BookingCard({
             </h2>
 
             <p className="text-gray-500">
-              {booking.destination}
+              {booking.destination ?? "Destination"}
             </p>
           </div>
 
@@ -63,7 +63,7 @@ export default function BookingCard({
           <p>
             🎫 Réservation :
             {" "}
-            {booking.bookingNumber}
+            {booking.bookingNumber ?? "-"}
           </p>
 
           <p>
@@ -81,7 +81,7 @@ export default function BookingCard({
           <p>
             📅 Retour :
             {" "}
-            {booking.returnDate}
+            {booking.returnDate ?? "-"}
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export default function BookingCard({
                 text-blue-600
               "
             >
-              {booking.totalPrice.toLocaleString()}
+              {(booking.total ?? booking.total).toLocaleString()}
               {" "}
               DZD
             </p>

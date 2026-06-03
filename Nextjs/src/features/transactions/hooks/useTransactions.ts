@@ -2,4 +2,4 @@
 export {
   useTransactionContext
     as default,
-} from "@/src/providers/TransactionProvider";
+} from "@/providers/TransactionProvider";

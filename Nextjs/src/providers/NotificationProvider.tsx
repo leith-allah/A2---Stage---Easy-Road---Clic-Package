@@ -12,11 +12,11 @@ import {
   createNotification,
   getNotifications,
   markAsRead,
-} from "@/src/features/notifications/services/notification.service";
+} from "@/features/notifications/services/notification.service";
 
 import {
   Notification,
-} from "@/src/features/notifications/types/notification.types";
+} from "@/features/notifications/types/notification.types";
 
 type NotificationContextType = {
   notifications:

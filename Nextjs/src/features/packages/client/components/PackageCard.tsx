@@ -5,9 +5,9 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import FavoriteButton from "@/src/features/favorites/components/FavoriteButton";
+import FavoriteButton from "@/features/favorites/components/FavoriteButton";
 
-import { PackageType } from "@/types/package.types";
+import { PackageType } from "@/features/packages/types/package.types";
 
 type Props = {
   packageItem: PackageType;

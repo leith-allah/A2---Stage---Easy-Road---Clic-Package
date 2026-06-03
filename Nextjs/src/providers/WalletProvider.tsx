@@ -12,11 +12,11 @@ import {
   getWallet,
   debitWallet,
   topUpWallet,
-} from "@/src/features/wallet/services/wallet.service";
+} from "@/features/wallet/services/wallet.service";
 
 import {
   Wallet,
-} from "@/src/features/wallet/types/wallet.types";
+} from "@/features/wallet/types/wallet.types";
 
 type WalletContextType = {
   wallet: Wallet | null;

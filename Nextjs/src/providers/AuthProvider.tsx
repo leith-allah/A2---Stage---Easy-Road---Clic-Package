@@ -9,7 +9,7 @@ import {
 
 import {
   Role,
-} from "@/src/constants/roles";
+} from "@/constants/roles";
 
 type User = {
   id: number;

@@ -3,15 +3,15 @@
 
 import { useMemo, useState } from "react";
 
-import SearchBar from "@/src/components/ui/SearchBar";
-import FilterBar from "@/src/components/ui/FilterBar";
+import SearchBar from "@/components/ui/SearchBar";
+import FilterBar from "@/components/ui/FilterBar";
 
-import PackageCard from "@/src/features/packages/client/components/PackageCard";
+import PackageCard from "@/features/packages/client/components/PackageCard";
 
-import { mockPackages } from "@/src/features/packages/data/mockPackages";
+import { mockPackages } from "@/features/packages/data/mockPackages";
 
-import { searchPackages } from "@/src/features/packages/utils/searchPackages";
-import { filterPackages } from "@/src/features/packages/utils/filterPackages";
+import { searchPackages } from "@/features/packages/utils/searchPackages";
+import { filterPackages } from "@/features/packages/utils/filterPackages";
 
 export default function OffersPage() {
   const [search, setSearch] = useState("");

@@ -1,7 +1,7 @@
 
 import {
   ApiError,
-} from "@/src/lib/api-error";
+} from "@/lib/api-error";
 
 export default function
 useApiError() {

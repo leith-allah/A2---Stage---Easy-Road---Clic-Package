@@ -12,6 +12,7 @@ export const POST = asyncHandler(async (req: Request) => {
     {
       received: body,
     },
+    200,
     "Validation successful"
   );
 });

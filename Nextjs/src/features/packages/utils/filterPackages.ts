@@ -1,5 +1,5 @@
 
-import { PackageType } from "@/types/package.types";
+import { PackageType } from "@/features/packages/types/package.types";
 
 export function filterPackages(
   packages: PackageType[],

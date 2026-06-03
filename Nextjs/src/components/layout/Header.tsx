@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import NotificationBell from
-"@/src/features/notifications/components/NotificationBell";
+"@/features/notifications/components/NotificationBell";
 
 export default function Header() {
   return (

@@ -1,6 +1,6 @@
 
 import { BookingStatus }
-from "@/types/booking.types";
+from "@/features/bookings/types/booking.types";
 
 type Props = {
   status: BookingStatus;
