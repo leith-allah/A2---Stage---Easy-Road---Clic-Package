@@ -11,6 +11,9 @@ from "@/server/dto/package/create-package.dto";
 import { requireAdmin }
 from "@/server/middlewares/admin.middleware";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
 
 export async function GET() {
 
@@ -27,6 +30,10 @@ export async function POST(
 ) {
 
   await requireAdmin();
+
+  await requirePermission(
+    "package:create"
+  );
   
   const body:
     CreatePackageDto =

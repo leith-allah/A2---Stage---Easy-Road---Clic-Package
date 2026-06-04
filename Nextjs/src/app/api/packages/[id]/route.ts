@@ -11,6 +11,9 @@ from "@/server/dto/package/update-package.dto";
 import { requireAdmin }
 from "@/server/middlewares/admin.middleware";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
 
 export async function GET(
   request: NextRequest,
@@ -54,6 +57,10 @@ export async function PATCH(
   const { id } =
     await params;
     await requireAdmin();
+  
+  await requirePermission(
+    "package:update"
+  );
 
   const body:
     UpdatePackageDto =
@@ -87,6 +94,10 @@ export async function DELETE(
   const { id } =
     await params;
     await requireAdmin();
+
+  await requirePermission(
+    "package:delete"
+  );
 
   await packageService.deletePackage(
     Number(id)
