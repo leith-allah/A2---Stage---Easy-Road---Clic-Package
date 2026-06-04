@@ -1,7 +1,5 @@
 
-export interface Package {
-
-  id: number;
+export interface CreatePackageDto {
 
   name: string;
 
@@ -13,13 +11,11 @@ export interface Package {
 
   description?: string;
 
-  departureDate: Date;
+  departureDate: string;
 
-  returnDate: Date;
+  returnDate: string;
 
   basePrice: number;
 
   availableSeats: number;
-
-  createdAt: Date;
 }
