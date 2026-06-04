@@ -15,6 +15,10 @@ import {
   userService,
 } from "@/server/services/user.service";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+
 export async function GET() {
 
   const users =
@@ -28,6 +32,10 @@ export async function GET() {
 export async function POST(
   request: Request
 ) {
+
+  await requirePermission(
+    "user:create"
+  );
 
   const data =
     await validateBody(

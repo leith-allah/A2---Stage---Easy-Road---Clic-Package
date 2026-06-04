@@ -15,6 +15,10 @@ import {
   userService,
 } from "@/server/services/user.service";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+
 type Params = {
   params: Promise<{
     id: string;
@@ -44,6 +48,10 @@ export async function PATCH(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "user:update"
+  );
+
   const { id } =
     await params;
 
@@ -71,6 +79,9 @@ export async function DELETE(
 
   const { id } =
     await params;
+    await requirePermission(
+      "user:delete"
+    );
 
   await userService.deleteUser(
     Number(id)
