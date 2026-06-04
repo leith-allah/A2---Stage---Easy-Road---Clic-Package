@@ -1,21 +1,38 @@
 
+import { walletRepository }
+from "@/server/repositories/wallet.repository";
+
 export const walletService = {
 
   async getBalance() {
 
-    return {
-      balance: 0,
-    };
+    const wallet =
+      walletRepository.findByUserId(
+        1
+      );
+
+    return wallet;
   },
 
   async topup(
     amount: number
   ) {
 
-    return {
-      success: true,
-      amount,
-    };
+    const wallet =
+      walletRepository.findByUserId(
+        1
+      );
+
+    if (!wallet) {
+      throw new Error(
+        "Wallet introuvable"
+      );
+    }
+
+    return walletRepository.updateBalance(
+      1,
+      wallet.balance + amount
+    );
   },
 
   async transfer(
@@ -23,10 +40,45 @@ export const walletService = {
     amount: number
   ) {
 
+    const sender =
+      walletRepository.findByUserId(
+        1
+      );
+
+    const recipient =
+      walletRepository.findByUserId(
+        recipientId
+      );
+
+    if (
+      !sender ||
+      !recipient
+    ) {
+      throw new Error(
+        "Wallet introuvable"
+      );
+    }
+
+    if (
+      sender.balance < amount
+    ) {
+      throw new Error(
+        "Fonds insuffisants"
+      );
+    }
+
+    walletRepository.updateBalance(
+      sender.userId,
+      sender.balance - amount
+    );
+
+    walletRepository.updateBalance(
+      recipient.userId,
+      recipient.balance + amount
+    );
+
     return {
       success: true,
-      recipientId,
-      amount,
     };
   },
 };
