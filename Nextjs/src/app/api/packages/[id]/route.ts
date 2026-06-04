@@ -8,9 +8,6 @@ from "@/server/services/package.service";
 import { UpdatePackageDto }
 from "@/server/dto/package/update-package.dto";
 
-import { requireAdmin }
-from "@/server/middlewares/admin.middleware";
-
 import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
@@ -56,7 +53,6 @@ export async function PATCH(
 
   const { id } =
     await params;
-    await requireAdmin();
   
   await requirePermission(
     "package:update"
@@ -93,7 +89,6 @@ export async function DELETE(
 
   const { id } =
     await params;
-    await requireAdmin();
 
   await requirePermission(
     "package:delete"
