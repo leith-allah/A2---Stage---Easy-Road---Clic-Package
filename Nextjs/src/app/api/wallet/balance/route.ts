@@ -1,8 +1,16 @@
 
-import { NextResponse } from "next/server";
+import { NextResponse }
+from "next/server";
+
+import { walletService }
+from "@/server/services/wallet.service";
 
 export async function GET() {
-  return NextResponse.json({
-    message: "Not implemented yet",
-  });
+
+  const balance =
+    await walletService.getBalance();
+
+  return NextResponse.json(
+    balance
+  );
 }
