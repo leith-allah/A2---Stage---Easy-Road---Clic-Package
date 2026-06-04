@@ -8,6 +8,9 @@ from "@/server/services/package.service";
 import { UpdatePackageDto }
 from "@/server/dto/package/update-package.dto";
 
+import { requireAdmin }
+from "@/server/middlewares/admin.middleware";
+
 
 export async function GET(
   request: NextRequest,
@@ -50,6 +53,7 @@ export async function PATCH(
 
   const { id } =
     await params;
+    await requireAdmin();
 
   const body:
     UpdatePackageDto =
@@ -82,6 +86,7 @@ export async function DELETE(
 
   const { id } =
     await params;
+    await requireAdmin();
 
   await packageService.deletePackage(
     Number(id)
