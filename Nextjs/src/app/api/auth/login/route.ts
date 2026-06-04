@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { comparePassword } from "@/server/auth/password";
 import { signToken } from "@/server/auth/jwt";
 import { setAuthCookie } from "@/server/auth/cookies";
-import { getMockUser } from "@/server/auth/mock-user";
+import { userRepository } from "@/server/repositories/user.repository";
 
 export async function POST(
   request: Request
@@ -18,11 +18,9 @@ export async function POST(
   } = body;
 
   const user =
-    await getMockUser();
+    await userRepository.findByEmail(email);
 
-  if (
-    email !== user.email
-  ) {
+  if (!user) {
     return NextResponse.json(
       {
         message:
@@ -37,7 +35,7 @@ export async function POST(
   const validPassword =
     await comparePassword(
       password,
-      user.password
+      user.mdp_user
     );
 
   if (!validPassword) {
@@ -54,27 +52,40 @@ export async function POST(
 
   const token =
     signToken({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+      sub: Number(
+        user.id_user
+      ),
 
-  await setAuthCookie(
-    token
-  );
+      email:
+        user.email_pro_user,
+
+      role:
+        user.statut_user as
+          | "ADMIN"
+          | "AGENCY"
+          | "CLIENT",
+    });
 
   return NextResponse.json({
     message:
       "Connexion réussie",
 
     user: {
-      id: user.id,
-      email: user.email,
+      id: Number(
+        user.id_user
+      ),
+
+      email:
+        user.email_pro_user,
+
       firstName:
-        user.firstName,
+        user.prenom_user,
+
       lastName:
-        user.lastName,
-      role: user.role,
-    },
+        user.nom_user,
+
+      role:
+        user.statut_user,
+    }
   });
 }
