@@ -1,9 +1,5 @@
 
-export interface Booking {
-
-  id: number;
-
-  reference: string;
+export interface CreateBookingDto {
 
   travelers: number;
 
@@ -18,10 +14,6 @@ export interface Booking {
   discount: number;
 
   totalPrice: number;
-
-  bookingDate: Date;
-
-  status: string;
 
   packageId: number;
 
