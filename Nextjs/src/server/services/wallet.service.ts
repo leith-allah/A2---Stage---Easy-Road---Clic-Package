@@ -7,11 +7,22 @@ export const walletService = {
   async getBalance() {
 
     const wallet =
-      walletRepository.findByUserId(
+      await walletRepository.findByUserId(
         1
       );
 
-    return wallet;
+    if (!wallet) {
+      throw new Error(
+        "Portefeuille introuvable"
+      );
+    }
+
+    return {
+      balance:
+        Number(
+          wallet.solde_total_prtfl
+        ),
+    };
   },
 
   async topup(
@@ -19,20 +30,30 @@ export const walletService = {
   ) {
 
     const wallet =
-      walletRepository.findByUserId(
+      await walletRepository.findByUserId(
         1
       );
 
     if (!wallet) {
       throw new Error(
-        "Wallet introuvable"
+        "Portefeuille introuvable"
       );
     }
 
-    return walletRepository.updateBalance(
-      1,
-      wallet.balance + amount
+    const newBalance =
+      Number(
+        wallet.solde_total_prtfl
+      ) + amount;
+
+    await walletRepository.updateBalance(
+      wallet.id_prtfl,
+      newBalance
     );
+
+    return {
+      success: true,
+      balance: newBalance,
+    };
   },
 
   async transfer(
@@ -41,12 +62,12 @@ export const walletService = {
   ) {
 
     const sender =
-      walletRepository.findByUserId(
+      await walletRepository.findByUserId(
         1
       );
 
     const recipient =
-      walletRepository.findByUserId(
+      await walletRepository.findByUserId(
         recipientId
       );
 
@@ -55,30 +76,45 @@ export const walletService = {
       !recipient
     ) {
       throw new Error(
-        "Wallet introuvable"
+        "Portefeuille introuvable"
       );
     }
+
+    const senderBalance =
+      Number(
+        sender.solde_total_prtfl
+      );
 
     if (
-      sender.balance < amount
+      senderBalance < amount
     ) {
       throw new Error(
-        "Fonds insuffisants"
+        "Solde insuffisant"
       );
     }
 
-    walletRepository.updateBalance(
-      sender.userId,
-      sender.balance - amount
+    const newSenderBalance =
+      senderBalance - amount;
+
+    const newRecipientBalance =
+      Number(
+        recipient.solde_total_prtfl
+      ) + amount;
+
+    await walletRepository.updateBalance(
+      sender.id_prtfl,
+      newSenderBalance
     );
 
-    walletRepository.updateBalance(
-      recipient.userId,
-      recipient.balance + amount
+    await walletRepository.updateBalance(
+      recipient.id_prtfl,
+      newRecipientBalance
     );
 
     return {
       success: true,
+      balance: newSenderBalance,
     };
   },
+
 };

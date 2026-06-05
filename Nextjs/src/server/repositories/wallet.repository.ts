@@ -1,6 +1,6 @@
 
-import { wallets }
-from "@/server/mock-data/wallets";
+import { prisma }
+from "@/server/db/prisma";
 
 export const walletRepository = {
 
@@ -8,33 +8,30 @@ export const walletRepository = {
     userId: number
   ) {
 
-    return wallets.find(
-      wallet =>
-        wallet.userId === userId
-    );
+    return prisma.portefeuille.findUnique({
+      where: {
+        id_user: BigInt(userId),
+      },
+    });
   },
 
   updateBalance(
-    userId: number,
+    walletId: bigint,
     balance: number
   ) {
 
-    const wallet =
-      wallets.find(
-        wallet =>
-          wallet.userId === userId
-      );
+    return prisma.portefeuille.update({
+      where: {
+        id_prtfl: walletId,
+      },
 
-    if (!wallet) {
-      return null;
-    }
+      data: {
+        solde_total_prtfl: balance,
 
-    wallet.balance =
-      balance;
-
-    wallet.updatedAt =
-      new Date();
-
-    return wallet;
+        derniere_maj_prtfl:
+          new Date(),
+      },
+    });
   },
+
 };
