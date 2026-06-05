@@ -1,8 +1,16 @@
 
-import { NextResponse } from "next/server";
+import {
+  notificationService,
+}
+from "@/server/services/notification.service";
 
 export async function GET() {
-  return NextResponse.json({
-    message: "Not implemented yet",
-  });
+
+  const notifications =
+    await notificationService.getAllNotifications();
+
+  return Response.json(
+    notifications
+  );
+
 }
