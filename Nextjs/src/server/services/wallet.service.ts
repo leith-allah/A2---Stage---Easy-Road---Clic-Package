@@ -46,7 +46,7 @@ export const walletService = {
       ) + amount;
 
     await walletRepository.updateBalance(
-      wallet.id_prtfl,
+      Number(wallet.id_prtfl),
       newBalance
     );
 
@@ -102,12 +102,12 @@ export const walletService = {
       ) + amount;
 
     await walletRepository.updateBalance(
-      sender.id_prtfl,
+      Number(sender.id_prtfl),
       newSenderBalance
     );
 
     await walletRepository.updateBalance(
-      recipient.id_prtfl,
+      Number(recipient.id_prtfl),
       newRecipientBalance
     );
 
