@@ -117,4 +117,55 @@ export const walletService = {
     };
   },
 
+  async getAllWallets() {
+
+    return walletRepository.findAll();
+
+  },
+
+  async getWalletById(
+    id: number
+  ) {
+
+    const wallet =
+      await walletRepository.findById(
+        id
+      );
+
+    if (!wallet) {
+
+      throw new Error(
+        "Portefeuille introuvable"
+      );
+
+    }
+
+    return wallet;
+
+  },
+
+  async createWallet(
+    userId: number
+  ) {
+
+    return walletRepository.create(
+      userId
+    );
+
+  },
+
+  async deleteWallet(
+    id: number
+  ) {
+
+    await this.getWalletById(
+      id
+    );
+
+    return walletRepository.delete(
+      id
+    );
+
+  },
+
 };

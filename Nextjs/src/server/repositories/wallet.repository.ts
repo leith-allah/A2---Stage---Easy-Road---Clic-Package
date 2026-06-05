@@ -4,6 +4,32 @@ from "@/server/db/prisma";
 
 export const walletRepository = {
 
+  findAll() {
+
+    return prisma.portefeuille.findMany({
+
+      orderBy: {
+        id_prtfl: "asc",
+      },
+
+    });
+
+  },
+
+  findById(
+    id: number
+  ) {
+
+    return prisma.portefeuille.findUnique({
+
+      where: {
+        id_prtfl: BigInt(id),
+      },
+
+    });
+
+  },
+
   findByUserId(
     userId: number
   ) {
@@ -15,38 +41,49 @@ export const walletRepository = {
       },
 
     });
+
   },
 
-  findById(
-    walletId: number
+  create(
+    userId: number
   ) {
 
-    return prisma.portefeuille.findUnique({
+    return prisma.portefeuille.create({
 
-      where: {
-        id_prtfl: BigInt(walletId),
+      data: {
+
+        num_prtfl:
+          crypto.randomUUID(),
+
+        solde_total_prtfl: 0,
+
+        derniere_maj_prtfl:
+          new Date(),
+
+        id_user:
+          BigInt(userId),
+
       },
 
     });
+
   },
 
   updateBalance(
-
-    walletId: number,
-
+    id: number,
     balance: number
-
   ) {
 
     return prisma.portefeuille.update({
 
       where: {
-        id_prtfl: BigInt(walletId),
+        id_prtfl: BigInt(id),
       },
 
       data: {
 
-        solde_total_prtfl: balance,
+        solde_total_prtfl:
+          balance,
 
         derniere_maj_prtfl:
           new Date(),
@@ -54,6 +91,21 @@ export const walletRepository = {
       },
 
     });
+
+  },
+
+  delete(
+    id: number
+  ) {
+
+    return prisma.portefeuille.delete({
+
+      where: {
+        id_prtfl: BigInt(id),
+      },
+
+    });
+
   },
 
 };
