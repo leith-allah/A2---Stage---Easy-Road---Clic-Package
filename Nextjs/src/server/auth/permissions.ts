@@ -21,5 +21,17 @@ export type Permission =
   | "wallet:transfer"
 
   // TRANSACTIONS
-  | "transaction:view";
+  | "transaction:view"
+
+  // AGENCIES
+  | "agency:view"
+  | "agency:create"
+  | "agency:update"
+  | "agency:delete"
+
+  // AGENCIES OFFICES
+  | "agency-office:view"
+  | "agency-office:create"
+  | "agency-office:update"
+  | "agency-office:delete";
   

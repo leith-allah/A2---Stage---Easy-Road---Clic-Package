@@ -26,6 +26,12 @@ Record<UserRole, Permission[]> = {
     "wallet:transfer",
 
     "transaction:view",
+
+    "agency:view",
+    "agency:create",
+    "agency:update",
+    "agency:delete",
+
   ],
 
   AGENCY: [
@@ -38,6 +44,8 @@ Record<UserRole, Permission[]> = {
     "wallet:transfer",
 
     "transaction:view",
+
+    "agency:view",
   ],
 
   CLIENT: [
