@@ -1,8 +1,62 @@
 
-import { NextResponse } from "next/server";
+import { NextRequest }
+from "next/server";
+
+import { transactionService }
+from "@/server/services/transaction.service";
+
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
 
 export async function GET() {
-  return NextResponse.json({
-    message: "Not implemented yet",
-  });
+
+  await requirePermission(
+    "transaction:view"
+  );
+
+  const transactions =
+    await transactionService.getAllTransactions();
+
+  return Response.json(
+    transactions
+  );
+}
+
+export async function POST(
+  request: NextRequest
+) {
+
+  await requirePermission(
+    "transaction:view"
+  );
+
+  const body =
+    await request.json();
+
+  const transaction =
+    await transactionService.createTransaction({
+
+      sourceWalletId:
+        body.sourceWalletId,
+
+      destinationWalletId:
+        body.destinationWalletId,
+
+      amount:
+        body.amount,
+
+      type:
+        body.type,
+
+      status:
+        body.status,
+
+    });
+
+  return Response.json(
+    transaction,
+    {
+      status: 201,
+    }
+  );
 }

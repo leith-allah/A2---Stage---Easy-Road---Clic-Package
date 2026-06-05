@@ -4,6 +4,30 @@ from "@/server/db/prisma";
 
 export const transactionRepository = {
 
+  findAll() {
+
+    return prisma.transactions.findMany({
+
+      orderBy: {
+        date_heure_transac: "desc",
+      },
+
+    });
+  },
+
+  findById(
+    id: number
+  ) {
+
+    return prisma.transactions.findUnique({
+
+      where: {
+        id_transac: BigInt(id),
+      },
+
+    });
+  },
+
   create(data: {
 
     sourceWalletId: number;
@@ -51,5 +75,51 @@ export const transactionRepository = {
 
     });
   },
+
+  update(
+  id: number,
+  data: {
+    type?: string;
+    status?: string;
+  }
+) {
+
+  return prisma.transactions.update({
+
+    where: {
+      id_transac: BigInt(id),
+    },
+
+    data: {
+
+      ...(data.type && {
+        type_transac: data.type,
+      }),
+
+      ...(data.status && {
+        statut_transac: data.status,
+      }),
+
+    },
+
+  });
+
+},
+
+delete(
+  id: number
+) {
+
+  return prisma.transactions.delete({
+
+    where: {
+      id_transac: BigInt(id),
+    },
+
+  });
+
+},
+
+
 
 };
