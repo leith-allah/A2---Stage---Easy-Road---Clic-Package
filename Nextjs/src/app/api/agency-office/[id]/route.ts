@@ -1,8 +1,14 @@
 
-import {
-  agencyOfficeService,
-}
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+import { agencyOfficeService }
 from "@/server/services/agency-office.service";
+
+import {
+  updateAgencyOfficeSchema,
+}
+from "@/server/validations/agency-office/update-agency-office.validation";
 
 type Params = {
 
@@ -16,6 +22,10 @@ export async function GET(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "agency-office:view"
+  );
 
   const { id } =
     await params;
@@ -36,16 +46,25 @@ export async function PATCH(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "agency-office:update"
+  );
+
   const { id } =
     await params;
 
   const body =
     await request.json();
 
+  const data =
+    updateAgencyOfficeSchema.parse(
+      body
+    );
+
   const office =
     await agencyOfficeService.updateAgencyOffice(
       Number(id),
-      body
+      data
     );
 
   return Response.json(
@@ -58,6 +77,10 @@ export async function DELETE(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "agency-office:delete"
+  );
 
   const { id } =
     await params;

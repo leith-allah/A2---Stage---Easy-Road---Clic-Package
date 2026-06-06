@@ -1,26 +1,22 @@
 
 import { z } from "zod";
 
-export const updateAgencyOfficeSchema =
-  z.object({
+export const updateAgencyOfficeSchema = z.object({
 
-    type:
-      z.string().optional(),
+  type: z.string().min(1).optional(),
 
-    country:
-      z.string().optional(),
+  country: z.string().min(1).optional(),
 
-    city:
-      z.string().optional(),
+  city: z.string().min(1).optional(),
 
-    address:
-      z.string().optional(),
+  address: z.string().min(1).optional(),
 
-    rib:
-      z.string().optional(),
+  rib: z.string().optional(),
 
-    iban:
-      z.string().optional(),
+  iban: z.string().optional(),
 
-  });
+});
+
+export type UpdateAgencyOfficeValidation =
+  z.infer<typeof updateAgencyOfficeSchema>;
   
