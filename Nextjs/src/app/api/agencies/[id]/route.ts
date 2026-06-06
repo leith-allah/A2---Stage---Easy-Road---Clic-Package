@@ -3,8 +3,12 @@ import { agencyService }
 from "@/server/services/agency.service";
 
 import { requirePermission }
-from "@/server/middlewares/permission.middleware"; 
+from "@/server/middlewares/permission.middleware";
 
+import {
+  updateAgencySchema,
+}
+from "@/server/validations/agency/update-agency.validation";
 
 type Params = {
 
@@ -18,6 +22,10 @@ export async function GET(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "agency:view"
+  );
 
   const { id } =
     await params;
@@ -38,18 +46,26 @@ export async function PATCH(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "agency:update"
+  );
+
   const { id } =
     await params;
 
   const body =
     await request.json();
 
+  const data =
+    updateAgencySchema.parse(
+      body
+    );
+
   const agency =
     await agencyService.updateAgency(
       Number(id),
-      body
+      data
     );
-    await requirePermission("agency:update");
 
   return Response.json(
     agency
@@ -62,10 +78,16 @@ export async function DELETE(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "agency:delete"
+  );
+
   const { id } =
     await params;
-    await agencyService.deleteAgency(Number(id));
-    await requirePermission("agency:delete");
+
+  await agencyService.deleteAgency(
+    Number(id)
+  );
 
   return Response.json({
 
