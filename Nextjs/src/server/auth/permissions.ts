@@ -33,5 +33,24 @@ export type Permission =
   | "agency-office:view"
   | "agency-office:create"
   | "agency-office:update"
-  | "agency-office:delete";
+  | "agency-office:delete" 
+
+  // EXCURSIONS
+  | "excursion:view"
+  | "excursion:create"
+  | "excursion:update"
+  | "excursion:delete"
+
+
+
+  export const permissions = {
+
+  // EXCURSIONS
+
+  "excursion:view": "Voir les excursions",
+  "excursion:create": "Créer une excursion",
+  "excursion:update": "Modifier une excursion",
+  "excursion:delete": "Supprimer une excursion",
+
+};
   
