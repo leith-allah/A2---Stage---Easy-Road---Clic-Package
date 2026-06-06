@@ -4,6 +4,16 @@ import {
 }
 from "@/server/services/role.service";
 
+import {
+  requirePermission,
+}
+from "@/server/middlewares/permission.middleware";
+
+import {
+  updateRoleSchema,
+}
+from "@/server/validations/role/update-role.validation";
+
 type Params = {
 
   params: Promise<{
@@ -16,6 +26,10 @@ export async function GET(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "role:view"
+  );
 
   const { id } =
     await params;
@@ -36,18 +50,27 @@ export async function PATCH(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "role:update"
+  );
+
   const { id } =
     await params;
 
   const body =
     await request.json();
 
+  const data =
+    updateRoleSchema.parse(
+      body
+    );
+
   const role =
     await roleService.updateRole(
 
       Number(id),
 
-      body.name
+      data.name ?? ""
 
     );
 
@@ -61,6 +84,10 @@ export async function DELETE(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "role:delete"
+  );
 
   const { id } =
     await params;

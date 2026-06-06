@@ -41,6 +41,12 @@ export type Permission =
   | "excursion:update"
   | "excursion:delete"
 
+  // ROLES
+  | "role:view"
+  | "role:create"
+  | "role:update"
+  | "role:delete";
+
 
 
   export const permissions = {
