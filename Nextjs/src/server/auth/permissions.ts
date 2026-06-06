@@ -45,7 +45,13 @@ export type Permission =
   | "role:view"
   | "role:create"
   | "role:update"
-  | "role:delete";
+  | "role:delete"
+
+  // TRANSPORTS
+  | "transport:view"
+  | "transport:create"
+  | "transport:update"
+  | "transport:delete";
 
 
 
