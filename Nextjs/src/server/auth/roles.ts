@@ -8,15 +8,46 @@ from "@/server/types/auth.types";
 export const ROLE_PERMISSIONS:
 Record<UserRole, Permission[]> = {
 
-  ADMIN: [
-
+  SUPER_ADMIN: [
+    
+    "package:view",
     "package:create",
     "package:update",
     "package:delete",
 
+    "booking:view",
     "booking:create",
     "booking:update",
-    "booking:cancel",
+    "booking:delete",
+
+    "user:create",
+    "user:update",
+    "user:delete",
+
+    "wallet:topup",
+    "wallet:transfer",
+
+    "transaction:view",
+
+    "agency:view",
+    "agency:create",
+    "agency:update",
+    "agency:delete",
+
+  ],
+
+
+  ADMIN: [
+
+    "package:view",
+    "package:create",
+    "package:update",
+    "package:delete",
+
+    "booking:view",
+    "booking:create",
+    "booking:update",
+    "booking:delete",
 
     "user:create",
     "user:update",
@@ -36,9 +67,12 @@ Record<UserRole, Permission[]> = {
 
   AGENCY: [
 
+    "package:view",
+
+    "booking:view",
     "booking:create",
     "booking:update",
-    "booking:cancel",
+    "booking:delete",
 
     "wallet:topup",
     "wallet:transfer",
@@ -50,6 +84,9 @@ Record<UserRole, Permission[]> = {
 
   CLIENT: [
 
+    "package:view",
+
+    "booking:view",
     "booking:create",
 
     "wallet:topup",

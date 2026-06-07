@@ -54,6 +54,29 @@ export const bookingService = {
     );
   },
 
+
+  async bookingExists(
+  id: number
+) {
+
+  const booking =
+    await bookingRepository.findById(
+      id
+    );
+
+  if (!booking) {
+
+    throw new NotFoundException(
+      "Réservation introuvable"
+    );
+
+  }
+
+  return booking;
+
+},
+
+
   async createBooking(
     dto: CreateBookingDto
   ) {
@@ -103,6 +126,8 @@ export const bookingService = {
     dto: UpdateBookingDto
   ) {
 
+    await this.bookingExists(id);
+
     return bookingRepository.update(
       id,
       {
@@ -112,9 +137,14 @@ export const bookingService = {
     );
   },
 
+
   async deleteBooking(
     id: number
   ) {
+
+    await this.bookingExists(
+      id
+    );
 
     await bookingRepository.delete(
       id
@@ -123,5 +153,6 @@ export const bookingService = {
     return {
       success: true,
     };
+
   },
 };

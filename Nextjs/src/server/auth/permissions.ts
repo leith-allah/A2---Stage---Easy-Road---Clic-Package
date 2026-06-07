@@ -8,9 +8,10 @@ export type Permission =
   | "package:delete"
 
   // BOOKINGS
+  | "booking:view"
   | "booking:create"
   | "booking:update"
-  | "booking:cancel"
+  | "booking:delete"
 
   // USERS
   | "user:create"
@@ -83,6 +84,13 @@ export type Permission =
   "hotel:create": "Créer un hôtel",
   "hotel:update": "Modifier un hôtel",
   "hotel:delete": "Supprimer un hôtel",
+
+
+  // BOOKINGS
+  "booking:view": "Voir les réservations",
+  "booking:create": "Créer une réservation",
+  "booking:update": "Modifier une réservation",
+  "booking:delete": "Supprimer une réservation",
 
 };
   

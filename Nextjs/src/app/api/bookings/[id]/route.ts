@@ -2,12 +2,25 @@
 import { NextRequest }
 from "next/server";
 
-import { bookingService }
+import {
+  bookingService,
+}
 from "@/server/services/booking.service";
 
-import { UpdateBookingDto }
-from "@/server/dto/booking/update-booking.dto";
+import {
+  requirePermission,
+}
+from "@/server/middlewares/permission.middleware";
 
+import {
+  validateBody,
+}
+from "@/server/validations/validate-request";
+
+import {
+  updateBookingSchema,
+}
+from "@/server/validations/booking/update-booking.validation";
 
 export async function GET(
   request: NextRequest,
@@ -21,6 +34,10 @@ export async function GET(
   }
 ) {
 
+  await requirePermission(
+    "booking:view"
+  );
+
   const { id } =
     await params;
 
@@ -32,8 +49,8 @@ export async function GET(
   return Response.json(
     booking
   );
-}
 
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -47,12 +64,18 @@ export async function PATCH(
   }
 ) {
 
+  await requirePermission(
+    "booking:update"
+  );
+
   const { id } =
     await params;
 
-  const body:
-    UpdateBookingDto =
-      await request.json();
+  const body =
+    await validateBody(
+      request,
+      updateBookingSchema
+    );
 
   const booking =
     await bookingService.updateBooking(
@@ -63,8 +86,8 @@ export async function PATCH(
   return Response.json(
     booking
   );
-}
 
+}
 
 export async function DELETE(
   request: NextRequest,
@@ -78,6 +101,10 @@ export async function DELETE(
   }
 ) {
 
+  await requirePermission(
+    "booking:delete"
+  );
+
   const { id } =
     await params;
 
@@ -88,4 +115,5 @@ export async function DELETE(
   return Response.json({
     success: true,
   });
+
 }

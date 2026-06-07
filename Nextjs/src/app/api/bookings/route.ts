@@ -2,14 +2,31 @@
 import { NextRequest }
 from "next/server";
 
-import { bookingService }
+import {
+  bookingService,
+}
 from "@/server/services/booking.service";
 
-import { CreateBookingDto }
-from "@/server/dto/booking/create-booking.dto";
+import {
+  requirePermission,
+}
+from "@/server/middlewares/permission.middleware";
 
+import {
+  validateBody,
+}
+from "@/server/validations/validate-request";
+
+import {
+  createBookingSchema,
+}
+from "@/server/validations/booking/create-booking.validation";
 
 export async function GET() {
+
+  await requirePermission(
+    "booking:view"
+  );
 
   const bookings =
     await bookingService.getBookings();
@@ -17,16 +34,22 @@ export async function GET() {
   return Response.json(
     bookings
   );
-}
 
+}
 
 export async function POST(
   request: NextRequest
 ) {
 
-  const body:
-    CreateBookingDto =
-      await request.json();
+  await requirePermission(
+    "booking:create"
+  );
+
+  const body =
+    await validateBody(
+      request,
+      createBookingSchema
+    );
 
   const booking =
     await bookingService.createBooking(
@@ -34,6 +57,10 @@ export async function POST(
     );
 
   return Response.json(
-    booking
+    booking,
+    {
+      status: 201,
+    }
   );
+
 }
