@@ -14,6 +14,10 @@ from "@/server/middlewares/permission.middleware";
 
 export async function GET() {
 
+  await requirePermission(
+    "package:view"
+  );
+
   const packages =
     await packageService.getPackages();
 

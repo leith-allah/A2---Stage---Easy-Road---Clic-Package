@@ -2,6 +2,7 @@
 export type Permission =
 
   // PACKAGES
+  | "package:view"
   | "package:create"
   | "package:update"
   | "package:delete"
@@ -64,11 +65,24 @@ export type Permission =
   export const permissions = {
 
   // EXCURSIONS
-
   "excursion:view": "Voir les excursions",
   "excursion:create": "Créer une excursion",
   "excursion:update": "Modifier une excursion",
   "excursion:delete": "Supprimer une excursion",
+
+
+  // PACKAGES
+  "package:view": "Voir les packages",
+  "package:create": "Créer un package",
+  "package:update": "Modifier un package",
+  "package:delete": "Supprimer un package",
+
+
+  // HOTELS
+  "hotel:view": "Voir les hôtels",
+  "hotel:create": "Créer un hôtel",
+  "hotel:update": "Modifier un hôtel",
+  "hotel:delete": "Supprimer un hôtel",
 
 };
   

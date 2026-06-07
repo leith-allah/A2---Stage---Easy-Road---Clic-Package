@@ -16,6 +16,27 @@ from "@/server/exceptions/not-found.exception";
 
 export const packageService = {
 
+  async packageExists(
+    id: number
+  ) {
+
+    const pkg =
+      await packageRepository.findById(
+        id
+      );
+
+    if (!pkg) {
+
+      throw new NotFoundException(
+        "Package introuvable"
+      );
+
+    }
+
+    return pkg;
+
+  },
+
   async getPackages() {
 
     const packages =
@@ -103,6 +124,8 @@ export const packageService = {
     dto: UpdatePackageDto
   ) {
 
+    await this.packageExists(id);
+
     return packageRepository.update(
       id,
       {
@@ -145,6 +168,10 @@ export const packageService = {
     id: number
   ) {
 
+    await this.packageExists(
+      id
+    );
+
     await packageRepository.delete(
       id
     );
@@ -152,6 +179,7 @@ export const packageService = {
     return {
       success: true,
     };
+
   },
 
 };

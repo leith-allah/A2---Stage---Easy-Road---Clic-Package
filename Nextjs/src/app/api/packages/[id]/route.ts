@@ -24,6 +24,10 @@ export async function GET(
   }
 ) {
 
+  await requirePermission(
+    "package:view"
+  );
+
   const { id } =
     await params;
 
