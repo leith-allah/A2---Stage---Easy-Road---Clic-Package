@@ -1,47 +1,34 @@
 
-import { NextRequest }
-from "next/server";
+import { NextRequest } from "next/server";
 
-import { hotelService }
-from "@/server/services/hotel.service";
+import { hotelService } from "@/server/services/hotel.service";
+
+import { createHotelSchema } from "@/server/validations/hotel/hotel.validation";
+
+import { requirePermission } from "@/server/middlewares/permission.middleware";
 
 export async function GET() {
+  await requirePermission("hotel:view");
 
   const hotels =
     await hotelService.getAllHotels();
 
-  return Response.json(
-    hotels
-  );
-
+  return Response.json(hotels);
 }
 
 export async function POST(
   request: NextRequest
 ) {
+  await requirePermission("hotel:create");
 
   const body =
     await request.json();
 
+  const data =
+    createHotelSchema.parse(body);
+
   const hotel =
-    await hotelService.createHotel({
-
-      nom_hot:
-        body.nom_hot,
-
-      nb_etoiles_hot:
-        body.nb_etoiles_hot,
-
-      pays_hot:
-        body.pays_hot,
-
-      ville_hot:
-        body.ville_hot,
-
-      adresse_hot:
-        body.adresse_hot,
-
-    });
+    await hotelService.createHotel(data);
 
   return Response.json(
     hotel,
@@ -49,5 +36,4 @@ export async function POST(
       status: 201,
     }
   );
-
 }
