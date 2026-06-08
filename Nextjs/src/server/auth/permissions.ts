@@ -28,6 +28,9 @@ export type Permission =
 
   // TRANSACTIONS
   | "transaction:view"
+  | "transaction:create"
+  | "transaction:update"
+  | "transaction:delete"
 
   // AGENCIES
   | "agency:view"

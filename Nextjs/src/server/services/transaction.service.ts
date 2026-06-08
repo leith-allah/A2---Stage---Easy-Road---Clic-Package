@@ -1,19 +1,29 @@
 
-import {
-  transactionRepository,
-}
+import { transactionRepository } 
 from "@/server/repositories/transaction.repository";
 
-import {
-  NotFoundException,
-}
+import { NotFoundException }
 from "@/server/utils/api-error";
+
+import { TransactionMapper }
+from "@/server/mappers/transaction.mapper";
+
 
 export const transactionService = {
 
   async getAllTransactions() {
 
-    return transactionRepository.findAll();
+    const transactions =
+      await transactionRepository.findAll();
+
+    return transactions.map(
+      (transaction) =>
+        TransactionMapper.toDto(
+          TransactionMapper.fromPrisma(
+            transaction
+          )
+        )
+    );
   },
 
   async getTransactionById(
@@ -33,7 +43,11 @@ export const transactionService = {
 
     }
 
-    return transaction;
+    return TransactionMapper.toDto(
+      TransactionMapper.fromPrisma(
+        transaction
+      )
+    );
   },
 
   async createTransaction(

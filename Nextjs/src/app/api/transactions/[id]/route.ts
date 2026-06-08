@@ -4,6 +4,16 @@ import {
 }
 from "@/server/services/transaction.service";
 
+import {
+  validateBody,
+}
+from "@/server/validations/validate-request";
+
+import {
+  updateTransactionSchema,
+}
+from "@/server/validations/transaction/update-transaction.validation";
+
 type Params = {
 
   params: Promise<{
@@ -40,7 +50,10 @@ export async function PATCH(
     await params;
 
   const body =
-    await request.json();
+    await validateBody(
+      request,
+      updateTransactionSchema
+    );
 
   const transaction =
     await transactionService.updateTransaction(

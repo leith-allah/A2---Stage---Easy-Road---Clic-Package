@@ -2,11 +2,26 @@
 import { NextRequest }
 from "next/server";
 
-import { transactionService }
+import {
+  transactionService,
+}
 from "@/server/services/transaction.service";
 
-import { requirePermission }
+import {
+  requirePermission,
+}
 from "@/server/middlewares/permission.middleware";
+
+import {
+  validateBody,
+}
+from "@/server/validations/validate-request";
+
+import {
+  createTransactionSchema,
+}
+from "@/server/validations/transaction/create-transaction.validation";
+
 
 export async function GET() {
 
@@ -31,7 +46,10 @@ export async function POST(
   );
 
   const body =
-    await request.json();
+    await validateBody(
+      request,
+      createTransactionSchema
+    );
 
   const transaction =
     await transactionService.createTransaction({
