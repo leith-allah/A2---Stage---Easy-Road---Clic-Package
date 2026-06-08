@@ -2,13 +2,19 @@
 import { walletRepository }
 from "@/server/repositories/wallet.repository";
 
+import { getCurrentUserId } from "@/server/auth/session";
+
+
 export const walletService = {
 
   async getBalance() {
 
+    const userId =
+      await getCurrentUserId();
+
     const wallet =
       await walletRepository.findByUserId(
-        1
+        userId
       );
 
     if (!wallet) {
@@ -29,9 +35,12 @@ export const walletService = {
     amount: number
   ) {
 
+    const userId =
+      await getCurrentUserId();
+
     const wallet =
       await walletRepository.findByUserId(
-        1
+        userId
       );
 
     if (!wallet) {
@@ -61,9 +70,12 @@ export const walletService = {
     amount: number
   ) {
 
+    const userId =
+      await getCurrentUserId();
+
     const sender =
       await walletRepository.findByUserId(
-        1
+        userId
       );
 
     const recipient =
@@ -101,14 +113,16 @@ export const walletService = {
         recipient.solde_total_prtfl
       ) + amount;
 
-    await walletRepository.updateBalance(
-      Number(sender.id_prtfl),
-      newSenderBalance
-    );
+    await walletRepository.transferFunds(
 
-    await walletRepository.updateBalance(
+      Number(sender.id_prtfl),
+
       Number(recipient.id_prtfl),
+
+      newSenderBalance,
+
       newRecipientBalance
+
     );
 
     return {

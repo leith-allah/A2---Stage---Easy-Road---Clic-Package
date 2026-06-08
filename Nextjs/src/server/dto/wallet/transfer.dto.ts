@@ -1,5 +1,5 @@
 
 export interface TransferDto {
-  receiverId: number;
+  recipientId: number;
   amount: number;
 }

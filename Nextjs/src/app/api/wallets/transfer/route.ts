@@ -1,31 +1,49 @@
 
-import { NextRequest }
-from "next/server";
+import {
+  successResponse,
+} from "@/server/api/responses/success";
 
-import { walletService }
-from "@/server/services/wallet.service";
+import {
+  validateBody,
+} from "@/server/validations/wallet/validate-request";
 
-import { requirePermission }
-from "@/server/middlewares/permission.middleware";
+import {
+  transferSchema,
+} from "@/server/validations/wallet/transfer.validation";
+
+import {
+  walletService,
+} from "@/server/services/wallet.service";
+
+import {
+  requirePermission,
+} from "@/server/middlewares/permission.middleware";
+
 
 export async function POST(
-  request: NextRequest
+  request: Request
 ) {
 
   await requirePermission(
     "wallet:transfer"
   );
 
-  const body =
-    await request.json();
+  const data =
+    await validateBody(
+      request,
+      transferSchema
+    );
 
   const result =
     await walletService.transfer(
-      body.recipientId,
-      body.amount
+      data.recipientId,
+      data.amount
     );
 
-  return Response.json(
-    result
+  return successResponse(
+    result,
+    200,
+    "Transfert effectué"
   );
+
 }

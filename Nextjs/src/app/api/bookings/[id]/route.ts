@@ -15,7 +15,7 @@ from "@/server/middlewares/permission.middleware";
 import {
   validateBody,
 }
-from "@/server/validations/validate-request";
+from "@/server/validations/wallet/validate-request";
 
 import {
   updateBookingSchema,

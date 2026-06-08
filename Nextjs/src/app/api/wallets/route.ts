@@ -1,15 +1,35 @@
 
 import {
+  successResponse,
+} from "@/server/api/responses/success";
+
+import {
+  validateBody,
+} from "@/server/validations/wallet/validate-request";
+
+import {
+  createWalletSchema,
+} from "@/server/validations/wallet/create-wallet.validation";
+
+import {
   walletService,
-}
-from "@/server/services/wallet.service";
+} from "@/server/services/wallet.service";
+
+import {
+  requirePermission,
+} from "@/server/middlewares/permission.middleware";
+
 
 export async function GET() {
+
+  await requirePermission(
+    "wallet:view"
+  );
 
   const wallets =
     await walletService.getAllWallets();
 
-  return Response.json(
+  return successResponse(
     wallets
   );
 
@@ -19,19 +39,25 @@ export async function POST(
   request: Request
 ) {
 
-  const body =
-    await request.json();
+  await requirePermission(
+    "wallet:create"
+  );
+
+  const data =
+    await validateBody(
+      request,
+      createWalletSchema
+    );
 
   const wallet =
     await walletService.createWallet(
-      body.userId
+      data.userId
     );
 
-  return Response.json(
+  return successResponse(
     wallet,
-    {
-      status: 201,
-    }
+    201,
+    "Portefeuille créé"
   );
 
 }

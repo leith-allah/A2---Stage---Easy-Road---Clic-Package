@@ -108,4 +108,54 @@ export const walletRepository = {
 
   },
 
+
+  async transferFunds(
+  senderWalletId: number,
+  recipientWalletId: number,
+  senderNewBalance: number,
+  recipientNewBalance: number
+) {
+
+  return prisma.$transaction([
+
+    prisma.portefeuille.update({
+
+      where: {
+        id_prtfl: BigInt(senderWalletId),
+      },
+
+      data: {
+
+        solde_total_prtfl:
+          senderNewBalance,
+
+        derniere_maj_prtfl:
+          new Date(),
+
+      },
+
+    }),
+
+    prisma.portefeuille.update({
+
+      where: {
+        id_prtfl: BigInt(recipientWalletId),
+      },
+
+      data: {
+
+        solde_total_prtfl:
+          recipientNewBalance,
+
+        derniere_maj_prtfl:
+          new Date(),
+
+      },
+
+    }),
+
+  ]);
+
+},
+
 };

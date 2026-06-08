@@ -21,6 +21,10 @@ export type Permission =
   // WALLET
   | "wallet:topup"
   | "wallet:transfer"
+  | "wallet:balance"
+  | "wallet:view"
+  | "wallet:create"
+  | "wallet:delete"
 
   // TRANSACTIONS
   | "transaction:view"

@@ -24,6 +24,10 @@ Record<UserRole, Permission[]> = {
     "user:update",
     "user:delete",
 
+    "wallet:view",
+    "wallet:balance",
+    "wallet:create",
+    "wallet:delete",
     "wallet:topup",
     "wallet:transfer",
 
@@ -53,6 +57,10 @@ Record<UserRole, Permission[]> = {
     "user:update",
     "user:delete",
 
+    "wallet:view",
+    "wallet:balance",
+    "wallet:create",
+    "wallet:delete",
     "wallet:topup",
     "wallet:transfer",
 
@@ -74,6 +82,8 @@ Record<UserRole, Permission[]> = {
     "booking:update",
     "booking:delete",
 
+    "wallet:view",
+    "wallet:balance",
     "wallet:topup",
     "wallet:transfer",
 
@@ -89,6 +99,8 @@ Record<UserRole, Permission[]> = {
     "booking:view",
     "booking:create",
 
+    "wallet:view",
+    "wallet:balance",
     "wallet:topup",
 
     "transaction:view",

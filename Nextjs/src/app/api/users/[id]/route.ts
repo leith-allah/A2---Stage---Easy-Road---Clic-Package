@@ -5,7 +5,7 @@ import {
 
 import {
   validateBody,
-} from "@/server/validations/validate-request";
+} from "@/server/validations/wallet/validate-request";
 
 import {
   updateUserSchema,

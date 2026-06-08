@@ -1,8 +1,16 @@
 
 import {
+  successResponse,
+} from "@/server/api/responses/success";
+
+import {
   walletService,
-}
-from "@/server/services/wallet.service";
+} from "@/server/services/wallet.service";
+
+import {
+  requirePermission,
+} from "@/server/middlewares/permission.middleware";
+
 
 type Params = {
 
@@ -17,6 +25,10 @@ export async function GET(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "wallet:view"
+  );
+
   const { id } =
     await params;
 
@@ -25,7 +37,7 @@ export async function GET(
       Number(id)
     );
 
-  return Response.json(
+  return successResponse(
     wallet
   );
 
@@ -36,6 +48,10 @@ export async function DELETE(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "wallet:delete"
+  );
+
   const { id } =
     await params;
 
@@ -43,10 +59,12 @@ export async function DELETE(
     Number(id)
   );
 
-  return Response.json({
-
-    success: true,
-
-  });
+  return successResponse(
+    {
+      deleted: true,
+    },
+    200,
+    "Portefeuille supprimé"
+  );
 
 }
