@@ -32,7 +32,7 @@ export class NotificationMapper {
         ),
 
       comment:
-        notification.commentaire_demande_recharge,
+        notification.comment_demande_recharge,
 
       createdAt:
         notification.date_heure_demande_recharge,

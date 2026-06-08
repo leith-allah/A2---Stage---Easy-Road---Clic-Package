@@ -38,4 +38,60 @@ export const notificationService = {
 
   },
 
+  async createNotification(
+    data: {
+
+      userId: number;
+
+      status: string;
+
+      amount: number;
+
+      comment?: string;
+
+    }
+  ) {
+
+    return notificationRepository.create(
+      data
+    );
+
+  },
+
+  async updateNotification(
+    id: number,
+    data: {
+
+      status?: string;
+
+      comment?: string;
+
+    }
+  ) {
+
+    await this.getNotificationById(
+      id
+    );
+
+    return notificationRepository.update(
+      id,
+      data
+    );
+
+  },
+
+  async deleteNotification(
+    id: number
+  ) {
+
+    await this.getNotificationById(
+      id
+    );
+
+    return notificationRepository.delete(
+      id
+    );
+
+  },
+
 };

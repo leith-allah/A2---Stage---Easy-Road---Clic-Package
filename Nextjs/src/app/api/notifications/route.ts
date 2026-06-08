@@ -14,3 +14,36 @@ export async function GET() {
   );
 
 }
+
+export async function POST(
+  request: Request
+) {
+
+  const body =
+    await request.json();
+
+  const notification =
+    await notificationService.createNotification({
+
+      userId:
+        body.userId,
+
+      status:
+        body.status,
+
+      amount:
+        body.amount,
+
+      comment:
+        body.comment,
+
+    });
+
+  return Response.json(
+    notification,
+    {
+      status: 201,
+    }
+  );
+
+}
