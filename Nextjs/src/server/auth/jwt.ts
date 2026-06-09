@@ -54,3 +54,18 @@ export function verifyToken(
     role: payload.role,
   };
 }
+
+
+export function signRefreshToken(
+  payload: AuthJwtPayload
+) {
+
+  return jwt.sign(
+    payload,
+    JWT_SECRET,
+    {
+      expiresIn: "30d",
+    }
+  );
+
+}

@@ -17,11 +17,19 @@ export const userRepository = {
   },
 
   findByEmail(email: string) {
+
     return prisma.utilisateur.findUnique({
+
       where: {
         email_pro_user: email,
       },
+
+      include: {
+        role: true,
+      },
+
     });
+
   },
 
   create(data: any) {

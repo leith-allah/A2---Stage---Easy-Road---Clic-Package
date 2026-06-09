@@ -5,6 +5,7 @@
 
 INSERT INTO role (nom_role)
 VALUES 
+('SUPER_ADMIN'),
 ('ADMIN'),
 ('CLIENT'),
 ('AGENT');
@@ -38,10 +39,10 @@ INSERT INTO utilisateur (
     id_role, id_bureau
 )
 VALUES 
-('U001','111111111','Admin','Root','1990-01-01','DZ','ACTIVE','admin@easyroad.com','pass','2025-01-01',1,1),
-('U002','222222222','Client','Ali','1998-05-10','DZ','ACTIVE','ali@easyroad.com','pass','2025-01-01',2,1),
-('U003','333333333','Client','Sara','2000-09-15','DZ','ACTIVE','sara@easyroad.com','pass','2025-01-01',2,1),
-('U004','444444444','Agent','Yacine','1995-03-20','DZ','ACTIVE','agent@easyroad.com','pass','2025-01-01',3,1);
+('U001','111111111','Admin','Root','1990-01-01','DZ','ACTIVE','admin@easyroad.com','$2b$12$CLexYndLIfJaLuivlUeqAON8CPAu94w/6FPZJv7q2HPYy8GMUfCH6','2025-01-01',1,1),
+('U002','222222222','Client','Ali','1998-05-10','DZ','ACTIVE','ali@easyroad.com','$2b$12$9SYKEIG9VJH0efsPHgnvwuxTvyMQJY4CMCvYVHOX1tRtRMLxPrxqG','2025-01-01',2,1),
+('U003','333333333','Client','Sara','2000-09-15','DZ','ACTIVE','sara@easyroad.com','$2b$12$dRA.5xF85Net.fh4bOtFU.565XOVDsntOCBia6ThS6BWphMz3iR/G','2025-01-01',2,1),
+('U004','444444444','Agent','Yacine','1995-03-20','DZ','ACTIVE','agent@easyroad.com','$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa','2025-01-01',3,1);
 
 -- =========================
 -- PORTEFEUILLES
