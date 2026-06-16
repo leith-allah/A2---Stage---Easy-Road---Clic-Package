@@ -7,6 +7,9 @@ export const registerSchema =
     nin:
       z.string(),
 
+    id_bureau:
+      z.number(),
+
     firstName:
       z.string(),
 

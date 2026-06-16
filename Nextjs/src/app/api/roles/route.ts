@@ -14,6 +14,7 @@ import {
 }
 from "@/server/validations/role/create-role.validation";
 
+
 export async function GET() {
 
   await requirePermission(
@@ -49,6 +50,10 @@ export async function POST(
     await roleService.createRole(
       data.name
     );
+
+  console.log(
+    await roleService.getAllRoles()
+  );
 
   return Response.json(
     role,

@@ -14,6 +14,10 @@ from "@/server/dto/package/update-package.dto";
 import { NotFoundException }
 from "@/server/exceptions/not-found.exception";
 
+import { USER_STATUS }
+from "@/server/constants/user-status";
+
+
 export const packageService = {
 
   async packageExists(
@@ -82,7 +86,7 @@ export const packageService = {
         crypto.randomUUID(),
 
       statut_pack:
-        "ACTIF",
+        USER_STATUS.ACTIVE,
 
       nom_pack:
         dto.name,

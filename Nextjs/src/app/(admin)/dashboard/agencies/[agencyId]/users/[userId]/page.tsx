@@ -4,6 +4,10 @@
 import UserStatusButton from "@/features/admin/users/components/UserStatusButton";
 import { useState } from "react";
 
+import { USER_STATUS }
+from "@/server/constants/user-status";
+
+
 export default function UserDetailsPage() {
 
   type Status =
@@ -157,8 +161,8 @@ export default function UserDetailsPage() {
                 >
                   {user.status ===
                   "ACTIVE"
-                    ? "ACTIF"
-                    : "SUSPENDU"}
+                    ? USER_STATUS.ACTIVE
+                    : USER_STATUS.SUSPENDED}
                 </div>
               </div>
             </div>

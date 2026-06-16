@@ -2,30 +2,24 @@
 import { NextResponse }
 from "next/server";
 
-import {
-  hashPassword,
-}
+import { hashPassword }
 from "@/server/auth/password";
 
-import {
-  userRepository,
-}
+import { userRepository }
 from "@/server/repositories/user.repository";
 
-import {
-  walletRepository,
-}
+import { walletRepository }
 from "@/server/repositories/wallet.repository";
 
-import {
-  registerSchema,
-}
+import { registerSchema }
 from "@/server/validations/auth/register.validation";
 
-import {
-  validateBody,
-}
+import { validateBody }
 from "@/server/utils/validate-body";
+
+import { USER_STATUS }
+from "@/server/constants/user-status";
+
 
 export async function POST(
   request: Request
@@ -64,6 +58,14 @@ export async function POST(
   const user =
     await userRepository.create({
 
+      bureau_agence: {
+
+        connect: {
+          id_bureau: BigInt(body.id_bureau),
+        },
+
+      },
+
       mle_user:
         crypto.randomUUID(),
 
@@ -85,7 +87,7 @@ export async function POST(
         body.nationality,
 
       statut_user:
-        "EN_ATTENTE",
+        USER_STATUS.PENDING,
 
       email_pro_user:
         body.email,
@@ -96,11 +98,13 @@ export async function POST(
       dcc_user:
         new Date(),
 
-      id_role:
-        BigInt(4),
+      role: {
 
-      id_bureau:
-        null,
+        connect: {
+          id_role: BigInt(4),
+        },
+
+      },
 
     });
 

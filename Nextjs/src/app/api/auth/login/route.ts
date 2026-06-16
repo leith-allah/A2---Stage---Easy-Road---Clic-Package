@@ -15,6 +15,9 @@ from "@/server/repositories/user.repository";
 import { UserRole }
 from "@/server/types/auth.types";
 
+import { USER_STATUS }
+from "@/server/constants/user-status";
+
 
 export async function POST(
   request: Request
@@ -48,7 +51,7 @@ export async function POST(
   }
 
   if (
-    user.statut_user === "SUSPENDU"
+    user.statut_user === USER_STATUS.SUSPENDED
   ) {
 
     return NextResponse.json(
@@ -64,13 +67,29 @@ export async function POST(
   }
 
   if (
-    user.statut_user === "EN_ATTENTE"
+    user.statut_user === USER_STATUS.PENDING
   ) {
 
     return NextResponse.json(
       {
         message:
           "Compte en attente de validation",
+      },
+      {
+        status: 403,
+      }
+    );
+
+  }
+
+  if (
+    user.statut_user === USER_STATUS.DELETED
+  ) {
+
+    return NextResponse.json(
+      {
+        message:
+          "Compte supprimé",
       },
       {
         status: 403,
@@ -99,21 +118,33 @@ export async function POST(
 
   }
 
-  const role: UserRole =
+  const roleName =
+    user.role.nom_role;
 
-    user.role.nom_role === "AGENT"
+  if (
+    ![
+      "OWNER",
+      "SUPER_ADMIN",
+      "ADMIN",
+      "AGENCY",
+      "CLIENT",
+    ].includes(roleName)
+  ) {
 
-      ? "AGENCY"
+    return NextResponse.json(
+      {
+        message:
+          "Rôle invalide",
+      },
+      {
+        status: 403,
+      }
+    );
 
-      : user.role.nom_role === "SUPER_ADMIN"
+  }
 
-        ? "SUPER_ADMIN"
-
-        : user.role.nom_role === "ADMIN"
-
-          ? "ADMIN"
-
-          : "CLIENT";
+  const role =
+    roleName as UserRole;
 
   const token =
     signToken({

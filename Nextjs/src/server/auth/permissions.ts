@@ -14,9 +14,13 @@ export type Permission =
   | "booking:delete"
 
   // USERS
+  | "user:view"
   | "user:create"
   | "user:update"
   | "user:delete"
+  | "user:activate"
+  | "user:suspend"
+  | "user:assign-office"
 
   // WALLET
   | "wallet:topup"

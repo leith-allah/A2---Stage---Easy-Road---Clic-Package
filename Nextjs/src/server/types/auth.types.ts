@@ -1,5 +1,6 @@
 
 export type UserRole =
+  | "OWNER"
   | "SUPER_ADMIN"
   | "ADMIN"
   | "AGENCY"

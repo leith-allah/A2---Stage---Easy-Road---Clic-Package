@@ -18,6 +18,12 @@ import {
 import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
+import { canManageRole } 
+from "@/server/auth/role-hierarchy";
+
+import { getCurrentUser } 
+from "@/server/auth/current-user";
+
 
 type Params = {
   params: Promise<{
@@ -29,6 +35,10 @@ export async function GET(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "user:view"
+  );
 
   const { id } =
     await params;
@@ -54,6 +64,23 @@ export async function PATCH(
 
   const { id } =
     await params;
+  
+  const currentUser =
+    await getCurrentUser();
+
+    await userService.validateRoleManagement(
+      currentUser.role,
+      Number(id)
+    );
+  
+  if (
+    Number(currentUser.id) ===
+    Number(id)
+  ) {
+    throw new Error(
+      "Action interdite sur votre propre compte"
+    );
+  }
 
   const data =
     await validateBody(
@@ -82,6 +109,32 @@ export async function DELETE(
     await requirePermission(
       "user:delete"
     );
+
+  const currentUser =
+    await getCurrentUser();
+
+    await userService.validateRoleManagement(
+      currentUser.role,
+      Number(id)
+    );
+
+  const targetUser =
+    await userService.getUserById(
+      Number(id)
+    );
+
+  if (
+    !canManageRole(
+      currentUser.role,
+      targetUser.role
+    )
+  ) {
+
+    throw new Error(
+      "Permissions insuffisantes"
+    );
+
+  }
 
   await userService.deleteUser(
     Number(id)

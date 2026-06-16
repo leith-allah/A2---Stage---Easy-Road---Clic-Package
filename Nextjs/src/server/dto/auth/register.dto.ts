@@ -3,6 +3,8 @@ export interface RegisterDto {
 
   nin: string;
 
+  id_bureau: number;
+
   firstName: string;
 
   lastName: string;

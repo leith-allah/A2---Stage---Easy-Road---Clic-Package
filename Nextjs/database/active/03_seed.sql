@@ -3,12 +3,13 @@
 -- ROLES
 -- =========================
 
-INSERT INTO role (nom_role)
-VALUES 
-('SUPER_ADMIN'),
-('ADMIN'),
-('CLIENT'),
-('AGENT');
+INSERT INTO role (id_role, nom_role)
+VALUES
+(1, 'OWNER'),
+(2, 'SUPER_ADMIN'),
+(3, 'ADMIN'),
+(4, 'AGENCY'),
+(5, 'CLIENT');
 
 -- =========================
 -- AGENCE + BUREAU
@@ -34,25 +35,65 @@ VALUES
 
 INSERT INTO utilisateur (
     mle_user, nin_user, nom_user, prenom_user,
-    ddn_user, nat_user, statut_user,
-    email_pro_user, mdp_user, dcc_user,
-    id_role, id_bureau
+    ddn_user, nat_user, statut_user, email_pro_user,
+    mdp_user, dcc_user, id_role, id_bureau
 )
-VALUES 
-('U001','111111111','Admin','Root','1990-01-01','DZ','ACTIVE','admin@easyroad.com','$2b$12$CLexYndLIfJaLuivlUeqAON8CPAu94w/6FPZJv7q2HPYy8GMUfCH6','2025-01-01',1,1),
-('U002','222222222','Client','Ali','1998-05-10','DZ','ACTIVE','ali@easyroad.com','$2b$12$9SYKEIG9VJH0efsPHgnvwuxTvyMQJY4CMCvYVHOX1tRtRMLxPrxqG','2025-01-01',2,1),
-('U003','333333333','Client','Sara','2000-09-15','DZ','ACTIVE','sara@easyroad.com','$2b$12$dRA.5xF85Net.fh4bOtFU.565XOVDsntOCBia6ThS6BWphMz3iR/G','2025-01-01',2,1),
-('U004','444444444','Agent','Yacine','1995-03-20','DZ','ACTIVE','agent@easyroad.com','$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa','2025-01-01',3,1);
+VALUES
+
+-- OWNER (moi)
+(
+'U001', '111111111', 'Amokrane', 'Owner',
+'2000-01-01', 'DZ', 'ACTIVE', 'owner@easyroad.com',
+'$2b$12$CLexYndLIfJaLuivlUeqAON8CPAu94w/6FPZJv7q2HPYy8GMUfCH6',
+'2025-01-01', 1, 1
+),
+
+-- SUPER ADMIN
+(
+'U002', '222222222', 'Super', 'Admin',
+'1995-01-01', 'DZ', 'ACTIVE', 'superadmin@easyroad.com',
+'$2b$12$9SYKEIG9VJH0efsPHgnvwuxTvyMQJY4CMCvYVHOX1tRtRMLxPrxqG',
+'2025-01-01', 2, 1
+),
+
+-- ADMIN
+(
+'U003', '333333333', 'System', 'Admin',
+'1995-01-01', 'DZ', 'ACTIVE', 'admin@easyroad.com',
+'$2b$12$dRA.5xF85Net.fh4bOtFU.565XOVDsntOCBia6ThS6BWphMz3iR/G',
+'2025-01-01', 3, 1
+),
+
+-- AGENCY
+(
+'U004', '444444444', 'Agence', 'Partner',
+'1995-01-01', 'DZ', 'ACTIVE', 'agency@easyroad.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 4, 1
+),
+
+-- CLIENT
+(
+'U005', '555555555', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client@easyroad.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 1
+);
 
 -- =========================
 -- PORTEFEUILLES
 -- =========================
 
-INSERT INTO portefeuille (num_prtfl, solde_total_prtfl, derniere_maj_prtfl, id_user)
-VALUES 
-('PRT001', 50000, NOW(), 2),
-('PRT002', 75000, NOW(), 3),
-('PRT003', 0, NOW(), 4);
+INSERT INTO portefeuille (
+    num_prtfl,
+    solde_total_prtfl,
+    derniere_maj_prtfl,
+    id_user
+)
+VALUES
+('PRT000', 1000000, NOW(), 1), -- OWNER
+('PRT001', 50000, NOW(), 5), -- CLIENT
+('PRT002', 0, NOW(), 4);     -- AGENCY
 
 -- =========================
 -- VOLS
@@ -129,8 +170,7 @@ INSERT INTO propose VALUES (1,1), (2,1);
 
 INSERT INTO favorise (id_user, id_pack, date_ajout_fav)
 VALUES 
-(2,1,NOW()),
-(3,1,NOW());
+(5,1,NOW());
 
 -- =========================
 -- DEMANDES DE RECHARGEMENT
@@ -149,7 +189,7 @@ VALUES
     20000,
     NOW(),
     'Recharge initiale',
-    2
+    5
 );
 
 -- =========================
@@ -177,9 +217,9 @@ VALUES
     'Recharge portefeuille',
     NOW(),
     1,
+    5,
     2,
-    1,
-    2
+    1
 );
 
 -- =========================
@@ -215,5 +255,5 @@ VALUES
     'CONFIRMED',
     1,
     1,
-    2
+    5
 );

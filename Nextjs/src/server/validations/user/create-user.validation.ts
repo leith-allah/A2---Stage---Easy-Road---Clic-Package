@@ -1,28 +1,37 @@
 
-import { z } from "zod";
+import { z }
+from "zod";
 
 export const createUserSchema =
+
   z.object({
-    email: z.email(),
 
-    password:
-      z.string().min(6),
+    nin_user:
+      z.string().min(5),
 
-    firstName:
+    nom_user:
       z.string().min(2),
 
-    lastName:
+    prenom_user:
       z.string().min(2),
 
-    role:
+    ddn_user:
       z.string(),
 
-    suspended:
-      z.boolean().optional(),
-  });
+    nat_user:
+      z.string(),
 
-export type CreateUserInput =
-  z.infer<
-    typeof createUserSchema
-  >;
+    email_pro_user:
+      z.email(),
+
+    mdp_user:
+      z.string().min(8),
+
+    id_role:
+      z.number(),
+
+    id_bureau:
+      z.number(),
+
+  });
   

@@ -1,23 +1,24 @@
 
 import {
   hashPassword,
-}
-from "@/server/auth/password";
+} from "@/server/auth/password";
 
 import {
   signToken,
-}
-from "@/server/auth/jwt";
+} from "@/server/auth/jwt";
 
 import {
   userRepository,
-}
-from "@/server/repositories/user.repository";
+} from "@/server/repositories/user.repository";
 
 import {
   walletRepository,
-}
-from "@/server/repositories/wallet.repository";
+} from "@/server/repositories/wallet.repository";
+
+import {
+  USER_STATUS,
+} from "@/server/constants/user-status";
+
 
 export const authService = {
 
@@ -36,6 +37,8 @@ export const authService = {
     email: string;
 
     password: string;
+
+    id_bureau: number;
 
   }) {
 
@@ -60,10 +63,57 @@ export const authService = {
     const user =
       await userRepository.create({
 
-        ...data,
+        mle_user:
+          crypto.randomUUID(),
 
-        password:
+        nin_user:
+          data.nin,
+
+        nom_user:
+          data.lastName,
+
+        prenom_user:
+          data.firstName,
+
+        ddn_user:
+          new Date(
+            data.birthDate
+          ),
+
+        nat_user:
+          data.nationality,
+
+        statut_user:
+          USER_STATUS.PENDING,
+
+        email_pro_user:
+          data.email,
+
+        mdp_user:
           hashedPassword,
+
+        dcc_user:
+          new Date(),
+
+        role: {
+
+          connect: {
+            id_role:
+              BigInt(4),
+          },
+
+        },
+
+        bureau_agence: {
+
+          connect: {
+            id_bureau:
+              BigInt(
+                data.id_bureau
+              ),
+          },
+
+        },
 
       });
 

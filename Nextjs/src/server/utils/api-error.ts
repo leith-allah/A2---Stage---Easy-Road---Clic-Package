@@ -13,6 +13,7 @@ export class ApiError extends Error {
   }
 }
 
+
 export class NotFoundException
   extends ApiError {
 
@@ -28,4 +29,46 @@ export class NotFoundException
     this.name =
       "NotFoundException";
   }
+}
+
+
+export class UnauthorizedException
+  extends ApiError {
+
+  constructor(
+    message = "Non authentifié"
+  ) {
+
+    super(
+      401,
+      message,
+      "UNAUTHORIZED"
+    );
+
+    this.name =
+      "UnauthorizedException";
+
+  }
+
+}
+
+
+export class ForbiddenException
+  extends ApiError {
+
+  constructor(
+    message = "Accès interdit"
+  ) {
+
+    super(
+      403,
+      message,
+      "FORBIDDEN"
+    );
+
+    this.name =
+      "ForbiddenException";
+
+  }
+
 }

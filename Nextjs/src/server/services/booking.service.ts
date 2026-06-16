@@ -14,6 +14,10 @@ from "@/server/dto/booking/update-booking.dto";
 import { NotFoundException }
 from "@/server/exceptions/not-found.exception";
 
+import { USER_STATUS }
+from "@/server/constants/user-status";
+
+
 export const bookingService = {
 
   async getBookings() {
@@ -111,7 +115,7 @@ export const bookingService = {
         new Date(),
 
       statut_achat_pack:
-        "EN_ATTENTE",
+        USER_STATUS.PENDING,
 
       id_pack:
         BigInt(dto.packageId),

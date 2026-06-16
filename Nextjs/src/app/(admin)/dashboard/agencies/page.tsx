@@ -7,6 +7,9 @@
   import FilterBar from "@/components/ui/FilterBar";
   import UserStatusButton from "@/features/admin/users/components/UserStatusButton";
 
+  import { USER_STATUS }
+  from "@/server/constants/user-status";
+
   import Link from "next/link";
 
   export default function AgenciesPage() {
@@ -282,8 +285,8 @@
                   >
                     {agency.status ===
                     "ACTIVE"
-                      ? "ACTIF"
-                      : "SUSPENDU"}
+                      ? USER_STATUS.ACTIVE
+                      : USER_STATUS.SUSPENDED}
                   </div>
                 </div>
 
