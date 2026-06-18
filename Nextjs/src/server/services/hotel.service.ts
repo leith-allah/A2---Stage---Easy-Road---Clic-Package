@@ -5,12 +5,23 @@ from "@/server/repositories/hotel.repository";
 import { NotFoundException }
 from "@/server/utils/api-error";
 
+import { HotelMapper }
+from "@/server/mappers/hotel.mapper";
+
+
 export const hotelService = {
 
   async getAllHotels() {
 
-    return hotelRepository.findAll();
+    const hotels =
+      await hotelRepository.findAll();
 
+    return hotels.map(
+      (hotel) =>
+        HotelMapper.toDto(
+          hotel
+        )
+    );
   },
 
   async getHotelById(
@@ -27,10 +38,11 @@ export const hotelService = {
       throw new NotFoundException(
         "Hotel introuvable"
       );
-
     }
 
-    return hotel;
+    return HotelMapper.toDto(
+      hotel
+    );
 
   },
 
@@ -50,8 +62,13 @@ export const hotelService = {
     }
   ) {
 
-    return hotelRepository.create(
-      data
+    const hotel =
+      await hotelRepository.create(
+        data
+      );
+
+    return HotelMapper.toDto(
+      hotel
     );
 
   },
@@ -77,9 +94,14 @@ export const hotelService = {
       id
     );
 
-    return hotelRepository.update(
-      id,
-      data
+    const hotel =
+      await hotelRepository.update(
+        id,
+        data
+      );
+
+    return HotelMapper.toDto(
+      hotel
     );
 
   },

@@ -5,7 +5,7 @@ import {
 
 import {
   updateHotelSchema,
-} from "@/server/validations/hotel/hotel.validation";
+} from "@/server/validations/hotel/update-hotel.validation";
 
 import {
   requirePermission,

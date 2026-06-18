@@ -1,11 +1,23 @@
 
 import { prisma } from "@/server/db/prisma";
 
+import { PACKAGE_STATUS }
+from "@/server/constants/package-status";
+
+
 export const packageRepository = {
 
   async findAll() {
 
     return prisma.package_voyage.findMany({
+      where: {
+
+        NOT: {
+          statut_pack:
+            PACKAGE_STATUS.ARCHIVED,
+        },
+      },
+
       orderBy: {
         id_pack: "desc",
       },
@@ -16,13 +28,18 @@ export const packageRepository = {
     id: number
   ) {
 
-    return prisma.package_voyage.findUnique({
+    return prisma.package_voyage.findFirst({
       where: {
-        id_pack: BigInt(id),
+        id_pack:
+          BigInt(id),
+
+        NOT: {
+          statut_pack:
+            PACKAGE_STATUS.ARCHIVED,
+        },
       },
     });
   },
-
 
   async create(data: any) {
 
@@ -48,10 +65,16 @@ async delete(
   id: number
 ) {
 
-  return prisma.package_voyage.delete({
+  return prisma.package_voyage.update({
+
     where: {
       id_pack: BigInt(id),
     },
+
+    data: {
+      statut_pack:
+        PACKAGE_STATUS.ARCHIVED,
+    },
   });
-},
+}
 };
