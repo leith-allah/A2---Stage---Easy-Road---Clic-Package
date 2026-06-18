@@ -1,19 +1,27 @@
 
-import {
-  excursionRepository,
-}
+import { excursionRepository }
 from "@/server/repositories/excursion.repository";
 
-import {
-  NotFoundException,
-}
+import { NotFoundException }
 from "@/server/utils/api-error";
+
+import { ExcursionMapper }
+from "@/server/mappers/excursion.mapper";
+
 
 export const excursionService = {
 
   async getAllExcursions() {
 
-    return excursionRepository.findAll();
+    const excursions =
+      await excursionRepository.findAll();
+
+    return excursions.map(
+      (excursion) =>
+        ExcursionMapper.toDto(
+          excursion
+        )
+    );
 
   },
 
@@ -34,7 +42,9 @@ export const excursionService = {
 
     }
 
-    return excursion;
+    return ExcursionMapper.toDto(
+      excursion
+    );
 
   },
 
@@ -50,8 +60,13 @@ export const excursionService = {
     }
   ) {
 
-    return excursionRepository.create(
-      data
+    const excursion =
+      await excursionRepository.create(
+        data
+      );
+
+    return ExcursionMapper.toDto(
+      excursion
     );
 
   },
@@ -73,9 +88,14 @@ export const excursionService = {
       id
     );
 
-    return excursionRepository.update(
-      id,
-      data
+    const excursion =
+      await excursionRepository.update(
+        id,
+        data
+      );
+
+    return ExcursionMapper.toDto(
+      excursion
     );
 
   },
