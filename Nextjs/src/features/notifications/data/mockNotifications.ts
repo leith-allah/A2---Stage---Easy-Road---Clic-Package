@@ -1,6 +1,10 @@
 
 import { Notification } from "@/features/notifications/types/notification.types";
 
+import { TRANSACTION_STATUS } 
+from "@/server/constants/transaction-status"; 
+
+
 export const mockNotifications: Notification[] =
   [
     {

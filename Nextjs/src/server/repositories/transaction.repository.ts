@@ -2,6 +2,7 @@
 import { prisma }
 from "@/server/db/prisma";
 
+
 export const transactionRepository = {
 
   findAll() {
@@ -26,6 +27,38 @@ export const transactionRepository = {
       },
 
     });
+  },
+
+  findByWalletId(
+    walletId: number
+  ) {
+
+    return prisma.transactions.findMany({
+
+      where: {
+
+        OR: [
+
+          {
+            id_portefeuille_source:
+              BigInt(walletId),
+          },
+
+          {
+            id_portefeuille_dest:
+              BigInt(walletId),
+          },
+
+        ],
+
+      },
+
+      orderBy: {
+        date_heure_transac: "desc",
+      },
+
+    });
+
   },
 
   create(data: {
@@ -107,19 +140,13 @@ export const transactionRepository = {
 },
 
 delete(
-  id: number
+  _: number
 ) {
 
-  return prisma.transactions.delete({
+  throw new Error(
+    "La suppression des transactions est interdite"
+  );
 
-    where: {
-      id_transac: BigInt(id),
-    },
-
-  });
-
-},
-
-
-
+}
+  
 };

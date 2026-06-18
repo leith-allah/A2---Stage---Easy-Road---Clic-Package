@@ -87,7 +87,7 @@ export default function InvoicesPage() {
         );
         break;
 
-      case "pending":
+      case "PENDING":
         result = result.filter(
           (invoice) => invoice.status === "En attente"
         );
@@ -161,7 +161,7 @@ export default function InvoicesPage() {
                 },
                 {
                   label: "Factures en attente",
-                  value: "pending",
+                  value: "PENDING",
                 },
               ]}
             />

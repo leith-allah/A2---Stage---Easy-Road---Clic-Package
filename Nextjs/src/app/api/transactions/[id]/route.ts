@@ -1,18 +1,16 @@
 
-import {
-  transactionService,
-}
+import { transactionService }
 from "@/server/services/transaction.service";
 
-import {
-  validateBody,
-}
+import { validateBody }
 from "@/server/validations/validate-request";
 
-import {
-  updateTransactionSchema,
-}
+import { updateTransactionSchema }
 from "@/server/validations/transaction/update-transaction.validation";
+
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
 
 type Params = {
 
@@ -26,6 +24,10 @@ export async function GET(
   _: Request,
   { params }: Params
 ) {
+
+  await requirePermission(
+    "transaction:view"
+  );
 
   const { id } =
     await params;
@@ -46,6 +48,10 @@ export async function PATCH(
   { params }: Params
 ) {
 
+  await requirePermission(
+    "transaction:update"
+  );
+
   const { id } =
     await params;
 
@@ -64,25 +70,5 @@ export async function PATCH(
   return Response.json(
     transaction
   );
-
-}
-
-export async function DELETE(
-  _: Request,
-  { params }: Params
-) {
-
-  const { id } =
-    await params;
-
-  await transactionService.deleteTransaction(
-    Number(id)
-  );
-
-  return Response.json({
-
-    success: true,
-
-  });
 
 }

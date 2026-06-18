@@ -1,8 +1,20 @@
-
 import { walletRepository }
 from "@/server/repositories/wallet.repository";
 
-import { getCurrentUserId } from "@/server/auth/session";
+import { getCurrentUserId }
+from "@/server/auth/session";
+
+import { transactionRepository }
+from "@/server/repositories/transaction.repository";
+
+import { rechargeRequestRepository }
+from "@/server/repositories/recharge-request.repository";
+
+import { TRANSACTION_TYPE }
+from "@/server/constants/transaction-type";
+
+import { TRANSACTION_STATUS }
+from "@/server/constants/transaction-status";
 
 
 export const walletService = {
@@ -18,57 +30,76 @@ export const walletService = {
       );
 
     if (!wallet) {
+
       throw new Error(
-        "Portefeuille introuvable"
+        "Wallet not found"
       );
+
     }
 
     return {
+
       balance:
         Number(
           wallet.solde_total_prtfl
         ),
+
     };
+
   },
 
   async topup(
     amount: number
   ) {
 
+    if (amount <= 0) {
+
+      throw new Error(
+        "Invalid amount"
+      );
+
+    }
+
     const userId =
       await getCurrentUserId();
 
-    const wallet =
-      await walletRepository.findByUserId(
-        userId
-      );
+    const request =
+      await rechargeRequestRepository.create({
 
-    if (!wallet) {
-      throw new Error(
-        "Portefeuille introuvable"
-      );
-    }
+        userId,
 
-    const newBalance =
-      Number(
-        wallet.solde_total_prtfl
-      ) + amount;
+        amount,
 
-    await walletRepository.updateBalance(
-      Number(wallet.id_prtfl),
-      newBalance
-    );
+      });
 
     return {
+
       success: true,
-      balance: newBalance,
+
+      requestId:
+        Number(
+          request.id_demande_recharge
+        ),
+
+      status:
+        request.statut_demande_recharge,
+
     };
+
   },
 
   async transfer(
     recipientId: number,
     amount: number
   ) {
+
+    if (amount <= 0) {
+
+      throw new Error(
+        "Invalid amount"
+      );
+
+    }
 
     const userId =
       await getCurrentUserId();
@@ -87,9 +118,22 @@ export const walletService = {
       !sender ||
       !recipient
     ) {
+
       throw new Error(
-        "Portefeuille introuvable"
+        "Wallet not found"
       );
+
+    }
+
+    if (
+      Number(sender.id_prtfl) ===
+      Number(recipient.id_prtfl)
+    ) {
+
+      throw new Error(
+        "Cannot transfer to yourself"
+      );
+
     }
 
     const senderBalance =
@@ -100,9 +144,11 @@ export const walletService = {
     if (
       senderBalance < amount
     ) {
+
       throw new Error(
-        "Solde insuffisant"
+        "Insufficient balance"
       );
+
     }
 
     const newSenderBalance =
@@ -125,10 +171,33 @@ export const walletService = {
 
     );
 
+    await transactionRepository.create({
+
+      sourceWalletId:
+        Number(sender.id_prtfl),
+
+      destinationWalletId:
+        Number(recipient.id_prtfl),
+
+      amount,
+
+      type:
+        TRANSACTION_TYPE.TRANSFER,
+
+      status:
+        TRANSACTION_STATUS.SUCCESS,
+
+    });
+
     return {
+
       success: true,
-      balance: newSenderBalance,
+
+      balance:
+        newSenderBalance,
+
     };
+
   },
 
   async getAllWallets() {
@@ -149,7 +218,29 @@ export const walletService = {
     if (!wallet) {
 
       throw new Error(
-        "Portefeuille introuvable"
+        "Wallet not found"
+      );
+
+    }
+
+    return wallet;
+
+  },
+
+  async getMyWallet() {
+
+    const userId =
+      await getCurrentUserId();
+
+    const wallet =
+      await walletRepository.findByUserId(
+        userId
+      );
+
+    if (!wallet) {
+
+      throw new Error(
+        "Wallet not found"
       );
 
     }
@@ -162,6 +253,19 @@ export const walletService = {
     userId: number
   ) {
 
+    const existingWallet =
+      await walletRepository.findByUserId(
+        userId
+      );
+
+    if (existingWallet) {
+
+      throw new Error(
+        "Wallet already exists"
+      );
+
+    }
+
     return walletRepository.create(
       userId
     );
@@ -169,15 +273,11 @@ export const walletService = {
   },
 
   async deleteWallet(
-    id: number
+    _: number
   ) {
 
-    await this.getWalletById(
-      id
-    );
-
-    return walletRepository.delete(
-      id
+    throw new Error(
+      "La suppression des portefeuilles est interdite"
     );
 
   },

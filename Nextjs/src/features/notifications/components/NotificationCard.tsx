@@ -3,6 +3,10 @@
 
 import { Notification } from "@/features/notifications/types/notification.types";
 
+import { TRANSACTION_STATUS } 
+from "@/server/constants/transaction-status"; 
+
+
 type Props = {
   notification: Notification;
 };

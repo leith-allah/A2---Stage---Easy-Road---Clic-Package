@@ -40,6 +40,10 @@ Record<UserRole, Permission[]> = {
     "transaction:update",
     "transaction:delete",
 
+    "recharge-request:view",
+    "recharge-request:approve",
+    "recharge-request:reject",
+
     "agency:view",
     "agency:create",
     "agency:update",
@@ -84,6 +88,10 @@ Record<UserRole, Permission[]> = {
     "transaction:update",
     "transaction:delete",
 
+    "recharge-request:view",
+    "recharge-request:approve",
+    "recharge-request:reject",
+
     "agency:view",
     "agency:create",
     "agency:update",
@@ -123,6 +131,10 @@ Record<UserRole, Permission[]> = {
     "transaction:create",
     "transaction:update",
     "transaction:delete",
+
+    "recharge-request:view",
+    "recharge-request:approve",
+    "recharge-request:reject",
 
     "agency:view",
     "agency:create",
@@ -164,11 +176,13 @@ Record<UserRole, Permission[]> = {
 
     "wallet:view",
     "wallet:balance",
-    "wallet:topup",
 
     "transaction:view",
     "transaction:create",
     "transaction:update",
     "transaction:delete",
+
+    "recharge-request:create",
+
   ],
 };

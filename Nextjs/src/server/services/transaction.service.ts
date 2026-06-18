@@ -8,6 +8,12 @@ from "@/server/utils/api-error";
 import { TransactionMapper }
 from "@/server/mappers/transaction.mapper";
 
+import { getCurrentUserId }
+from "@/server/auth/session";
+
+import { walletRepository }
+from "@/server/repositories/wallet.repository";
+
 
 export const transactionService = {
 
@@ -50,6 +56,40 @@ export const transactionService = {
     );
   },
 
+  async getMyTransactions() {
+
+    const userId =
+      await getCurrentUserId();
+
+    const wallet =
+      await walletRepository.findByUserId(
+        userId
+      );
+
+    if (!wallet) {
+
+      throw new Error(
+        "Wallet not found"
+      );
+
+    }
+
+    const transactions =
+      await transactionRepository.findByWalletId(
+        Number(wallet.id_prtfl)
+      );
+
+    return transactions.map(
+      (transaction) =>
+        TransactionMapper.toDto(
+          TransactionMapper.fromPrisma(
+            transaction
+          )
+        )
+    );
+
+  },
+
   async createTransaction(
     data: {
 
@@ -90,15 +130,12 @@ export const transactionService = {
 },
 
 async deleteTransaction(
-  id: number
+  _: number
 ) {
 
-  await this.getTransactionById(
-    id
+  throw new Error(
+    "Transaction deletion is forbidden"
   );
 
-  return transactionRepository.delete(
-    id
-  );
-},
+}
 };

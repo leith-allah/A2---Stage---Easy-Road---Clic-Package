@@ -1,11 +1,11 @@
 
-import { successResponse } 
+import { successResponse }
 from "@/server/api/responses/success";
 
-import { walletService } 
-from "@/server/services/wallet.service";
+import { rechargeRequestService }
+from "@/server/services/recharge-request.service";
 
-import { requirePermission } 
+import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
 
@@ -17,25 +17,26 @@ type Params = {
 
 };
 
+
 export async function GET(
   _: Request,
   { params }: Params
 ) {
 
   await requirePermission(
-    "wallet:view"
+    "recharge-request:view"
   );
 
   const { id } =
     await params;
 
-  const wallet =
-    await walletService.getWalletById(
+  const request =
+    await rechargeRequestService.getRequestById(
       Number(id)
     );
 
   return successResponse(
-    wallet
+    request
   );
 
 }

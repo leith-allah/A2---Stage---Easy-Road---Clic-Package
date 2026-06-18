@@ -1,0 +1,12 @@
+
+export const TRANSACTION_TYPE = {
+
+  TRANSFER: "TRANSFERT",
+
+  TOPUP: "RECHARGEMENT",
+
+  PURCHASE: "ACHAT",
+
+  REFUND: "REMBOURSEMENT",
+
+} as const;

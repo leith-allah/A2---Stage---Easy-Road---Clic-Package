@@ -1,11 +1,11 @@
 
-import { successResponse } 
+import { successResponse }
 from "@/server/api/responses/success";
 
-import { walletService } 
-from "@/server/services/wallet.service";
+import { rechargeRequestService }
+from "@/server/services/recharge-request.service";
 
-import { requirePermission } 
+import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
 
@@ -17,25 +17,28 @@ type Params = {
 
 };
 
-export async function GET(
+
+export async function PATCH(
   _: Request,
   { params }: Params
 ) {
 
   await requirePermission(
-    "wallet:view"
+    "recharge-request:approve"
   );
 
   const { id } =
     await params;
 
-  const wallet =
-    await walletService.getWalletById(
+  const request =
+    await rechargeRequestService.approveRequest(
       Number(id)
     );
 
   return successResponse(
-    wallet
+    request,
+    200,
+    "Recharge request approved"
   );
 
 }

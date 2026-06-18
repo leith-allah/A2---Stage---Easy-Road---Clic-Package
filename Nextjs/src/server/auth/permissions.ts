@@ -36,6 +36,12 @@ export type Permission =
   | "transaction:update"
   | "transaction:delete"
 
+  // RECHARGE REQUESTS
+  | "recharge-request:view"
+  | "recharge-request:create"
+  | "recharge-request:approve"
+  | "recharge-request:reject"
+
   // AGENCIES
   | "agency:view"
   | "agency:create"
@@ -102,6 +108,13 @@ export type Permission =
   "booking:create": "Créer une réservation",
   "booking:update": "Modifier une réservation",
   "booking:delete": "Supprimer une réservation",
+
+  
+  // RECHARGE REQUESTS
+  "recharge-request:view": "Voir les demandes de rechargement",
+  "recharge-request:create": "Créer une demande de rechargement",
+  "recharge-request:approve": "Approuver une demande de rechargement",
+  "recharge-request:reject": "Refuser une demande de rechargement",
 
 };
   

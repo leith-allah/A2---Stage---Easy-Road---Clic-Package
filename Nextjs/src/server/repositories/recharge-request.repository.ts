@@ -2,6 +2,10 @@
 import { prisma }
 from "@/server/db/prisma";
 
+import { RECHARGE_REQUEST_STATUS } 
+from "@/server/constants/recharge-request-status";
+
+
 export const rechargeRequestRepository = {
 
   findAll() {
@@ -52,7 +56,7 @@ export const rechargeRequestRepository = {
           data.amount,
 
         statut_demande_recharge:
-          "PENDING",
+          RECHARGE_REQUEST_STATUS.PENDING,
 
         comment_demande_recharge:
           data.comment,

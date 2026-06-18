@@ -112,11 +112,18 @@ export const userService = {
     id: number
   ) {
 
-    await this.getUserById(id);
-
-    return userRepository.delete(
+    await this.getUserById(
       id
     );
+
+    return userRepository.update(
+      id,
+      {
+        statut_user:
+          USER_STATUS.DELETED,
+      }
+    );
+
   },
 
   async activateUser(

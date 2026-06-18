@@ -94,17 +94,11 @@ export const walletRepository = {
 
   },
 
-  delete(
-    id: number
-  ) {
+  delete(id: number) {
 
-    return prisma.portefeuille.delete({
-
-      where: {
-        id_prtfl: BigInt(id),
-      },
-
-    });
+    throw new Error(
+      "La suppression des portefeuilles est interdite"
+    );
 
   },
 
