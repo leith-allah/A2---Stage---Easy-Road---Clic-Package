@@ -3,9 +3,24 @@ import { transportRepository } from "@/server/repositories/transport.repository"
 
 import { NotFoundException } from "@/server/utils/api-error";
 
+import { TransportMapper }
+from "@/server/mappers/transport.mapper";
+
+
 export const transportService = {
+
   async getAllTransports() {
-    return transportRepository.findAll();
+
+    const transports =
+      await transportRepository.findAll();
+
+    return transports.map(
+      (transport) =>
+        TransportMapper.toDto(
+          transport
+        )
+    );
+
   },
 
   async getTransportById(id: number) {
@@ -18,14 +33,24 @@ export const transportService = {
       );
     }
 
-    return transport;
+    return TransportMapper.toDto(
+      transport
+    );
   },
 
   async createTransport(data: {
     route: string;
     company?: string;
   }) {
-    return transportRepository.create(data);
+
+    const transport =
+      await transportRepository.create(
+        data
+      );
+
+    return TransportMapper.toDto(
+      transport
+    );
   },
 
   async updateTransport(
@@ -37,9 +62,14 @@ export const transportService = {
   ) {
     await this.getTransportById(id);
 
-    return transportRepository.update(
-      id,
-      data
+    const transport =
+      await transportRepository.update(
+        id,
+        data
+      );
+
+    return TransportMapper.toDto(
+      transport
     );
   },
 
