@@ -97,6 +97,20 @@ export const packageService = {
   },
 
 
+  async getArchivedPackages() {
+
+    const packages =
+      await packageRepository.findArchived();
+
+    return packages.map(
+      (pkg) =>
+        PackageMapper.toDto(
+          PackageMapper.fromPrisma(pkg)
+        )
+    );
+  },
+
+
   async createPackage(
     dto: CreatePackageDto
   ) {
@@ -312,32 +326,38 @@ export const packageService = {
     await prisma.package_voyage.updateMany({
 
       where: {
-
         statut_pack: {
-
           not:
             PACKAGE_STATUS.ARCHIVED,
-
         },
 
         date_depart_pack: {
-
           lt:
             new Date(),
-
         },
-
       },
 
       data: {
-
         statut_pack:
           PACKAGE_STATUS.ARCHIVED,
-
       },
-
     });
 
+    await prisma.package_voyage.updateMany({
+
+      where: {
+
+        stock_dispo_pack: 0,
+
+        statut_pack:
+          PACKAGE_STATUS.ACTIVE,
+      },
+
+      data: {
+        statut_pack:
+          PACKAGE_STATUS.INACTIVE,
+      },
+    });
   },
 
   async deletePackage(

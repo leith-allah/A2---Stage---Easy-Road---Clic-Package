@@ -77,40 +77,61 @@ export const packageRepository = {
     });
   },
 
+  async findArchived() {
+
+    return prisma.package_voyage.findMany({
+
+      where: {
+
+        statut_pack:
+          PACKAGE_STATUS.ARCHIVED,
+
+      },
+
+      orderBy: {
+
+        id_pack: "desc",
+
+      },
+
+    });
+
+  },
+
   async create(data: any) {
 
-  return prisma.package_voyage.create({
-    data,
-  });
-},
+    return prisma.package_voyage.create({
+      data,
+    });
+  },
 
-async update(
-  id: number,
-  data: any
-) {
+  async update(
+    id: number,
+    data: any
+  ) {
 
-  return prisma.package_voyage.update({
-    where: {
-      id_pack: BigInt(id),
-    },
-    data,
-  });
-},
+    return prisma.package_voyage.update({
+      where: {
+        id_pack: BigInt(id),
+      },
+      data,
+    });
+  },
 
-async delete(
-  id: number
-) {
+  async delete(
+    id: number
+  ) {
 
-  return prisma.package_voyage.update({
+    return prisma.package_voyage.update({
 
-    where: {
-      id_pack: BigInt(id),
-    },
+      where: {
+        id_pack: BigInt(id),
+      },
 
-    data: {
-      statut_pack:
-        PACKAGE_STATUS.ARCHIVED,
-    },
-  });
-}
-};
+      data: {
+        statut_pack:
+          PACKAGE_STATUS.ARCHIVED,
+      },
+    });
+  }
+  };
