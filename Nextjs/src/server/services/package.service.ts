@@ -360,6 +360,152 @@ export const packageService = {
     });
   },
 
+  async archivePackage(
+    id: number
+  ) {
+
+    await this.packageExists(
+      id
+    );
+
+    return packageRepository.update(
+      id,
+      {
+        statut_pack:
+          PACKAGE_STATUS.ARCHIVED,
+      }
+    );
+
+  },
+
+  async restorePackage(
+    id: number
+  ) {
+
+    const pkg =
+      await this.packageExists(
+        id
+      );
+
+    if (
+      pkg.stock_dispo_pack <= 0
+    ) {
+
+      return packageRepository.update(
+        id,
+        {
+          statut_pack:
+            PACKAGE_STATUS.INACTIVE,
+        }
+      );
+
+    }
+
+    return packageRepository.update(
+      id,
+      {
+        statut_pack:
+          PACKAGE_STATUS.DRAFT,
+      }
+    );
+
+  },
+
+  async decreaseStock(
+    id: number,
+    quantity: number
+  ) {
+
+    const pkg =
+      await this.packageExists(
+        id
+      );
+
+    const newStock =
+      Math.max(
+        0,
+        pkg.stock_dispo_pack
+        - quantity
+      );
+
+    return packageRepository.update(
+      id,
+      {
+        stock_dispo_pack:
+          newStock,
+
+        statut_pack:
+          newStock <= 0
+            ? PACKAGE_STATUS.INACTIVE
+            : pkg.statut_pack,
+      }
+    );
+
+  },
+
+  async increaseStock(
+    id: number,
+    quantity: number
+  ) {
+
+    const pkg =
+      await this.packageExists(
+        id
+      );
+
+    const newStock =
+      pkg.stock_dispo_pack
+      + quantity;
+
+    return packageRepository.update(
+      id,
+      {
+        stock_dispo_pack:
+          newStock,
+
+        statut_pack:
+          newStock > 0 &&
+          pkg.statut_pack ===
+            PACKAGE_STATUS.INACTIVE
+              ? PACKAGE_STATUS.ACTIVE
+              : pkg.statut_pack,
+      }
+    );
+
+  },
+
+  async publishAllDraftPackages() {
+
+    const result =
+      await prisma.package_voyage.updateMany({
+
+        where: {
+
+          statut_pack:
+            PACKAGE_STATUS.DRAFT,
+
+        },
+
+        data: {
+
+          statut_pack:
+            PACKAGE_STATUS.ACTIVE,
+
+        },
+
+      });
+
+    return {
+
+      success: true,
+
+      updated:
+        result.count,
+
+    };
+
+  },
+
   async deletePackage(
     id: number
   ) {
