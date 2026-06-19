@@ -10,6 +10,7 @@
 
 CREATE TABLE vol (
     id_vol BIGSERIAL PRIMARY KEY,
+    statut_vol VARCHAR(50) NOT NULL DEFAULT 'ACTIF',
     compagnie_vol VARCHAR(50) NOT NULL,
     lieu_depart_vol VARCHAR(50) NOT NULL,
     destination_vol VARCHAR(50) NOT NULL,
@@ -19,7 +20,7 @@ CREATE TABLE vol (
     date_retour_vol DATE,
     heure_depart_retour_vol TIME,
     heure_arrivee_retour_vol TIME,
-    num_vol VARCHAR(50) NOT NULL UNIQUE
+    num_vol VARCHAR(50) NOT NULL 
 );
 
 CREATE TABLE transport (

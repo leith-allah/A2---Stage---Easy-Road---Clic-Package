@@ -236,6 +236,7 @@ model utilise {
 
 model vol {
   id_vol                   BigInt    @id @default(autoincrement())
+  statut_vol               String    @default("ACTIF") @db.VarChar(50)
   compagnie_vol            String    @db.VarChar(50)
   lieu_depart_vol          String    @db.VarChar(50)
   destination_vol          String    @db.VarChar(50)
@@ -245,6 +246,6 @@ model vol {
   date_retour_vol          DateTime? @db.Date
   heure_depart_retour_vol  DateTime? @db.Time(6)
   heure_arrivee_retour_vol DateTime? @db.Time(6)
-  num_vol                  String    @unique @db.VarChar(50)
+  num_vol                  String    @db.VarChar(50)
   possede                  possede[]
 }

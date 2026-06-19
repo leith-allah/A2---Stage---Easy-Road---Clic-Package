@@ -6,5 +6,6 @@
 
   "javascript.preferences.importModuleSpecifierEnding": "minimal",
   "standard.enable": false,
-  "js/ts.tsdk.path": "node_modules\\typescript\\lib"
+  "js/ts.tsdk.path": "node_modules\\typescript\\lib",
+  "editor.tabSize": 2
 }

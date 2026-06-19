@@ -76,7 +76,13 @@ export type Permission =
   | "hotel:view"
   | "hotel:create"
   | "hotel:update"
-  | "hotel:delete";
+  | "hotel:delete" 
+
+  // FLIGHTS
+  | "flight:view"
+  | "flight:create"
+  | "flight:update"
+  | "flight:delete";
 
 
 
