@@ -12,18 +12,44 @@ import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
 
-export async function GET() {
+export async function GET(
+  request: NextRequest
+) {
 
   await requirePermission(
     "package:view"
   );
 
-  const packages =
-    await packageService.getPackages();
+  const searchParams =
+    request.nextUrl.searchParams;
 
-  return NextResponse.json(
+  const country =
+    searchParams.get(
+      "country"
+    ) || undefined;
+
+  const destination =
+    searchParams.get(
+      "destination"
+    ) || undefined;
+
+  const status =
+    searchParams.get(
+      "status"
+    ) || undefined;
+
+  const packages =
+    await packageService.getPackages({
+
+      country,
+      destination,
+      status,
+    });
+
+  return Response.json(
     packages
   );
+
 }
 
 export async function POST(

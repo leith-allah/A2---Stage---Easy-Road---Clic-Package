@@ -17,6 +17,9 @@ from "@/server/exceptions/not-found.exception";
 import { PACKAGE_STATUS }
 from "@/server/constants/package-status";
 
+import { prisma }
+from "@/server/db/prisma";
+
 
 export const packageService = {
 
@@ -41,10 +44,26 @@ export const packageService = {
 
   },
 
-  async getPackages() {
+  async getPackages(
+    filters?: {
+      country?: string;
+      destination?: string;
+      status?: string;
+    }
+  ) {
+
+    await this.archiveExpiredPackages();
 
     const packages =
-      await packageRepository.findAll();
+
+      filters?.country ||
+      filters?.destination ||
+      filters?.status
+
+        ? await packageRepository.findFiltered(
+            filters
+          )
+        : await packageRepository.findAll();
 
     return packages.map(
       (pkg) =>
@@ -57,6 +76,8 @@ export const packageService = {
   async getPackageById(
     id: number
   ) {
+
+    await this.archiveExpiredPackages();
 
     const pkg =
       await packageRepository.findById(
@@ -284,6 +305,39 @@ export const packageService = {
           dto.availableSeats,
       }
     );
+  },
+
+  async archiveExpiredPackages() {
+
+    await prisma.package_voyage.updateMany({
+
+      where: {
+
+        statut_pack: {
+
+          not:
+            PACKAGE_STATUS.ARCHIVED,
+
+        },
+
+        date_depart_pack: {
+
+          lt:
+            new Date(),
+
+        },
+
+      },
+
+      data: {
+
+        statut_pack:
+          PACKAGE_STATUS.ARCHIVED,
+
+      },
+
+    });
+
   },
 
   async deletePackage(

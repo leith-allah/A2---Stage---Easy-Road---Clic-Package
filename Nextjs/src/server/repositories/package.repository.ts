@@ -41,6 +41,42 @@ export const packageRepository = {
     });
   },
 
+  async findFiltered(
+    filters: {
+      country?: string;
+      destination?: string;
+      status?: string;
+    }
+  ) {
+
+    return prisma.package_voyage.findMany({
+
+      where: {
+
+        ...(filters.country && {
+
+          pays_pack:
+            filters.country,
+
+        }),
+
+        ...(filters.destination && {
+
+          destination_pack:
+            filters.destination,
+
+        }),
+
+        ...(filters.status && {
+
+          statut_pack:
+            filters.status,
+
+        }),
+      },
+    });
+  },
+
   async create(data: any) {
 
   return prisma.package_voyage.create({
