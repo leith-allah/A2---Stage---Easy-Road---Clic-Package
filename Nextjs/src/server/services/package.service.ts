@@ -165,6 +165,45 @@ export const packageService = {
       stock_dispo_pack:
         dto.availableSeats,
 
+      supp_economy_pack:
+        dto.suppEconomy ?? 0,
+
+      supp_business_pack:
+        dto.suppBusiness ?? 0,
+
+      supp_first_pack:
+        dto.suppFirst ?? 0,
+
+      supp_single_pack:
+        dto.suppSingle ?? 0,
+
+      supp_double_pack:
+        dto.suppDouble ?? 0,
+
+      supp_triple_pack:
+        dto.suppTriple ?? 0,
+
+      supp_quadruple_pack:
+        dto.suppQuadruple ?? 0,
+
+      supp_suite_pack:
+        dto.suppSuite ?? 0,
+
+      supp_bed_only_pack:
+        dto.suppBedOnly ?? 0,
+
+      supp_bed_breakfast_pack:
+        dto.suppBedBreakfast ?? 0,
+
+      supp_half_board_pack:
+        dto.suppHalfBoard ?? 0,
+
+      supp_full_board_pack:
+        dto.suppFullBoard ?? 0,
+
+      supp_all_inclusive_pack:
+        dto.suppAllInclusive ?? 0,
+
       date_heure_creation_pack:
         new Date(),
     });
@@ -317,6 +356,45 @@ export const packageService = {
 
         stock_dispo_pack:
           dto.availableSeats,
+
+        supp_economy_pack:
+          dto.suppEconomy,
+
+        supp_business_pack:
+          dto.suppBusiness,
+
+        supp_first_pack:
+          dto.suppFirst,
+
+        supp_single_pack:
+          dto.suppSingle,
+
+        supp_double_pack:
+          dto.suppDouble,
+
+        supp_triple_pack:
+          dto.suppTriple,
+
+        supp_quadruple_pack:
+          dto.suppQuadruple,
+
+        supp_suite_pack:
+          dto.suppSuite,
+
+        supp_bed_only_pack:
+          dto.suppBedOnly,
+
+        supp_bed_breakfast_pack:
+          dto.suppBedBreakfast,
+
+        supp_half_board_pack:
+          dto.suppHalfBoard,
+
+        supp_full_board_pack:
+          dto.suppFullBoard,
+
+        supp_all_inclusive_pack:
+          dto.suppAllInclusive,
       }
     );
   },

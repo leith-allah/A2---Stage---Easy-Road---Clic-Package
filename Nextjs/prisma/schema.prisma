@@ -121,6 +121,19 @@ model package_voyage {
   stock_total_pack         Int
   stock_dispo_pack         Int
   date_heure_creation_pack DateTime        @db.Timestamp(6)
+  supp_economy_pack        Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_business_pack       Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_first_pack          Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_single_pack         Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_double_pack         Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_triple_pack         Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_quadruple_pack      Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_suite_pack          Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_bed_only_pack       Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_bed_breakfast_pack  Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_half_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_full_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_all_inclusive_pack  Decimal?        @default(0) @db.Decimal(10, 2)
   achat_package            achat_package[]
   favorise                 favorise[]
   heberge                  heberge[]
