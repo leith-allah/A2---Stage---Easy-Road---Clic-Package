@@ -35,6 +35,26 @@ export const rechargeRequestRepository = {
 
   },
 
+  findByUserId(
+    userId: number
+  ) {
+
+    return prisma.demande_rechargement.findMany({
+
+      where: {
+        id_user:
+          BigInt(userId),
+      },
+
+      orderBy: {
+        date_heure_demande_recharge:
+          "desc",
+      },
+
+    });
+
+  },
+
   create(data: {
 
     userId: number;

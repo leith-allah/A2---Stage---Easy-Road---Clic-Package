@@ -1,4 +1,9 @@
 
+import crypto from "crypto";
+
+import { prisma }
+from "@/server/db/prisma";
+
 import { rechargeRequestRepository }
 from "@/server/repositories/recharge-request.repository";
 
@@ -22,6 +27,9 @@ from "@/server/constants/recharge-request-status";
 
 import { OWNER_WALLET_ID }
 from "@/server/constants/business-wallet";
+
+import { getCurrentUserId }
+from "@/server/auth/session";
 
 
 export const rechargeRequestService = {
@@ -50,6 +58,17 @@ export const rechargeRequestService = {
     }
 
     return request;
+
+  },
+
+  async getMyRequests() {
+
+    const userId =
+      await getCurrentUserId();
+
+    return rechargeRequestRepository.findByUserId(
+      userId
+    );
 
   },
 
@@ -181,52 +200,101 @@ export const rechargeRequestService = {
         clientWallet.solde_total_prtfl
       ) + amount;
 
-    await walletRepository.transferFunds(
+    const result =
+      await prisma.$transaction(
 
-      Number(ownerWallet.id_prtfl),
+        async (tx) => {
 
-      Number(clientWallet.id_prtfl),
+          await tx.portefeuille.update({
 
-      newOwnerBalance,
+            where: {
+              id_prtfl:
+                ownerWallet.id_prtfl,
+            },
 
-      newClientBalance
+            data: {
 
-    );
+              solde_total_prtfl:
+                newOwnerBalance,
 
-    await transactionRepository.create({
+              derniere_maj_prtfl:
+                new Date(),
 
-      sourceWalletId:
-        Number(
-          ownerWallet.id_prtfl
-        ),
+            },
 
-      destinationWalletId:
-        Number(
-          clientWallet.id_prtfl
-        ),
+          });
 
-      amount,
+          await tx.portefeuille.update({
 
-      type:
-        TRANSACTION_TYPE.TOPUP,
+            where: {
+              id_prtfl:
+                clientWallet.id_prtfl,
+            },
 
-      status:
-        TRANSACTION_STATUS.SUCCESS,
+            data: {
 
-    });
+              solde_total_prtfl:
+                newClientBalance,
 
-    return rechargeRequestRepository.update(
+              derniere_maj_prtfl:
+                new Date(),
 
-      id,
+            },
 
-      {
+          });
 
-        status:
-          RECHARGE_REQUEST_STATUS.APPROVED,
+          await tx.transactions.create({
 
-      }
+            data: {
 
-    );
+              ref_transac:
+                crypto.randomUUID(),
+
+              type_transac:
+                TRANSACTION_TYPE.TOPUP,
+
+              statut_transac:
+                TRANSACTION_STATUS.SUCCESS,
+
+              montant_transac:
+                amount,
+
+              date_heure_transac:
+                new Date(),
+
+              id_portefeuille_source:
+                ownerWallet.id_prtfl,
+
+              id_portefeuille_dest:
+                clientWallet.id_prtfl,
+
+            },
+
+          });
+
+          return tx.demande_rechargement.update({
+
+            where: {
+
+              id_demande_recharge:
+                request.id_demande_recharge,
+
+            },
+
+            data: {
+
+              statut_demande_recharge:
+                RECHARGE_REQUEST_STATUS.APPROVED,
+
+            },
+
+          });
+
+        }
+
+      );
+
+    return result;
 
   },
 
