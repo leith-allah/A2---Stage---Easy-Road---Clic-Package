@@ -179,6 +179,7 @@ CREATE TABLE package_voyage (
     stock_total_pack INT NOT NULL,
     stock_dispo_pack INT NOT NULL,
     date_heure_creation_pack TIMESTAMP NOT NULL,
+    
     supp_economy_pack DECIMAL(10,2) DEFAULT 0,
     supp_business_pack DECIMAL(10,2) DEFAULT 0,
     supp_first_pack DECIMAL(10,2) DEFAULT 0,    
@@ -192,6 +193,10 @@ CREATE TABLE package_voyage (
     supp_half_board_pack DECIMAL(10,2) DEFAULT 0,
     supp_full_board_pack DECIMAL(10,2) DEFAULT 0,
     supp_all_inclusive_pack DECIMAL(10,2) DEFAULT 0,
+
+    id_user BIGINT NOT NULL
+    REFERENCES utilisateur(id_user)
+    ON DELETE RESTRICT,
 
     CHECK (stock_dispo_pack >= 0),
     CHECK (stock_dispo_pack <= stock_total_pack)

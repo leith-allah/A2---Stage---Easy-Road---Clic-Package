@@ -54,6 +54,10 @@ Record<UserRole, Permission[]> = {
     "role:update",
     "role:delete",
 
+    "purchase:view",
+    "purchase:create",
+    "purchase:cancel",
+
   ],
 
   SUPER_ADMIN: [
@@ -96,6 +100,10 @@ Record<UserRole, Permission[]> = {
     "agency:create",
     "agency:update",
     "agency:delete",
+    
+    "purchase:view",
+    "purchase:create",
+    "purchase:cancel",
 
   ],
 
@@ -140,6 +148,10 @@ Record<UserRole, Permission[]> = {
     "agency:create",
     "agency:update",
     "agency:delete",
+    
+    "purchase:view",
+    "purchase:create",
+    "purchase:cancel",
 
   ],
 
@@ -165,6 +177,11 @@ Record<UserRole, Permission[]> = {
     "agency:view",
 
     "user:view",
+    
+    "purchase:view",
+    "purchase:create",
+    "purchase:cancel",
+
   ],
 
   CLIENT: [
@@ -183,6 +200,10 @@ Record<UserRole, Permission[]> = {
     "transaction:delete",
 
     "recharge-request:create",
+    
+    "purchase:view",
+    "purchase:create",
+    "purchase:cancel",
 
   ],
 };

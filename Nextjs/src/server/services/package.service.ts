@@ -11,6 +11,9 @@ from "@/server/dto/package/create-package.dto";
 import { UpdatePackageDto }
 from "@/server/dto/package/update-package.dto";
 
+import { getCurrentUserId }
+from "@/server/auth/session";
+
 import { NotFoundException }
 from "@/server/exceptions/not-found.exception";
 
@@ -115,6 +118,8 @@ export const packageService = {
     dto: CreatePackageDto
   ) {
 
+    const userId = await getCurrentUserId();
+
     if (
       new Date(dto.returnDate)
       <
@@ -206,6 +211,8 @@ export const packageService = {
 
       date_heure_creation_pack:
         new Date(),
+      
+      id_user: BigInt(userId),
     });
   },
 

@@ -15,3 +15,5 @@ CREATE INDEX idx_achat_pack ON achat_package(id_pack);
 
 CREATE INDEX idx_package_destination ON package_voyage(destination_pack);
 CREATE INDEX idx_package_statut ON package_voyage(statut_pack);
+
+CREATE INDEX idx_package_owner ON package_voyage(id_user);

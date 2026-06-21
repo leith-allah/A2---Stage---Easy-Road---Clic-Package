@@ -82,7 +82,12 @@ export type Permission =
   | "flight:view"
   | "flight:create"
   | "flight:update"
-  | "flight:delete";
+  | "flight:delete"
+
+    // PURCHASE PACKAGE
+  | "purchase:view"
+  | "purchase:create"
+  | "purchase:cancel";
 
 
 

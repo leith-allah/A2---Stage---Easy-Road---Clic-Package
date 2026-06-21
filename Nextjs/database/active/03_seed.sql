@@ -92,8 +92,10 @@ INSERT INTO portefeuille (
 )
 VALUES
 ('PRT000', 1000000, NOW(), 1), -- OWNER
-('PRT001', 50000, NOW(), 5), -- CLIENT
-('PRT002', 0, NOW(), 4);     -- AGENCY
+('PRT001', 0, NOW(), 2), -- SUPER_ADMIN
+('PRT002', 0, NOW(), 3), -- ADMIN
+('PRT003', 500000, NOW(), 4), -- AGENCY
+('PRT004', 300000, NOW(), 5); -- CLIENT
 
 -- =========================
 -- VOLS
@@ -142,15 +144,27 @@ VALUES
 -- =========================
 
 INSERT INTO package_voyage (
-mle_pack, statut_pack, nom_pack,
-pays_pack, destination_pack,
-date_depart_pack, date_retour_pack,
-prix_base_pack, stock_total_pack, stock_dispo_pack,
-date_heure_creation_pack
+mle_pack, statut_pack, nom_pack, pays_pack, destination_pack,
+date_depart_pack, date_retour_pack, prix_base_pack, 
+stock_total_pack, stock_dispo_pack, date_heure_creation_pack, 
+
+supp_economy_pack, supp_business_pack, supp_first_pack,
+
+supp_single_pack, supp_double_pack, 
+supp_triple_pack, supp_quadruple_pack, supp_suite_pack,
+
+supp_bed_only_pack, supp_bed_breakfast_pack,
+supp_half_board_pack, supp_full_board_pack, supp_all_inclusive_pack,
+
+id_user
 )
 VALUES 
 ('PK001','ACTIVE','Paris Découverte','France','Paris',
-'2026-06-01','2026-06-10',120000,50,50,NOW());
+'2026-06-01','2026-06-10',120000,50,50,NOW(),
+0,25000,60000,
+30000,15000,10000,5000,50000,
+0,5000,10000,15000,20000,
+2);
 
 -- =========================
 -- RELATIONS N-N

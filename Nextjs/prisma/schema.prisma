@@ -134,15 +134,18 @@ model package_voyage {
   supp_half_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
   supp_full_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
   supp_all_inclusive_pack  Decimal?        @default(0) @db.Decimal(10, 2)
+  id_user                  BigInt
   achat_package            achat_package[]
   favorise                 favorise[]
   heberge                  heberge[]
+  utilisateur              utilisateur     @relation(fields: [id_user], references: [id_user], onUpdate: NoAction)
   possede                  possede[]
   propose                  propose[]
   utilise                  utilise[]
 
   @@index([destination_pack], map: "idx_package_destination")
   @@index([statut_pack], map: "idx_package_statut")
+  @@index([id_user], map: "idx_package_owner")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -229,6 +232,7 @@ model utilisateur {
   achat_package        achat_package[]
   demande_rechargement demande_rechargement[]
   favorise             favorise[]
+  package_voyage       package_voyage[]
   portefeuille         portefeuille?
   transactions         transactions[]
   bureau_agence        bureau_agence          @relation(fields: [id_bureau], references: [id_bureau], onDelete: NoAction, onUpdate: NoAction)

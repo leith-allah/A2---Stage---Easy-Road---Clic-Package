@@ -2,56 +2,49 @@
 import { prisma }
 from "@/server/db/prisma";
 
+
 export const walletRepository = {
 
   findAll() {
 
     return prisma.portefeuille.findMany({
-
       orderBy: {
         id_prtfl: "asc",
       },
-
     });
-
   },
+
 
   findById(
     id: number
   ) {
 
     return prisma.portefeuille.findUnique({
-
       where: {
         id_prtfl: BigInt(id),
       },
-
     });
-
   },
+
 
   findByUserId(
     userId: number
   ) {
 
     return prisma.portefeuille.findUnique({
-
       where: {
         id_user: BigInt(userId),
       },
-
     });
-
   },
+
 
   create(
     userId: number
   ) {
 
     return prisma.portefeuille.create({
-
       data: {
-
         num_prtfl:
           crypto.randomUUID(),
 
@@ -62,12 +55,10 @@ export const walletRepository = {
 
         id_user:
           BigInt(userId),
-
       },
-
     });
-
   },
+
 
   updateBalance(
     id: number,
@@ -75,7 +66,6 @@ export const walletRepository = {
   ) {
 
     return prisma.portefeuille.update({
-
       where: {
         id_prtfl: BigInt(id),
       },
@@ -87,19 +77,15 @@ export const walletRepository = {
 
         derniere_maj_prtfl:
           new Date(),
-
       },
-
     });
-
   },
 
-  delete(id: number) {
 
+  delete(id: number) {
     throw new Error(
       "La suppression des portefeuilles est interdite"
     );
-
   },
 
 
@@ -125,9 +111,7 @@ export const walletRepository = {
 
         derniere_maj_prtfl:
           new Date(),
-
       },
-
     }),
 
     prisma.portefeuille.update({
@@ -143,13 +127,86 @@ export const walletRepository = {
 
         derniere_maj_prtfl:
           new Date(),
-
       },
-
     }),
-
   ]);
-
 },
+
+
+  async secureTransfer(
+    senderWalletId: number,
+    recipientWalletId: number,
+    amount: number
+  ) {
+
+    return prisma.$transaction(
+      async (tx) => {
+
+        const sender =
+          await tx.portefeuille.findUnique({
+            where: {
+              id_prtfl: BigInt(senderWalletId),
+            },
+          });
+
+        const recipient =
+          await tx.portefeuille.findUnique({
+            where: {
+              id_prtfl: BigInt(recipientWalletId),
+            },
+          });
+
+        if (!sender || !recipient) {
+          throw new Error("Wallet introuvable");
+        }
+
+        const senderBalance =
+          Number(sender.solde_total_prtfl);
+
+        if (senderBalance < amount) {
+          throw new Error("Solde insuffisant");
+        }
+
+        await tx.portefeuille.update({
+
+          where: {
+            id_prtfl: sender.id_prtfl,
+          },
+
+          data: {
+
+            solde_total_prtfl:
+              senderBalance - amount,
+
+            derniere_maj_prtfl:
+              new Date(),
+
+          },
+
+        });
+
+        await tx.portefeuille.update({
+
+          where: {
+            id_prtfl: recipient.id_prtfl,
+          },
+
+          data: {
+
+            solde_total_prtfl:
+              Number(recipient.solde_total_prtfl)
+              + amount,
+
+            derniere_maj_prtfl:
+              new Date(),
+
+          },
+
+        });
+
+      }
+    );
+
+  }
 
 };

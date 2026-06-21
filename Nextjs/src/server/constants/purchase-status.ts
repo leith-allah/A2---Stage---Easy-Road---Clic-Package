@@ -1,0 +1,10 @@
+
+export const PURCHASE_STATUS = {
+
+  CONFIRMED: "CONFIRME",
+
+  CANCELLED: "ANNULE",
+
+  REFUNDED: "REMBOURSE",
+
+} as const;
