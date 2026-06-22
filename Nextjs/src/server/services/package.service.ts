@@ -31,9 +31,8 @@ export const packageService = {
   ) {
 
     const pkg =
-      await packageRepository.findById(
-        id
-      );
+      await packageRepository
+        .findByIdIncludingArchived(id);
 
     if (!pkg) {
 
@@ -468,9 +467,19 @@ export const packageService = {
   ) {
 
     const pkg =
-      await this.packageExists(
-        id
+
+      await packageRepository
+        .findByIdIncludingArchived(
+          id
+        );
+
+    if (!pkg) {
+
+      throw new NotFoundException(
+        "Package introuvable"
       );
+
+    }
 
     if (
       pkg.stock_dispo_pack <= 0

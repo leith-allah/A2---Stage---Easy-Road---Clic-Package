@@ -8,7 +8,15 @@ from "@/server/services/propose.service";
 import { createProposeSchema }
 from "@/server/validations/propose/create-propose.validation";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+
 export async function GET() {
+
+  await requirePermission(
+    "package:view"
+  );
 
   return Response.json(
     await proposeService.getAll()
@@ -19,6 +27,10 @@ export async function GET() {
 export async function POST(
   request: NextRequest
 ) {
+
+  await requirePermission(
+    "package:update"
+  );
 
   const body =
     await request.json();

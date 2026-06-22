@@ -8,7 +8,15 @@ from "@/server/services/utilise.service";
 import { createUtiliseSchema }
 from "@/server/validations/utilise/create-utilise.validation";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+
 export async function GET() {
+
+  await requirePermission(
+    "package:view"
+  );
 
   return Response.json(
     await utiliseService.getAll()
@@ -19,6 +27,10 @@ export async function GET() {
 export async function POST(
   request: NextRequest
 ) {
+
+  await requirePermission(
+    "package:update"
+  );
 
   const body =
     await request.json();

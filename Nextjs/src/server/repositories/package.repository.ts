@@ -53,6 +53,10 @@ export const packageRepository = {
 
       where: {
 
+        statut_pack: {
+          not: PACKAGE_STATUS.ARCHIVED,
+        },
+
         ...(filters.country && {
 
           pays_pack:
@@ -92,6 +96,20 @@ export const packageRepository = {
 
         id_pack: "desc",
 
+      },
+
+    });
+
+  },
+
+  findByIdIncludingArchived(
+    id: number
+  ) {
+
+    return prisma.package_voyage.findUnique({
+
+      where: {
+        id_pack: BigInt(id),
       },
 
     });

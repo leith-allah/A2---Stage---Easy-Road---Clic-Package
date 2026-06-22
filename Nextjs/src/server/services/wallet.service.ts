@@ -1,3 +1,9 @@
+
+import crypto from "crypto";
+
+import { prisma }
+from "@/server/db/prisma";
+
 import { walletRepository }
 from "@/server/repositories/wallet.repository";
 
@@ -159,45 +165,85 @@ export const walletService = {
         recipient.solde_total_prtfl
       ) + amount;
 
-    await walletRepository.transferFunds(
+    const result =
+      await prisma.$transaction(
 
-      Number(sender.id_prtfl),
+        async (tx) => {
+          await tx.portefeuille.update({
 
-      Number(recipient.id_prtfl),
+            where: {
+              id_prtfl:
+                sender.id_prtfl,
+            },
 
-      newSenderBalance,
+            data: {
 
-      newRecipientBalance
+              solde_total_prtfl:
+                newSenderBalance,
 
-    );
+              derniere_maj_prtfl:
+                new Date(),
+            },
+          });
 
-    await transactionRepository.create({
+          await tx.portefeuille.update({
 
-      sourceWalletId:
-        Number(sender.id_prtfl),
+            where: {
+              id_prtfl:
+                recipient.id_prtfl,
+            },
 
-      destinationWalletId:
-        Number(recipient.id_prtfl),
+            data: {
 
-      amount,
+              solde_total_prtfl:
+                newRecipientBalance,
 
-      type:
-        TRANSACTION_TYPE.TRANSFER,
+              derniere_maj_prtfl:
+                new Date(),
+            },
+          });
 
-      status:
-        TRANSACTION_STATUS.SUCCESS,
+          await tx.transactions.create({
 
-    });
+            data: {
 
-    return {
+              ref_transac:
+                crypto.randomUUID(),
 
-      success: true,
+              type_transac:
+                TRANSACTION_TYPE.TRANSFER,
 
-      balance:
-        newSenderBalance,
+              statut_transac:
+                TRANSACTION_STATUS.SUCCESS,
 
-    };
+              montant_transac:
+                amount,
 
+              date_heure_transac:
+                new Date(),
+
+              id_portefeuille_source:
+                sender.id_prtfl,
+
+              id_portefeuille_dest:
+                recipient.id_prtfl,
+
+              id_user:
+                BigInt(userId),
+            },
+          });
+
+          return {
+
+            success: true,
+
+            balance:
+              newSenderBalance,
+          };
+        }
+      );
+
+    return result;
   },
 
   async getAllWallets() {

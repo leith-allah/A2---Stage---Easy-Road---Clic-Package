@@ -15,6 +15,26 @@ Record<UserRole, Permission[]> = {
     "package:update",
     "package:delete",
 
+    "flight:view",
+    "flight:create",
+    "flight:update",
+    "flight:delete",
+
+    "hotel:view",
+    "hotel:create",
+    "hotel:update",
+    "hotel:delete",
+
+    "transport:view",
+    "transport:create",
+    "transport:update",
+    "transport:delete",
+
+    "excursion:view",
+    "excursion:create",
+    "excursion:update",
+    "excursion:delete",
+
     "booking:view",
     "booking:create",
     "booking:update",
@@ -67,6 +87,26 @@ Record<UserRole, Permission[]> = {
     "package:update",
     "package:delete",
 
+    "flight:view",
+    "flight:create",
+    "flight:update",
+    "flight:delete",
+
+    "hotel:view",
+    "hotel:create",
+    "hotel:update",
+    "hotel:delete",
+
+    "transport:view",
+    "transport:create",
+    "transport:update",
+    "transport:delete",
+
+    "excursion:view",
+    "excursion:create",
+    "excursion:update",
+    "excursion:delete",
+
     "booking:view",
     "booking:create",
     "booking:update",
@@ -115,6 +155,26 @@ Record<UserRole, Permission[]> = {
     "package:update",
     "package:delete",
 
+    "flight:view",
+    "flight:create",
+    "flight:update",
+    "flight:delete",
+
+    "hotel:view",
+    "hotel:create",
+    "hotel:update",
+    "hotel:delete",
+
+    "transport:view",
+    "transport:create",
+    "transport:update",
+    "transport:delete",
+
+    "excursion:view",
+    "excursion:create",
+    "excursion:update",
+    "excursion:delete",
+
     "booking:view",
     "booking:create",
     "booking:update",
@@ -158,6 +218,29 @@ Record<UserRole, Permission[]> = {
   AGENCY: [
 
     "package:view",
+    "package:create",
+    "package:update",
+    "package:delete",
+
+    "flight:view",
+    "flight:create",
+    "flight:update",
+    "flight:delete",
+
+    "hotel:view",
+    "hotel:create",
+    "hotel:update",
+    "hotel:delete",
+
+    "transport:view",
+    "transport:create",
+    "transport:update",
+    "transport:delete",
+
+    "excursion:view",
+    "excursion:create",
+    "excursion:update",
+    "excursion:delete",
 
     "booking:view",
     "booking:create",
@@ -199,6 +282,7 @@ Record<UserRole, Permission[]> = {
     "transaction:update",
     "transaction:delete",
 
+    "recharge-request:view",
     "recharge-request:create",
     
     "purchase:view",

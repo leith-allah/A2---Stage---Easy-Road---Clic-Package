@@ -1,4 +1,7 @@
 
+import { prisma }
+from "@/server/db/prisma";
+
 import {
   hashPassword,
 } from "@/server/auth/password";
@@ -61,67 +64,97 @@ export const authService = {
       );
 
     const user =
-      await userRepository.create({
+      await prisma.$transaction(
 
-        mle_user:
-          crypto.randomUUID(),
+        async (tx) => {
 
-        nin_user:
-          data.nin,
+          const user =
 
-        nom_user:
-          data.lastName,
+            await tx.utilisateur.create({
 
-        prenom_user:
-          data.firstName,
+              data: {
 
-        ddn_user:
-          new Date(
-            data.birthDate
-          ),
+                mle_user:
+                  crypto.randomUUID(),
 
-        nat_user:
-          data.nationality,
+                nin_user:
+                  data.nin,
 
-        statut_user:
-          USER_STATUS.PENDING,
+                nom_user:
+                  data.lastName,
 
-        email_pro_user:
-          data.email,
+                prenom_user:
+                  data.firstName,
 
-        mdp_user:
-          hashedPassword,
+                ddn_user:
+                  new Date(
+                    data.birthDate
+                  ),
 
-        dcc_user:
-          new Date(),
+                nat_user:
+                  data.nationality,
 
-        role: {
+                statut_user:
+                  USER_STATUS.PENDING,
 
-          connect: {
-            id_role:
-              BigInt(4),
-          },
+                email_pro_user:
+                  data.email,
 
-        },
+                mdp_user:
+                  hashedPassword,
 
-        bureau_agence: {
+                dcc_user:
+                  new Date(),
 
-          connect: {
-            id_bureau:
-              BigInt(
-                data.id_bureau
-              ),
-          },
+                role: {
 
-        },
+                  connect: {
+                    id_role: BigInt(4),
+                  },
 
-      });
+                },
 
-    await walletRepository.create(
-      Number(
-        user.id_user
-      )
-    );
+                bureau_agence: {
+
+                  connect: {
+
+                    id_bureau:
+                      BigInt(
+                        data.id_bureau
+                      ),
+
+                  },
+
+                },
+
+              },
+
+            });
+
+          await tx.portefeuille.create({
+
+            data: {
+
+              num_prtfl:
+                crypto.randomUUID(),
+
+              solde_total_prtfl: 0,
+
+              derniere_maj_prtfl:
+                new Date(),
+
+              id_user:
+                user.id_user,
+
+            },
+
+          });
+
+          return user;
+
+        }
+
+      );
 
     const token =
       signToken({

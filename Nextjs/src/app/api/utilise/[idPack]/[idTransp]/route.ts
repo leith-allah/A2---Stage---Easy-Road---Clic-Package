@@ -2,6 +2,10 @@
 import { utiliseService }
 from "@/server/services/utilise.service";
 
+import { requirePermission }
+from "@/server/middlewares/permission.middleware";
+
+
 type Params = {
 
   params: Promise<{
@@ -21,6 +25,10 @@ export async function DELETE(
   { params }: Params
 
 ) {
+
+  await requirePermission(
+    "package:update"
+  );
 
   const {
     idPack,
