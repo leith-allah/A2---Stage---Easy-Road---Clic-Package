@@ -17,3 +17,12 @@ CREATE INDEX idx_package_destination ON package_voyage(destination_pack);
 CREATE INDEX idx_package_statut ON package_voyage(statut_pack);
 
 CREATE INDEX idx_package_owner ON package_voyage(id_user);
+
+CREATE INDEX idx_demande_creation_statut
+ON demande_creation_compte(statut_demande_creation);
+
+CREATE INDEX idx_demande_creation_role
+ON demande_creation_compte(id_role);
+
+CREATE INDEX idx_demande_creation_bureau
+ON demande_creation_compte(id_bureau);

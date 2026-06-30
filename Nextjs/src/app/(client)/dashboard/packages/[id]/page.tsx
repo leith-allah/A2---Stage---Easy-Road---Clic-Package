@@ -1,619 +1,737 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import Link from "next/link";
+import { useParams } from "next/navigation";
 
-import FavoriteButton from "@/features/favorites/components/FavoriteButton";
+import { fetchPackageById }
+from "@/features/packages/services/package-detail.service";
+
+import {
+  FlightClass,
+  RoomType,
+  PensionType,
+}
+from "@/features/purchases/types/purchase-options.types";
+
+import { calculatePrice }
+from "@/features/offers/utils/calculatePrice";
+
+import { usePurchase }
+from "@/features/purchases/hooks/usePurchase";
+
 
 export default function PackageDetailsPage() {
-  const packageData = {
-    id: 1,
 
-    name: "Package Dubai Luxury",
+  const {
 
-    country: "Émirats Arabes Unis",
+    purchase,
 
-    destination: "Dubai",
+    loading: purchaseLoading,
 
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+  } = usePurchase();
 
-    description:
-      "Découvrez une expérience luxueuse à Dubai avec hôtel 5 étoiles, excursions premium, transferts privés et vols internationaux inclus.",
 
-    departureDate: "12 Juin 2026",
+  const params = useParams();
 
-    returnDate: "19 Juin 2026",
+  const [pkg, setPkg] =
+    useState<any>(null);
 
-    basePrice: 350000,
+  const [loading, setLoading] =
+    useState(true);
 
-    stock: 14,
-
-    airline: "Emirates",
-
-    departureLocation: "Aéroport d'Alger",
-
-    departureTimeOutbound: "09:30",
-
-    arrivalTimeOutbound: "18:45",
-
-    departureTimeReturn: "21:15",
-
-    arrivalTimeReturn: "05:50",
-
-    flightNumber: "EK 758",
-
-    hotelName: "Atlantis The Palm",
-
-    hotelStars: 5,
-
-    hotelAddress:
-      "Crescent Rd - The Palm Jumeirah - Dubai",
-
-    transportRoute:
-      "Aéroport Dubai → Hôtel → Aéroport Dubai",
-
-    transportCompany: "Dubai Luxury Transport",
-
-    excursionName: "Safari Désert VIP",
-
-    excursionLocation: "Dubai Desert",
-
-    excursionDescription:
-      "Excursion complète avec dîner gastronomique et activités premium.",
-
-    availableSeats: 14,
-  };
-
-  const [travelers, setTravelers] = useState(1);
+  const [travellers, setTravellers] =
+    useState(1);
 
   const [flightClass, setFlightClass] =
-    useState("economy");
+    useState<FlightClass>("Economy");
 
   const [roomType, setRoomType] =
-    useState("double");
+    useState<RoomType>("Double");
 
   const [pension, setPension] =
-    useState("breakfast");
+    useState<PensionType>("BedOnly");
 
-  // Prix dynamiques
-  const totalPrice = useMemo(() => {
-    let price = packageData.basePrice;
+  useEffect(() => {
 
-    // Classe Vol
-    if (flightClass === "business") {
-      price += 120000;
+    async function load() {
+
+      const data =
+        await fetchPackageById(
+          Number(params.id)
+        );
+
+      setPkg(data);
+
+      setLoading(false);
     }
 
-    if (flightClass === "first") {
-      price += 250000;
+    load();
+
+  }, [params.id]);
+
+  const totalPrice =
+    useMemo(() => {
+
+      if (!pkg)
+        return 0;
+
+      return calculatePrice({
+
+        packageData: pkg,
+
+        travellers,
+
+        flightClass,
+
+        roomType,
+
+        pension,
+
+      });
+
+    }, [
+
+      pkg,
+
+      travellers,
+
+      flightClass,
+
+      roomType,
+
+      pension,
+
+    ]);
+
+  if (loading) {
+
+    return (
+      <p className="p-8">
+        Chargement...
+      </p>
+    );
+
+  }
+
+  if (!pkg) {
+
+    return (
+      <p className="p-8">
+        Package introuvable
+      </p>
+    );
+
+  }
+
+  
+  async function handlePurchase() {
+
+    try {
+
+      await purchase({
+
+        packageId: pkg.id,
+
+        nbVoyageurs: travellers,
+
+        classeVol: flightClass,
+
+        typeChambre: roomType,
+
+        pension,
+      });
+
+      alert("Réservation effectuée !");
     }
 
-    // Chambre
-    if (roomType === "single") {
-      price += 5000;
+    catch (e: any) {
+      alert(e.message);
     }
-
-    if (roomType === "triple") {
-      price += 20000;
-    }
-
-    if (roomType === "quadruple") {
-      price += 35000;
-    }
-
-    if (roomType === "suite") {
-      price += 180000;
-    }
-
-    // Pension
-    if (pension === "half") {
-      price += 30000;
-    }
-
-    if (pension === "full") {
-      price += 70000;
-    }
-
-    if (pension === "all-inclusive") {
-      price += 140000;
-    }
-
-    return price * travelers;
-  }, [
-    travelers,
-    flightClass,
-    roomType,
-    pension,
-  ]);
-
-  const discount = useMemo(() => {
-    if (travelers >= 4) {
-      return 50000;
-    }
-
-    return 0;
-  }, [travelers]);
-
-  const finalPrice = totalPrice - discount;
+  }
 
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-6">
-      <div className="max-w-7xl mx-auto">
 
-        {/* Header */}
-        <div className="flex flex-col xl:flex-row gap-10">
+    <div className="max-w-6xl mx-auto p-8 space-y-10">
 
-          {/* LEFT */}
-          <div className="flex-1 space-y-8">
+      <div>
 
-            {/* Image */}
-            <div className="relative overflow-hidden rounded-3xl shadow-xl">
-              <img
-                src={packageData.image}
-                alt={packageData.name}
-                className="
-                  w-full
-                  h-[450px]
-                  object-cover
-                "
-              />
+        <h1 className="text-4xl font-bold">
+          {pkg.name}
+        </h1>
 
-              <div className="absolute top-6 right-6">
-                <FavoriteButton initialFavorite={false} />
-              </div>
+        <p className="text-gray-500 mt-2">
+          {pkg.country} • {pkg.destination}
+        </p>
+
+      </div>
+
+      {pkg.image && (
+
+        <img
+          src={pkg.image}
+          alt={pkg.name}
+          className="
+            w-full
+            max-h-[500px]
+            object-cover
+            rounded-xl
+          "
+        />
+
+      )}
+
+      <div>
+
+        <h2 className="text-2xl font-bold mb-4">
+          Description
+        </h2>
+
+        <p className="leading-relaxed">
+          {pkg.description}
+        </p>
+
+      </div>
+
+      <div className="space-y-4">
+
+        <Info
+          label="Date départ"
+          value={
+            new Date(
+              pkg.departureDate
+            ).toLocaleDateString()
+          }
+        />
+
+        <Info
+          label="Date retour"
+          value={
+            new Date(
+              pkg.returnDate
+            ).toLocaleDateString()
+          }
+        />
+
+        <Info
+          label="Places disponibles"
+          value={String(pkg.availableSeats)}
+        />
+
+        <Info
+          label="Prix de base"
+          value={`${pkg.basePrice.toLocaleString()} DA`}
+        />
+
+      </div>
+
+      {pkg.flights?.length > 0 && (
+
+        <div>
+
+          <h2 className="text-2xl font-bold mb-4">
+            Vol(s)
+          </h2>
+
+          <div className="space-y-4">
+
+            {pkg.flights.map((flight: any) => (
 
               <div
-                className="
-                  absolute
-                  bottom-6
-                  left-6
-                  bg-white/90
-                  backdrop-blur-md
-                  px-5
-                  py-3
-                  rounded-2xl
-                "
+                key={flight.id}
+                className="border rounded-lg p-4"
               >
-                <p className="text-sm text-gray-500">
-                  Places restantes
+
+                <p className="font-semibold">
+                  {flight.airline}
                 </p>
 
-                <p className="text-2xl font-bold text-blue-600">
-                  {packageData.availableSeats}
+                <p>
+                  {flight.departureLocation}
+                  {" → "}
+                  {flight.destination}
                 </p>
+
+                <p>
+                  Vol : {flight.flightNumber}
+                </p>
+
+                <p>
+                  Départ :
+                  {" "}
+                  {new Date(flight.departureDate).toLocaleDateString()}
+                  {" "}
+                  {new Date(flight.departureTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+
+                {flight.returnDate && (
+
+                <p>
+
+                  Retour :
+
+                  {" "}
+
+                  {new Date(
+                    flight.returnDate
+                  ).toLocaleDateString()}
+
+                  {" "}
+
+                  {new Date(
+                    flight.returnDepartureTime
+                  ).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+
+                  {" → "}
+
+                  {new Date(
+                    flight.returnArrivalTime
+                  ).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+
+                </p>
+
+              )}
+
               </div>
-            </div>
 
-            {/* Infos principales */}
-            <div className="bg-white rounded-3xl shadow-md p-8">
-              <div className="flex items-start justify-between gap-6">
+            ))}
 
-                <div>
-                  <p className="text-blue-600 font-semibold">
-                    {packageData.country}
-                  </p>
-
-                  <h1 className="text-5xl font-bold mt-2">
-                    {packageData.name}
-                  </h1>
-
-                  <p className="text-gray-500 mt-3 text-lg">
-                    {packageData.destination}
-                  </p>
-                </div>
-
-                <div className="text-right">
-                  <p className="text-gray-500">
-                    Prix de base
-                  </p>
-
-                  <h2
-                    className="
-                      text-4xl
-                      font-bold
-                      text-blue-600
-                    "
-                  >
-                    {packageData.basePrice.toLocaleString()}{" "}
-                    DZD
-                  </h2>
-                </div>
-              </div>
-
-              <p
-                className="
-                  mt-8
-                  text-gray-700
-                  leading-8
-                "
-              >
-                {packageData.description}
-              </p>
-            </div>
           </div>
 
-
-          {/* RIGHT */}
-          <div className="w-full xl:w-[420px]">
-
-            <div
-              className="
-                sticky
-                top-8
-                bg-white
-                rounded-3xl
-                shadow-xl
-                p-8
-              "
-            >
-              <h2 className="text-3xl font-bold mb-8">
-                Réservation
-              </h2>
-
-              <div className="space-y-6">
-
-                {/* Voyageurs */}
-                <div>
-                  <label className="font-semibold">
-                    Nombre Voyageurs
-                  </label>
-
-                  <input
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={travelers}
-                    onChange={(e) =>
-                      setTravelers(Number(e.target.value))
-                    }
-                    className="
-                      w-full
-                      mt-2
-                      border
-                      rounded-2xl
-                      px-4
-                      py-4
-                    "
-                  />
-                </div>
-
-                {/* Classe */}
-                <div>
-                  <label className="font-semibold">
-                    Classe Vol
-                  </label>
-
-                  <select
-                    value={flightClass}
-                    onChange={(e) =>
-                      setFlightClass(
-                        e.target.value
-                      )
-                    }
-                    className="
-                      w-full
-                      mt-2
-                      border
-                      rounded-2xl
-                      px-4
-                      py-4
-                    "
-                  >
-                    <option value="economy">
-                      Économique
-                    </option>
-
-                    <option value="business">
-                      Business (+120 000 DZD/pers.)
-                    </option>
-
-                    <option value="first">
-                      First Class (+250 000 DZD/pers.)
-                    </option>
-                  </select>
-                </div>
-
-                {/* Chambre */}
-                <div>
-                  <label className="font-semibold">
-                    Type Chambre
-                  </label>
-
-                  <select
-                    value={roomType}
-                    onChange={(e) =>
-                      setRoomType(e.target.value)
-                    }
-                    className="
-                      w-full
-                      mt-2
-                      border
-                      rounded-2xl
-                      px-4
-                      py-4
-                    "
-                  >
-                    <option value="double">
-                      Double
-                    </option>
-
-                    <option value="single">
-                      Single (+5 000 DZD/pers.)
-                    </option>
-
-                    <option value="triple">
-                      Triple (+20 000 DZD/pers.)
-                    </option>
-
-                    <option value="quadruple">
-                      Quadruple (+35 000 DZD/pers.)
-                    </option>
-
-                    <option value="suite">
-                      Suite (+180 000 DZD/pers.)
-                    </option>
-                  </select>
-                </div>
-
-                {/* Pension */}
-                <div>
-                  <label className="font-semibold">
-                    Pension
-                  </label>
-
-                  <select
-                    value={pension}
-                    onChange={(e) =>
-                      setPension(
-                        e.target.value
-                      )
-                    }
-                    className="
-                      w-full
-                      mt-2
-                      border
-                      rounded-2xl
-                      px-4
-                      py-4
-                    "
-                  >
-                    <option value="breakfast">
-                      Petit Déjeuner
-                    </option>
-
-                    <option value="half">
-                      Demi Pension (+ 30 000 DZD/pers.)
-                    </option>
-
-                    <option value="full">
-                      Pension Complète (+ 70 000 DZD/pers.)
-                    </option>
-
-                    <option value="all-inclusive">
-                      All Inclusive (+140 000 DZD/pers.)
-                    </option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Pricing */}
-              <div
-                className="
-                  mt-10
-                  pt-8
-                  border-t
-                  space-y-4
-                "
-              >
-                <PriceRow
-                  label="Coût par pers."
-                  value={`${(
-                    finalPrice / travelers
-                  ).toLocaleString()} DZD`}
-                />
-
-                <PriceRow
-                  label="Prix Achat"
-                  value={`${totalPrice.toLocaleString()} DZD`}
-                />
-
-                <PriceRow
-                  label="Remise"
-                  value={`-${discount.toLocaleString()} DZD`}
-                  green
-                />
-
-                <div
-                  className="
-                    flex
-                    justify-between
-                    items-center
-                    pt-4
-                  "
-                >
-                  <p className="text-xl font-bold">
-                    Total Final
-                  </p>
-
-                  <p
-                    className="
-                      text-3xl
-                      font-bold
-                      text-blue-600
-                    "
-                  >
-                    {finalPrice.toLocaleString()} DZD
-                  </p>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <button
-                className="
-                  w-full
-                  mt-10
-                  bg-blue-600
-                  hover:bg-blue-700
-                  transition
-                  text-white
-                  py-5
-                  rounded-2xl
-                  text-lg
-                  font-bold
-                "
-              >
-                Réserver Maintenant
-              </button>
-
-              <Link
-                href="/dashboard/offers"
-                className="
-                  block
-                  text-center
-                  mt-5
-                  text-gray-500
-                  hover:text-black
-                "
-              >
-                Retour aux Offres
-              </Link>
-            </div>
-          </div>
         </div>
 
-        {/* Down */}
-        <div className="grid md:grid-cols-2 gap-8 items-start mt-8">
-              
-          {/* Vol */}
-          <div className="bg-white rounded-3xl shadow-md p-8">
-            <h2 className="text-3xl font-bold mb-8">
-              Informations Vol
-            </h2>
+      )}
 
-            <div className="grid md:grid-cols-2 gap-8">
+      {pkg.hotels?.length > 0 && (
 
-              <div className="space-y-5">
-                <Info
-                  label="Compagnie"
-                  value={packageData.airline}
-                />
+        <div>
 
-                <Info
-                  label="Numéro Vol"
-                  value={packageData.flightNumber}
-                />
+          <h2 className="text-2xl font-bold mb-4">
+            Hôtel(s)
+          </h2>
 
-                <Info
-                  label="Lieu Départ"
-                  value={
-                    packageData.departureLocation
-                  }
-                />
+          <div className="space-y-4">
+
+            {pkg.hotels.map((hotel: any) => (
+
+              <div
+                key={hotel.id}
+                className="border rounded-lg p-4"
+              >
+
+                <p className="font-semibold">
+                  {hotel.name}
+                </p>
+
+                <p>
+                  {"⭐".repeat(hotel.stars)}
+                </p>
+
+                <p>
+                  {hotel.city},
+                  {" "}
+                  {hotel.country}
+                </p>
+
+                <p>
+                  {hotel.adress}
+                </p>
+
               </div>
 
-              <div className="space-y-5">
-                <Info
-                  label="Aller"
-                  value={`${packageData.departureTimeOutbound} → ${packageData.arrivalTimeOutbound}`}
-                />
+            ))}
 
-                <Info
-                  label="Retour"
-                  value={`${packageData.departureTimeReturn} → ${packageData.arrivalTimeReturn}`}
-                />
+          </div>
 
-                <Info
-                  label="Dates"
-                  value={`${packageData.departureDate} → ${packageData.returnDate}`}
-                />
+        </div>
+
+      )}
+
+      {pkg.transports?.length > 0 && (
+
+        <div>
+
+          <h2 className="text-2xl font-bold mb-4">
+            Transport(s)
+          </h2>
+
+          <div className="space-y-4">
+
+            {pkg.transports.map((transport: any) => (
+
+              <div
+                key={transport.id}
+                className="border rounded-lg p-4"
+              >
+
+                <p className="font-semibold">
+                  {transport.company}
+                </p>
+
+                <p>
+                  {transport.route}
+                </p>
+
               </div>
-            </div>
+
+            ))}
+
           </div>
 
-          {/* Hôtel */}
-          <div className="bg-white rounded-3xl shadow-md p-8">
-            <h2 className="text-3xl font-bold mb-8">
-              Hôtel
-            </h2>
+        </div>
 
-            <div className="space-y-5">
-              <Info
-                label="Nom Hôtel"
-                value={packageData.hotelName}
-              />
+      )}
 
-              <Info
-                label="Étoiles"
-                value={"⭐".repeat(
-                  packageData.hotelStars
-                )}
-              />
+      {pkg.excursions?.length > 0 && (
 
-              <Info
-                label="Adresse"
-                value={packageData.hotelAddress}
-              />
-            </div>
+        <div>
+
+          <h2 className="text-2xl font-bold mb-4">
+            Excursion(s)
+          </h2>
+
+          <div className="space-y-4">
+
+            {pkg.excursions.map((excursion: any) => (
+
+              <div
+                key={excursion.id}
+                className="border rounded-lg p-4"
+              >
+
+                <p className="font-semibold">
+                  {excursion.name}
+                </p>
+
+                <p>
+                  {excursion.location}
+                </p>
+
+                <p>
+                  {excursion.description}
+                </p>
+
+              </div>
+
+            ))}
+
           </div>
 
-          {/* Transport */}
-          <div className="bg-white rounded-3xl shadow-md p-8">
-            <h2 className="text-3xl font-bold mb-8">
-              Transport
-            </h2>
+        </div>
 
-            <div className="space-y-5">
-              <Info
-                label="Société"
-                value={
-                  packageData.transportCompany
-                }
-              />
+      )}
 
-              <Info
-                label="Trajet"
-                value={
-                  packageData.transportRoute
-                }
-              />
-            </div>
-          </div>
+      <div>
 
-          {/* Excursion */}
-          <div className="bg-white rounded-3xl shadow-md p-8">
-            <h2 className="text-3xl font-bold mb-8">
-              Excursion Incluse
-            </h2>
+        <h2 className="text-2xl font-bold mb-4">
+          Suppléments Vol
+        </h2>
 
-            <div className="space-y-5">
-              <Info
-                label="Nom"
-                value={
-                  packageData.excursionName
-                }
-              />
+        <div className="space-y-2">
 
-              <Info
-                label="Lieu"
-                value={
-                  packageData.excursionLocation
-                }
-              />
+          <PriceRow
+            label="Economy"
+            value="Inclus"
+            green
+          />
 
-              <Info
-                label="Description"
-                value={
-                  packageData.excursionDescription
-                }
-              />
-            </div>
-          </div>
-        </div>    
+          <PriceRow
+            label="Business"
+            value={`${pkg.suppBusiness} DA`}
+          />
+
+          <PriceRow
+            label="First"
+            value={`${pkg.suppFirst} DA`}
+          />
+
+        </div>
+
       </div>
-    </section>
+
+      <div>
+
+        <h2 className="text-2xl font-bold mb-4">
+          Suppléments Chambre
+        </h2>
+
+        <div className="space-y-2">
+
+          <PriceRow label="Single" value={`${pkg.suppSingle} DA`} />
+          <PriceRow label="Double" value={`${pkg.suppDouble} DA`} />
+          <PriceRow label="Triple" value={`${pkg.suppTriple} DA`} />
+          <PriceRow label="Quadruple" value={`${pkg.suppQuadruple} DA`} />
+          <PriceRow label="Suite" value={`${pkg.suppSuite} DA`} />
+
+        </div>
+
+      </div>
+
+      <div>
+
+        <h2 className="text-2xl font-bold mb-4">
+          Suppléments Pension
+        </h2>
+
+        <div className="space-y-2">
+
+          <PriceRow label="Bed Only" value={`${pkg.suppBedOnly} DA`} />
+          <PriceRow label="Bed Breakfast" value={`${pkg.suppBedBreakfast} DA`} />
+          <PriceRow label="Half Board" value={`${pkg.suppHalfBoard} DA`} />
+          <PriceRow label="Full Board" value={`${pkg.suppFullBoard} DA`} />
+          <PriceRow label="All Inclusive" value={`${pkg.suppAllInclusive} DA`} />
+
+        </div>
+
+      </div>
+
+      <div className="border rounded-xl p-6">
+
+        <h2 className="text-3xl font-bold mb-6">
+          Réservation
+        </h2>
+
+        <div className="space-y-5">
+
+          <div>
+
+            <label className="block mb-2">
+              Voyageurs
+            </label>
+
+            <input
+              type="number"
+              min={1}
+              max={pkg.availableSeats}
+              value={travellers}
+              onChange={(e) =>
+                setTravellers(
+                  Number(
+                    e.target.value
+                  )
+                )
+              }
+              className="
+                border
+                rounded
+                p-2
+                w-full
+              "
+            />
+
+          </div>
+
+          <div>
+
+            <label className="block mb-2">
+              Classe Vol
+            </label>
+
+            <select
+              value={flightClass}
+              onChange={(e) =>
+                setFlightClass(
+                  e.target.value as FlightClass
+                )
+              }
+              className="border rounded p-2 w-full"
+            >
+
+              <option value="Economy">
+                Economy (Inclus)
+              </option>
+
+              {pkg.suppBusiness > 0 && (
+
+                <option value="Business">
+                  Business (+{pkg.suppBusiness.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppFirst > 0 && (
+
+                <option value="First">
+                  First (+{pkg.suppFirst.toLocaleString()} DA)
+                </option>
+
+              )}
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label className="block mb-2">
+              Chambre
+            </label>
+
+            <select
+              value={roomType}
+              onChange={(e) =>
+                setRoomType(
+                  e.target.value as RoomType
+                )
+              }
+              className="border rounded p-2 w-full"
+            >
+
+              {pkg.suppSingle > 0 && (
+
+                <option value="Single">
+                  Single (+{pkg.suppSingle.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              <option value="Double">
+                Double
+                {pkg.suppDouble > 0 &&
+                  ` (+${pkg.suppDouble.toLocaleString()} DA)`}
+              </option>
+
+              {pkg.suppTriple > 0 && (
+
+                <option value="Triple">
+                  Triple (+{pkg.suppTriple.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppQuadruple > 0 && (
+
+                <option value="Quadruple">
+                  Quadruple (+{pkg.suppQuadruple.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppSuite > 0 && (
+
+                <option value="Suite">
+                  Suite (+{pkg.suppSuite.toLocaleString()} DA)
+                </option>
+
+              )}
+
+            </select>
+
+          </div>
+
+          <div>
+
+            <label className="block mb-2">
+              Pension
+            </label>
+
+            <select
+              value={pension}
+              onChange={(e) =>
+                setPension(
+                  e.target.value as PensionType
+                )
+              }
+              className="border rounded p-2 w-full"
+            >
+
+              <option value="BedOnly">
+                Bed Only
+              </option>
+
+              {pkg.suppBedBreakfast > 0 && (
+
+                <option value="BedBreakfast">
+                  Bed & Breakfast
+                  (+{pkg.suppBedBreakfast.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppHalfBoard > 0 && (
+
+                <option value="HalfBoard">
+                  Half Board
+                  (+{pkg.suppHalfBoard.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppFullBoard > 0 && (
+
+                <option value="FullBoard">
+                  Full Board
+                  (+{pkg.suppFullBoard.toLocaleString()} DA)
+                </option>
+
+              )}
+
+              {pkg.suppAllInclusive > 0 && (
+
+                <option value="AllInclusive">
+                  All Inclusive
+                  (+{pkg.suppAllInclusive.toLocaleString()} DA)
+                </option>
+
+              )}
+
+            </select>
+
+          </div>
+
+          <div className="text-3xl font-bold">
+
+            Total :
+
+            {" "}
+
+            {totalPrice.toLocaleString()}
+
+            DA
+
+          </div>
+
+          <button
+
+            onClick={handlePurchase}
+
+            disabled={purchaseLoading}
+
+            className="
+              bg-blue-600
+              text-white
+              px-6
+              py-3
+              rounded-lg
+              font-semibold
+            "
+
+          >
+
+            {purchaseLoading
+
+              ? "Réservation..."
+
+              : "Réserver"}
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   );
 }
 
@@ -624,27 +742,28 @@ function Info({
   label: string;
   value: string;
 }) {
+
   return (
+
     <div
       className="
         flex
-        flex-col
-        md:flex-row
-        md:items-center
-        md:justify-between
-        gap-2
+        justify-between
         border-b
-        pb-4
+        pb-3
       "
     >
-      <p className="text-gray-500 font-medium">
+
+      <p className="text-gray-500">
         {label}
       </p>
 
-      <p className="font-semibold text-right">
+      <p className="font-semibold">
         {value}
       </p>
+
     </div>
+
   );
 }
 
@@ -657,17 +776,24 @@ function PriceRow({
   value: string;
   green?: boolean;
 }) {
+
   return (
-    <div className="flex justify-between items-center">
-      <p className="text-gray-500">{label}</p>
+
+    <div className="flex justify-between">
+
+      <p>{label}</p>
 
       <p
-        className={`font-semibold ${
-          green ? "text-green-600" : ""
-        }`}
+        className={
+          green
+            ? "text-green-600 font-semibold"
+            : "font-semibold"
+        }
       >
         {value}
       </p>
+
     </div>
+
   );
 }

@@ -1,6 +1,65 @@
 
-export default function ProfileHeader() {
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { UserDto } from "@/server/dto/user/user.dto";
+
+
+type Props = {
+    user: UserDto;
+};
+
+export default function ProfileHeader({
+    user,
+}: Props) {
+
+  const router = useRouter();
+
+  async function logout() {
+
+      await fetch("/api/auth/logout", {
+          method: "POST",
+      });
+
+      window.location.href = "/";
+
+  }
+
+async function supprimerCompte() {
+
+    if (
+
+        !confirm(
+
+            "Supprimer définitivement votre compte ?"
+
+        )
+
+    ) {
+
+        return;
+
+    }
+
+    await fetch(
+
+        "/api/profile/delete",
+
+        {
+
+            method: "PATCH",
+
+        }
+
+    );
+
+    await logout();
+
+}
+
   return (
+
     <div
       className="
         bg-white
@@ -14,7 +73,7 @@ export default function ProfileHeader() {
         gap-8
       "
     >
-      {/* Avatar */}
+
       <div
         className="
           w-32
@@ -29,95 +88,129 @@ export default function ProfileHeader() {
           text-blue-600
         "
       >
-        L
+
+        {user.firstName.charAt(0)}
+
       </div>
 
-      {/* Infos */}
       <div className="flex-1">
+
         <h1 className="text-4xl font-bold">
-          Leith Allah
+
+          {user.firstName} {user.lastName}
+
         </h1>
 
         <p className="text-gray-500 mt-2">
-          Administrateur Agence
+
+          {user.role}
+
         </p>
 
         <div className="mt-6 grid md:grid-cols-2 gap-4">
+
           <div>
+
             <p className="text-sm text-gray-500">
+
               Email
+
             </p>
 
             <p className="font-semibold">
-              leith@example.com
+
+              {user.email}
+
             </p>
+
           </div>
 
           <div>
+
             <p className="text-sm text-gray-500">
-              Téléphone
+
+              Matricule
+
             </p>
 
             <p className="font-semibold">
-              +213 555 00 00 00
+
+              {user.mle}
+
             </p>
+
           </div>
 
           <div>
+
             <p className="text-sm text-gray-500">
-              Numéro de compte
+
+              Nationalité
+
             </p>
 
             <p className="font-semibold">
-              CP-2026-00125
-            </p>
-          </div>
 
-          <div>
-            <p className="text-sm text-gray-500">
-              Pays
+              {user.nationality}
+
             </p>
 
-            <p className="font-semibold">
-              Algérie
-            </p>
           </div>
+
         </div>
+
       </div>
 
-      {/* Actions */}
       <div className="flex flex-col gap-4">
+
         <button
-          className="
-            bg-blue-600
-            hover:bg-blue-700
-            transition
-            text-white
-            px-6
-            py-3
-            rounded-full
-            font-semibold
-          "
+
+            onClick={supprimerCompte}
+
+            className="
+                border
+                border-red-500
+                bg-red-500
+                text-white
+                hover:bg-red-600
+                px-6
+                py-3
+                rounded-full
+                font-semibold
+            "
+
         >
-          Modifier Profil
+
+            Supprimer mon compte
+
         </button>
 
         <button
-          className="
-            border
-            border-red-300
-            text-red-500
-            hover:bg-red-50
-            transition
-            px-6
-            py-3
-            rounded-full
-            font-semibold
-          "
+
+            onClick={logout}
+
+            className="
+                border
+                border-red-300
+                text-red-500
+                hover:bg-red-50
+                transition
+                px-6
+                py-3
+                rounded-full
+                font-semibold
+            "
+
         >
-          Déconnexion
+
+            Déconnexion
+
         </button>
+
       </div>
+
     </div>
+
   );
+
 }

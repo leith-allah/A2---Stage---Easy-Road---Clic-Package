@@ -1,6 +1,11 @@
 
+import LoginForm
+from "@/features/auth/components/LoginForm";
+
 export default function LoginPage() {
+
   return (
+
     <section
       className="
         flex
@@ -10,6 +15,7 @@ export default function LoginPage() {
         py-20
       "
     >
+
       <div
         className="
           w-full
@@ -20,45 +26,24 @@ export default function LoginPage() {
           p-8
         "
       >
-        <h1 className="text-3xl font-bold mb-6 text-center">
+
+        <h1
+          className="
+            text-3xl
+            font-bold
+            mb-6
+            text-center
+          "
+        >
           Connexion
         </h1>
 
-        <form className="flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="
-              border
-              rounded-lg
-              p-3
-            "
-          />
+        <LoginForm />
 
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            className="
-              border
-              rounded-lg
-              p-3
-            "
-          />
-
-          <button
-            className="
-              bg-blue-600
-              text-white
-              rounded-lg
-              p-3
-              hover:bg-blue-700
-              transition
-            "
-          >
-            Se connecter
-          </button>
-        </form>
       </div>
+
     </section>
+
   );
+
 }

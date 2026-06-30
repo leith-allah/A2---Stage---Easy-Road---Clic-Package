@@ -1,22 +1,15 @@
 
-import { NextRequest }
+import { NextRequest, NextResponse }
 from "next/server";
 
-import {
-  flightService,
-}
+import { flightService }
 from "@/server/services/flight.service";
 
-import {
-  createFlightSchema,
-}
-from "@/server/validations/flight/create-flight.validation";
+import { CreateFlightDto }
+from "@/server/dto/flight/create-flight.dto";
 
-import {
-  requirePermission,
-}
+import { requirePermission }
 from "@/server/middlewares/permission.middleware";
-
 
 export async function GET() {
 
@@ -33,7 +26,6 @@ export async function GET() {
 
 }
 
-
 export async function POST(
   request: NextRequest
 ) {
@@ -42,57 +34,18 @@ export async function POST(
     "flight:create"
   );
 
-  const body =
+  const body: CreateFlightDto =
     await request.json();
 
-  const data =
-    createFlightSchema.parse(
+  const createdFlight =
+    await flightService.createFlight(
       body
     );
 
-  const flight =
-    await flightService.createFlight({
-
-      airline:
-        data.airline,
-
-      departureLocation:
-        data.departureLocation,
-
-      destination:
-        data.destination,
-
-      departureDate:
-        new Date(data.departureDate),
-
-      departureTime:
-        new Date(data.departureTime),
-
-      arrivalTime:
-        new Date(data.arrivalTime),
-
-      returnDate:
-        data.returnDate
-          ? new Date(data.returnDate)
-          : null,
-
-      returnDepartureTime:
-        data.returnDepartureTime
-          ? new Date(data.returnDepartureTime)
-          : null,
-
-      returnArrivalTime:
-        data.returnArrivalTime
-          ? new Date(data.returnArrivalTime)
-          : null,
-
-      flightNumber:
-        data.flightNumber,
-
-    });
-
-  return Response.json(
-    flight,
+  return NextResponse.json(
+    {
+      id: Number(createdFlight.id_vol),
+    },
     {
       status: 201,
     }

@@ -4,114 +4,102 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
 import {
-  Role,
-} from "@/constants/roles";
+  getMe,
+  logout,
+} from "@/features/auth/services/auth.service";
+
 
 type User = {
-  id: number;
+  sub: number;
 
-  name: string;
+  email: string;
 
-  role: Role;
-
-  suspended: boolean;
+  role:
+    | "OWNER"
+    | "SUPER_ADMIN"
+    | "ADMIN"
+    | "AGENCY"
+    | "CLIENT";
 };
 
 type AuthContextType = {
   user: User | null;
 
-  loginAsAdmin:
-    () => void;
+  loading: boolean;
 
-  loginAsAgency:
-    () => void;
+  refreshUser: () => Promise<void>;
 
-  loginAsClient:
-    () => void;
-
-  logout:
-    () => void;
+  logoutUser: () => Promise<void>;
 };
 
 const AuthContext =
-  createContext<
-    AuthContextType
-      | undefined
-  >(undefined);
+  createContext<AuthContextType | null>(
+    null
+  );
 
-export function
-AuthProvider({
+export function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
 
   const [user, setUser] =
-    useState<User | null>({
-      id: 1,
+    useState<User | null>(null);
 
-      name: "Leith",
+  const [loading, setLoading] =
+    useState(true);
 
-      role: "ADMIN",
+  async function refreshUser() {
 
-      suspended: false,
-    });
+    try {
 
-  function loginAsAdmin() {
+      const me =
+        await getMe();
 
-    setUser({
-      id: 1,
+      setUser(me);
 
-      name: "Admin",
+    } catch {
 
-      role: "ADMIN",
+      setUser(null);
 
-      suspended: false,
-    });
+    }
+
   }
 
-  function loginAsAgency() {
+  async function logoutUser() {
 
-    setUser({
-      id: 2,
+    await logout();
 
-      name: "Agency",
-
-      role: "AGENCY",
-
-      suspended: false,
-    });
-  }
-
-  function loginAsClient() {
-
-    setUser({
-      id: 3,
-
-      name: "Client",
-
-      role: "CLIENT",
-
-      suspended: false,
-    });
-  }
-
-  function logout() {
     setUser(null);
+
   }
+
+  useEffect(() => {
+
+    async function load() {
+
+      await refreshUser();
+
+      setLoading(false);
+
+    }
+
+    load();
+
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        loginAsAdmin,
-        loginAsAgency,
-        loginAsClient,
-        logout,
+        loading,
+        refreshUser,
+        logoutUser,
       }}
     >
       {children}
@@ -119,17 +107,19 @@ AuthProvider({
   );
 }
 
-export function
-useAuthContext() {
+export function useAuthContext() {
 
   const context =
     useContext(AuthContext);
 
   if (!context) {
+
     throw new Error(
       "AuthProvider manquant"
     );
+
   }
 
   return context;
+
 }

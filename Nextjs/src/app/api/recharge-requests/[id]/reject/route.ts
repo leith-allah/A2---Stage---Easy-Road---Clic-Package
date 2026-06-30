@@ -30,13 +30,12 @@ export async function PATCH(
   const { id } =
     await params;
 
-  const request =
-    await rechargeRequestService.rejectRequest(
-      Number(id)
-    );
+  await rechargeRequestService.rejectRequest(
+    Number(id)
+  );
 
   return successResponse(
-    request,
+    null,
     200,
     "Recharge request rejected"
   );

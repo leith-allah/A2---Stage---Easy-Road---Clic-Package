@@ -31,6 +31,20 @@ from "@/server/constants/business-wallet";
 import { getCurrentUserId }
 from "@/server/auth/session";
 
+import { RechargeRequestMapper }
+from "@/server/mappers/recharge-request.mapper";
+
+
+type CreateRechargeRequestData = {
+
+  userId: number;
+
+  amount: number;
+
+  comment?: string;
+
+};
+
 
 export const rechargeRequestService = {
 
@@ -66,26 +80,35 @@ export const rechargeRequestService = {
     const userId =
       await getCurrentUserId();
 
-    return rechargeRequestRepository.findByUserId(
-      userId
+    const requests =
+      await rechargeRequestRepository.findByUserId(
+        userId
+      );
+
+    return requests.map(
+      (request) =>
+        RechargeRequestMapper.toDto(
+          RechargeRequestMapper.fromPrisma(
+            request
+          )
+        )
     );
 
   },
 
   async createRequest(
-    data: {
-
-      userId: number;
-
-      amount: number;
-
-      comment?: string;
-
-    }
+    data: CreateRechargeRequestData
   ) {
 
-    return rechargeRequestRepository.create(
-      data
+    const request =
+      await rechargeRequestRepository.create(
+        data
+      );
+
+    return RechargeRequestMapper.toDto(
+      RechargeRequestMapper.fromPrisma(
+        request
+      )
     );
 
   },

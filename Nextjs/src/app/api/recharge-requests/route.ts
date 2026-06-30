@@ -39,8 +39,26 @@ export async function GET() {
   const requests =
     await rechargeRequestService.getAllRequests();
 
+  const safeRequests =
+
+    JSON.parse(
+
+      JSON.stringify(
+
+        requests,
+
+        (_, value) =>
+
+          typeof value === "bigint"
+            ? Number(value)
+            : value
+
+      )
+
+    );
+
   return successResponse(
-    requests
+    safeRequests
   );
 
 }

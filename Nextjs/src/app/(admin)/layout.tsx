@@ -16,6 +16,8 @@ export default function DashboardLayout({
     <ProtectedRoute
       allowedRoles={[
         ROLES.ADMIN,
+        ROLES.SUPER_ADMIN,
+        ROLES.OWNER,
       ]}
     >
       {children}

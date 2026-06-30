@@ -5,6 +5,12 @@ from "@/server/repositories/flight.repository";
 import { FlightMapper }
 from "@/server/mappers/flight.mapper";
 
+import { CreateFlightDto }
+from "@/server/dto/flight/create-flight.dto";
+
+import { UpdateFlightDto }
+from "@/server/dto/flight/update-flight.dto";
+
 import { NotFoundException }
 from "@/server/utils/api-error";
 
@@ -17,9 +23,7 @@ export const flightService = {
 
     return flights.map(
       (flight) =>
-        FlightMapper.toDto(
-          flight
-        )
+        FlightMapper.toDto(flight)
     );
 
   },
@@ -29,9 +33,7 @@ export const flightService = {
   ) {
 
     const flight =
-      await flightRepository.findById(
-        id
-      );
+      await flightRepository.findById(id);
 
     if (!flight) {
 
@@ -48,55 +50,90 @@ export const flightService = {
   },
 
   async createFlight(
-    data: any
+    dto: CreateFlightDto
   ) {
 
     if (
 
-        data.returnDate &&
+      dto.returnDate &&
 
-        new Date(data.returnDate)
-            <
-        new Date(data.departureDate)
+      new Date(dto.returnDate)
+        <
+      new Date(dto.departureDate)
 
     ) {
-        throw new Error(
-            "La date de retour doit être après la date aller"
-        );
+
+      throw new Error(
+        "La date de retour doit être après la date aller"
+      );
+
     }
 
     if (
 
-        new Date(data.arrivalTime)
-            <=
-        new Date(data.departureTime)
+      new Date(dto.arrivalTime)
+        <=
+      new Date(dto.departureTime)
 
     ) {
-        throw new Error(
-            "L'heure d'arrivée doit être après l'heure de départ"
-        );
-        }
 
-    const flight =
-      await flightRepository.create(
-        data
+      throw new Error(
+        "L'heure d'arrivée doit être après l'heure de départ"
       );
 
-    return FlightMapper.toDto(
-      flight
-    );
+    }
 
+    return flightRepository.create({
+
+      airline:
+        dto.airline,
+
+      departureLocation:
+        dto.departureLocation,
+
+      destination:
+        dto.destination,
+
+      departureDate:
+        new Date(dto.departureDate),
+
+      departureTime:
+        new Date(`1970-01-01T${dto.departureTime}:00`),
+
+      arrivalTime:
+        new Date(`1970-01-01T${dto.arrivalTime}:00`),
+
+      returnDate:
+        dto.returnDate
+          ? new Date(dto.returnDate)
+          : null,
+
+      returnDepartureTime:
+        dto.returnDepartureTime
+          ? new Date(`1970-01-01T${dto.returnDepartureTime}:00`)
+          : null,
+
+      returnArrivalTime:
+        dto.returnArrivalTime
+          ? new Date(`1970-01-01T${dto.returnArrivalTime}:00`)
+          : null,
+
+      flightNumber:
+        dto.flightNumber,
+
+    });
   },
 
   async updateFlight(
+
     id: number,
-    data: any
+
+    dto: UpdateFlightDto
+
   ) {
 
     const existingFlight =
-      await flightRepository.findById(
-        id
-      );
+      await flightRepository.findById(id);
 
     if (!existingFlight) {
 
@@ -107,38 +144,43 @@ export const flightService = {
     }
 
     if (
-        data.departureDate &&
-        data.returnDate &&
 
-        new Date(data.returnDate)
-            <
-        new Date(data.departureDate)
+      dto.departureDate &&
+      dto.returnDate &&
+
+      new Date(dto.returnDate)
+        <
+      new Date(dto.departureDate)
 
     ) {
-        throw new Error(
-            "La date de retour doit être après la date aller"
-        );
-        }
-    
+
+      throw new Error(
+        "La date de retour doit être après la date aller"
+      );
+
+    }
+
     if (
 
-        data.departureTime &&
-        data.arrivalTime &&
+      dto.departureTime &&
+      dto.arrivalTime &&
 
-        new Date(data.arrivalTime)
-            <=
-        new Date(data.departureTime)
+      new Date(dto.arrivalTime)
+        <=
+      new Date(dto.departureTime)
 
     ) {
-        throw new Error(
-            "L'heure d'arrivée doit être après l'heure de départ"
-        );
+
+      throw new Error(
+        "L'heure d'arrivée doit être après l'heure de départ"
+      );
+
     }
 
     const flight =
       await flightRepository.update(
         id,
-        data
+        dto
       );
 
     return FlightMapper.toDto(
@@ -152,9 +194,7 @@ export const flightService = {
   ) {
 
     const existingFlight =
-      await flightRepository.findById(
-        id
-      );
+      await flightRepository.findById(id);
 
     if (!existingFlight) {
 
@@ -164,9 +204,7 @@ export const flightService = {
 
     }
 
-    return flightRepository.delete(
-      id
-    );
+    return flightRepository.delete(id);
 
   },
 

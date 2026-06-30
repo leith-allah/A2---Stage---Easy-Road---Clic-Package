@@ -129,6 +129,39 @@ CREATE TABLE demande_rechargement (
         ON DELETE RESTRICT
 );
 
+CREATE TABLE demande_creation_compte (
+
+    id_demande_creation BIGSERIAL PRIMARY KEY,
+
+    statut_demande_creation VARCHAR(50) NOT NULL,
+
+    nom_user VARCHAR(50) NOT NULL,
+    prenom_user VARCHAR(50) NOT NULL,
+
+    ddn_user DATE NOT NULL,
+    nat_user VARCHAR(50) NOT NULL,
+
+    nin_user VARCHAR(30) NOT NULL,
+    email_user VARCHAR(100) NOT NULL,
+
+    mdp_user TEXT NOT NULL,
+
+    commentaire_demande TEXT,
+
+    date_heure_demande TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    id_role BIGINT NOT NULL
+        REFERENCES role(id_role),
+
+    id_bureau BIGINT NOT NULL
+        REFERENCES bureau_agence(id_bureau),
+
+    traite_par BIGINT
+        REFERENCES utilisateur(id_user),
+
+    date_traitement TIMESTAMP
+);
+
 CREATE TABLE transactions (
     id_transac BIGSERIAL PRIMARY KEY,
     ref_transac VARCHAR(255) NOT NULL UNIQUE,

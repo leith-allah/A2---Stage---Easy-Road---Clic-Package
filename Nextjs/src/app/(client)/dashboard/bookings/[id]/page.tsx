@@ -19,30 +19,85 @@ import {
   CreditCard,
 } from "lucide-react";
 
-import { mockBookings }
-from "@/features/bookings/data/mockBookings";
+import { getMyBookings } 
+from "@/features/bookings/services/booking.service";
 
 import BookingStatusBadge
 from "@/features/bookings/components/BookingStatusBadge";
+
+import { useEffect, useState } from "react";
+
+import { getBookingById } 
+from "@/features/bookings/services/booking.service";
+
 
 export default function
 BookingDetailsPage() {
 
   const params = useParams();
 
-  const booking = mockBookings.find(
-    (booking) =>
-      booking.id === Number(params.id)
-  );
+  const [booking, setBooking] =
+    useState<any>(null);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  useEffect(() => {
+
+    async function loadBooking() {
+
+      try {
+
+        const data =
+          await getBookingById(
+            Number(params.id)
+          );
+
+        setBooking(data);
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadBooking();
+
+  }, [params.id]);
+
+  if (loading) {
+
+    return (
+
+      <section className="p-10">
+
+        <h1 className="text-3xl font-bold">
+          Chargement...
+        </h1>
+
+      </section>
+
+    );
+
+  }
 
   if (!booking) {
+
     return (
+
       <section className="p-10">
+
         <h1 className="text-3xl font-bold">
           Réservation introuvable
         </h1>
+
       </section>
+
     );
+
   }
 
   return (

@@ -40,20 +40,21 @@ model agence {
 }
 
 model bureau_agence {
-  id_bureau      BigInt        @id @default(autoincrement())
-  mle_bureau     String        @unique @db.VarChar(255)
-  type_bureau    String        @db.VarChar(50)
-  dc_bureau      DateTime      @db.Date
-  pays_bureau    String        @db.VarChar(50)
-  ville_bureau   String        @db.VarChar(50)
-  adresse_bureau String        @db.VarChar(255)
-  num_agr_bureau String        @unique @db.VarChar(50)
-  rib_agence     String?       @db.VarChar(30)
-  iban_agence    String?       @db.VarChar(34)
-  dcc_bureau     DateTime      @db.Date
-  id_agence      BigInt
-  agence         agence        @relation(fields: [id_agence], references: [id_agence], onDelete: Cascade, onUpdate: NoAction)
-  utilisateur    utilisateur[]
+  id_bureau               BigInt                    @id @default(autoincrement())
+  mle_bureau              String                    @unique @db.VarChar(255)
+  type_bureau             String                    @db.VarChar(50)
+  dc_bureau               DateTime                  @db.Date
+  pays_bureau             String                    @db.VarChar(50)
+  ville_bureau            String                    @db.VarChar(50)
+  adresse_bureau          String                    @db.VarChar(255)
+  num_agr_bureau          String                    @unique @db.VarChar(50)
+  rib_agence              String?                   @db.VarChar(30)
+  iban_agence             String?                   @db.VarChar(34)
+  dcc_bureau              DateTime                  @db.Date
+  id_agence               BigInt
+  agence                  agence                    @relation(fields: [id_agence], references: [id_agence], onDelete: Cascade, onUpdate: NoAction)
+  demande_creation_compte demande_creation_compte[]
+  utilisateur             utilisateur[]
 }
 
 model demande_rechargement {
@@ -179,9 +180,10 @@ model propose {
 }
 
 model role {
-  id_role     BigInt        @id @default(autoincrement())
-  nom_role    String        @unique @db.VarChar(100)
-  utilisateur utilisateur[]
+  id_role                 BigInt                    @id @default(autoincrement())
+  nom_role                String                    @unique @db.VarChar(100)
+  demande_creation_compte demande_creation_compte[]
+  utilisateur             utilisateur[]
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -216,27 +218,28 @@ model transport {
 }
 
 model utilisateur {
-  id_user              BigInt                 @id @default(autoincrement())
-  mle_user             String                 @unique @db.VarChar(255)
-  nin_user             String                 @unique @db.VarChar(30)
-  nom_user             String                 @db.VarChar(50)
-  prenom_user          String                 @db.VarChar(50)
-  ddn_user             DateTime               @db.Date
-  nat_user             String                 @db.VarChar(50)
-  statut_user          String                 @db.VarChar(50)
-  email_pro_user       String                 @unique @db.VarChar(50)
-  mdp_user             String
-  dcc_user             DateTime               @db.Date
-  id_role              BigInt
-  id_bureau            BigInt
-  achat_package        achat_package[]
-  demande_rechargement demande_rechargement[]
-  favorise             favorise[]
-  package_voyage       package_voyage[]
-  portefeuille         portefeuille?
-  transactions         transactions[]
-  bureau_agence        bureau_agence          @relation(fields: [id_bureau], references: [id_bureau], onDelete: NoAction, onUpdate: NoAction)
-  role                 role                   @relation(fields: [id_role], references: [id_role], onDelete: NoAction, onUpdate: NoAction)
+  id_user                 BigInt                    @id @default(autoincrement())
+  mle_user                String                    @unique @db.VarChar(255)
+  nin_user                String                    @unique @db.VarChar(30)
+  nom_user                String                    @db.VarChar(50)
+  prenom_user             String                    @db.VarChar(50)
+  ddn_user                DateTime                  @db.Date
+  nat_user                String                    @db.VarChar(50)
+  statut_user             String                    @db.VarChar(50)
+  email_pro_user          String                    @unique @db.VarChar(50)
+  mdp_user                String
+  dcc_user                DateTime                  @db.Date
+  id_role                 BigInt
+  id_bureau               BigInt
+  achat_package           achat_package[]
+  demande_creation_compte demande_creation_compte[]
+  demande_rechargement    demande_rechargement[]
+  favorise                favorise[]
+  package_voyage          package_voyage[]
+  portefeuille            portefeuille?
+  transactions            transactions[]
+  bureau_agence           bureau_agence             @relation(fields: [id_bureau], references: [id_bureau], onDelete: NoAction, onUpdate: NoAction)
+  role                    role                      @relation(fields: [id_role], references: [id_role], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([id_bureau], map: "idx_user_bureau")
   @@index([id_role], map: "idx_user_role")
@@ -265,4 +268,29 @@ model vol {
   heure_arrivee_retour_vol DateTime? @db.Time(6)
   num_vol                  String    @db.VarChar(50)
   possede                  possede[]
+}
+
+model demande_creation_compte {
+  id_demande_creation     BigInt        @id @default(autoincrement())
+  statut_demande_creation String        @db.VarChar(50)
+  nom_user                String        @db.VarChar(50)
+  prenom_user             String        @db.VarChar(50)
+  ddn_user                DateTime      @db.Date
+  nat_user                String        @db.VarChar(50)
+  nin_user                String        @db.VarChar(30)
+  email_user              String        @db.VarChar(100)
+  mdp_user                String
+  commentaire_demande     String?
+  date_heure_demande      DateTime      @default(now()) @db.Timestamp(6)
+  id_role                 BigInt
+  id_bureau               BigInt
+  traite_par              BigInt?
+  date_traitement         DateTime?     @db.Timestamp(6)
+  bureau_agence           bureau_agence @relation(fields: [id_bureau], references: [id_bureau], onDelete: NoAction, onUpdate: NoAction)
+  role                    role          @relation(fields: [id_role], references: [id_role], onDelete: NoAction, onUpdate: NoAction)
+  utilisateur             utilisateur?  @relation(fields: [traite_par], references: [id_user], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([statut_demande_creation], map: "idx_demande_creation_statut")
+  @@index([id_bureau], map: "idx_demande_creation_bureau")
+  @@index([id_role], map: "idx_demande_creation_role")
 }

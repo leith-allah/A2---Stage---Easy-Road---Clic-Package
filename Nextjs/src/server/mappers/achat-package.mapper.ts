@@ -1,31 +1,80 @@
 
+import { Prisma } from "@prisma/client";
+
+export type AchatWithRelations =
+  Prisma.achat_packageGetPayload<{
+    include: {
+      package_voyage: true;
+    };
+  }>;
+
+
+type AchatPackageMapped = {
+
+  id: number;
+
+  bookingNumber: string;
+
+  packageId: number;
+
+  packageTitle: string;
+
+  destination: string;
+
+  image: string;
+
+  travelers: number;
+
+  total: number;
+
+  departureDate: Date | string;
+
+  returnDate: Date | string;
+
+  status: string;
+
+  createdAt: Date;
+
+};
+
+
 export const AchatPackageMapper = {
 
-  fromPrisma(data: any) {
+  fromPrisma(
+    data: AchatWithRelations
+  ): AchatPackageMapped {
 
     return {
 
-      id: Number(data.id_achat_pack),
+      id:
+        Number(data.id_achat_pack),
 
-      reference: data.ref_achat_pack,
+      bookingNumber:
+        data.ref_achat_pack,
 
-      packageId: Number(data.id_pack),
+      packageId:
+        Number(data.id_pack),
 
-      userId: Number(data.id_user),
+      packageTitle:
+        data.package_voyage?.nom_pack || "",
 
-      travelers: data.nb_voyageurs,
+      destination:
+        data.package_voyage?.destination_pack || "",
 
-      flightClass:
-        data.classe_vol_achat_pack,
+      image:
+        data.package_voyage?.image_pack || "",
 
-      roomType:
-        data.type_chambre_achat_pack,
-
-      pension:
-        data.pension_achat_pack,
+      travelers:
+        data.nb_voyageurs,
 
       total:
         Number(data.total_achat_pack),
+
+      departureDate:
+        data.package_voyage?.date_depart_pack || "",
+
+      returnDate:
+        data.package_voyage?.date_retour_pack || "",
 
       status:
         data.statut_achat_pack,
@@ -37,7 +86,9 @@ export const AchatPackageMapper = {
 
   },
 
-  toDto(data: any) {
+  toDto(
+    data: AchatPackageMapped
+  ): AchatPackageMapped {
 
     return data;
 

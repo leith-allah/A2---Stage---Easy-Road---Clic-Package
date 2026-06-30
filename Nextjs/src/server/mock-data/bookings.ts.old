@@ -1,4 +1,4 @@
-
+/*
 import { Booking } from "@/server/entities/booking.entity";
 
 export const bookings: Booking[] = [
@@ -30,3 +30,4 @@ export const bookings: Booking[] = [
     userId: 2,
   },
 ];
+*/

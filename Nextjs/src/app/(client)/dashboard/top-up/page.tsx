@@ -1,7 +1,65 @@
 
+"use client";
+
 import BackButton from "@/components/navigation/BackButton";
 
+import { useState } from "react";
+
+import { createRechargeRequest }
+from "@/features/recharge-requests/services/recharge-request.service";
+
+
 export default function TopUpPage() {
+
+  const [amount, setAmount] =
+    useState("");
+
+  const [note, setNote] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [success, setSuccess] =
+    useState("");
+  
+  async function handleSubmit(
+    e: React.FormEvent
+  ) {
+
+    e.preventDefault();
+
+    try {
+
+      setLoading(true);
+
+      await createRechargeRequest(
+        Number(amount),
+        note
+      );
+
+      setSuccess(
+        "Votre demande a été envoyée."
+      );
+
+      setAmount("");
+      setNote("");
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Erreur lors de l'envoi"
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+  }
+
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
       <div
@@ -31,7 +89,10 @@ export default function TopUpPage() {
           </p>
         </div>
 
-        <form className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+        >
           <div>
             <label className="block mb-2 font-medium">
               Montant souhaité
@@ -39,6 +100,12 @@ export default function TopUpPage() {
 
             <input
               type="number"
+              value={amount}
+              onChange={(e) =>
+                setAmount(
+                  e.target.value
+                )
+              }
               placeholder="0.00"
               className="
                 w-full
@@ -58,6 +125,12 @@ export default function TopUpPage() {
             </label>
 
             <textarea
+              value={note}
+              onChange={(e) =>
+                setNote(
+                  e.target.value
+                )
+              }
               rows={5}
               placeholder="Ajouter une note..."
               className="
@@ -72,7 +145,25 @@ export default function TopUpPage() {
             />
           </div>
 
+          {
+            success && (
+
+              <div
+                className="
+                  bg-green-100
+                  text-green-700
+                  p-4
+                  rounded-xl
+                "
+              >
+                {success}
+              </div>
+
+            )
+          }
+
           <button
+            disabled={loading}
             className="
               w-full
               bg-blue-600
@@ -85,8 +176,29 @@ export default function TopUpPage() {
               shadow-lg
             "
           >
-            Envoyer la demande
+            {
+              loading
+                ? "Envoi..."
+                : "Envoyer la demande"
+            }
           </button>
+
+          <div className="mt-6 text-center">
+
+            <a
+
+              href="/dashboard/top-up/history"
+
+              className="
+                text-blue-600
+                font-medium
+              "
+
+            >
+              Voir mes demandes
+            </a>
+
+          </div>
         </form>
       </div>
     </section>

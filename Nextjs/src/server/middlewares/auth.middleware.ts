@@ -12,6 +12,7 @@ import {
 }
 from "@/server/auth/jwt";
 
+
 export async function getCurrentUser() {
 
   const cookieStore =
@@ -21,6 +22,16 @@ export async function getCurrentUser() {
     cookieStore.get(
       AUTH_COOKIE_NAME
     )?.value;
+
+  console.log(
+    "COOKIE NAME:",
+    AUTH_COOKIE_NAME
+  );
+
+  console.log(
+    "TOKEN EXISTS:",
+    !!token
+  );
 
   if (!token) {
     return null;

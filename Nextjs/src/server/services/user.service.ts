@@ -227,4 +227,10 @@ async changePassword(
 
 },
 
+async supprimerCompte(id: number) {
+
+    return userRepository.softDelete(id);
+
+},
+
 };

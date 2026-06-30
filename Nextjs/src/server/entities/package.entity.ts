@@ -22,4 +22,24 @@ export interface Package {
   availableSeats: number;
 
   createdAt: Date;
+
+  status?: string;
+
+  totalSeats?: number;
+
+  suppEconomy?: number;
+  suppBusiness?: number;
+  suppFirst?: number;
+
+  suppSingle?: number;
+  suppDouble?: number;
+  suppTriple?: number;
+  suppQuadruple?: number;
+  suppSuite?: number;
+
+  suppBedOnly?: number;
+  suppBedBreakfast?: number;
+  suppHalfBoard?: number;
+  suppFullBoard?: number;
+  suppAllInclusive?: number;
 }

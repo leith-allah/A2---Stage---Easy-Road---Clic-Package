@@ -9,9 +9,6 @@ import useWallet from
 import InsufficientFundsModal from
 "@/features/wallet/components/InsufficientFundsModal";
 
-import {createBookingFlow} from 
-"@/features/bookings/services/bookingFlow.service";
-
 
 type Props = {
   total: number;
@@ -51,21 +48,7 @@ export default function ReserveButton({
 
       setLoading(true);
 
-      await createBookingFlow({
-        packageId: 1,
-
-        packageTitle:
-          "Dubai Luxury",
-
-        travelers: 2,
-
-        total,
-
-        departureDate:
-          "2026-08-12",
-
-        remainingTickets: 12,
-      });
+      console.log("Réservation temporairement désactivée");
 
       setSuccess(true);
 

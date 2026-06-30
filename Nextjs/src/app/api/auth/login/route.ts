@@ -18,6 +18,9 @@ from "@/server/types/auth.types";
 import { USER_STATUS }
 from "@/server/constants/user-status";
 
+import { AUTH_COOKIE_NAME }
+from "@/server/constants/auth.constants";
+
 
 export async function POST(
   request: Request
@@ -178,6 +181,11 @@ export async function POST(
 
   await setRefreshCookie(
     refreshToken
+  );
+
+  console.log(
+    "LOGIN SUCCESS",
+    AUTH_COOKIE_NAME
   );
 
   return NextResponse.json({

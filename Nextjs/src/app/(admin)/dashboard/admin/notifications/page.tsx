@@ -1,4 +1,4 @@
-
+/*
 export default function NotificationsPage() {
   return (
     <div>
@@ -6,3 +6,4 @@ export default function NotificationsPage() {
     </div>
   );
 }
+*/

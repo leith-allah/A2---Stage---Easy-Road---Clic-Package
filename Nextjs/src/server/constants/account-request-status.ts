@@ -1,0 +1,10 @@
+
+export const ACCOUNT_REQUEST_STATUS = {
+
+  PENDING: "EN_ATTENTE",
+
+  APPROVED: "VALIDEE",
+
+  REJECTED: "REFUSEE",
+
+} as const;

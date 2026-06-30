@@ -8,23 +8,19 @@ import {
   useState,
 } from "react";
 
-import {
-  getTransactions,
-  createTransaction,
-} from "@/features/transactions/services/transaction.service";
+import { getTransactions } 
+from "@/features/transactions/services/transaction.service";
 
 import {
   Transaction,
 } from "@/features/transactions/types/transaction.types";
+
 
 type TransactionContextType = {
   transactions:
     Transaction[];
 
   loading: boolean;
-
-  create:
-    typeof createTransaction;
 
   refresh:
     () => Promise<void>;
@@ -76,28 +72,11 @@ TransactionProvider({
 
   }, []);
 
-  async function create(
-    data: Parameters<
-      typeof createTransaction
-    >[0]
-  ) {
-
-    const transaction =
-      await createTransaction(
-        data
-      );
-
-    await refresh();
-
-    return transaction;
-  }
-
   return (
     <TransactionContext.Provider
       value={{
         transactions,
         loading,
-        create,
         refresh,
       }}
     >

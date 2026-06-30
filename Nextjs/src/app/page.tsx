@@ -1,5 +1,6 @@
 
 import Button from "@/components/ui/Button";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -39,9 +40,13 @@ export default function HomePage() {
       </div>
 
       <div className="flex gap-4">
-        <Button text="Commencer" />
+        <Link href="/register">
+          <Button text="Commencer" />
+        </Link>
 
-        <Button text="En savoir plus" />
+        <Link href="/about-us">
+          <Button text="En savoir plus" />
+        </Link>
       </div>
     </section>
   );

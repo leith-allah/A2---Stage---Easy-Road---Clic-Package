@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
-import Header from "@/components/layout/Header";
+import NewHeader from "@/components/layout/headers/NewHeader";
 import Footer from "@/components/layout/Footer";
 
 import {WalletProvider} from "@/providers/WalletProvider";
@@ -19,13 +19,16 @@ import {PackageProvider} from "@/providers/PackageProvider";
 
 import {AuthProvider} from "@/providers/AuthProvider";
 
-import RoleSwitcher from "@/components/dev/RoleSwitcher";
-
 import {Toaster} from "sonner";
 
 import {LoadingProvider} from "@/providers/LoadingProvider";
 
 import GlobalLoader from "@/components/ui/GlobalLoader";
+
+import { PurchaseProvider } from "@/providers/PurchaseProvider";
+
+import { FavoriteProvider }
+from "@/providers/FavoriteProvider";
 
 
 const geistSans = Geist({
@@ -60,21 +63,22 @@ export default function RootLayout({
     >
 
       <body className="min-h-full flex flex-col">
-        {/* <Header /> */}
+        <NewHeader />
 
         <main className="flex-1 p-6">
             <LoadingProvider>
               <AuthProvider>
                 <WalletProvider>
                   <NotificationProvider>
-                    <BookingProvider>
+                    <PurchaseProvider>
                       <TransactionProvider>
-                        <PackageProvider>
-                          {children}
-                          {/* <RoleSwitcher /> */}
+                         <PackageProvider>
+                          <FavoriteProvider>
+                            {children}
+                          </FavoriteProvider>
                         </PackageProvider>
                       </TransactionProvider>
-                    </BookingProvider>
+                    </PurchaseProvider>
                   </NotificationProvider>
                 </WalletProvider>
               </AuthProvider>
@@ -85,7 +89,7 @@ export default function RootLayout({
           />
         </main>
 
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   );

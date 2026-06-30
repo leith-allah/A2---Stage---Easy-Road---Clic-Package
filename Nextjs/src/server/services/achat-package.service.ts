@@ -78,11 +78,12 @@ export const achatPackageService = {
     }
 
     if (
-      packageData.stock_dispo_pack <= 0
+      packageData.stock_dispo_pack <
+      dto.nbVoyageurs
     ) {
 
       throw new Error(
-        "Plus de places disponibles"
+        "Pas assez de places disponibles"
       );
 
     }
@@ -271,36 +272,57 @@ export const achatPackageService = {
 
               id_transac:
                 transaction.id_transac,
-              
+
               date_heure_achat_pack:
                 new Date(),
+
             },
+
+            include: {
+
+              package_voyage: true,
+
+              utilisateur: true,
+
+              transactions: true,
+
+            },
+
           });
 
         const newStock = Math.max(
           0,
-          packageData.stock_dispo_pack - 1
+          packageData.stock_dispo_pack - dto.nbVoyageurs
         );
 
         await tx.package_voyage.update({
 
           where: {
-            id_pack:
-              packageData.id_pack,
+            id_pack: packageData.id_pack,
           },
 
           data: {
 
-            stock_dispo_pack:
-              newStock,
+            stock_dispo_pack: newStock,
+
+            // Si le stock tombe à 0, le package est archivé
+            ...(newStock === 0 && {
+              statut_pack: PACKAGE_STATUS.ARCHIVED,
+            }),
+
           },
+
         });
 
         return purchase;
       }
     );
 
-    return purchase;
+    return AchatPackageMapper.toDto(
+      AchatPackageMapper.fromPrisma(
+        purchase
+      )
+    );
     },
 
   async getMyPurchases() {
@@ -615,7 +637,7 @@ export const achatPackageService = {
 
             stock_dispo_pack:
 
-              packageData.stock_dispo_pack + 1,
+              packageData.stock_dispo_pack + purchase.nb_voyageurs,
 
           },
 

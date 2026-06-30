@@ -6,13 +6,13 @@ export type TransactionType =
   | "TRANSFER";
 
 export type Transaction = {
-  id: number;
 
-  type: TransactionType;
+  id: number;
 
   amount: number;
 
-  description: string;
+  type: string;
 
-  createdAt: string;
+  status: string;
+
 };

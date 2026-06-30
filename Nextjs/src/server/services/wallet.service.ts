@@ -291,7 +291,20 @@ export const walletService = {
 
     }
 
-    return wallet;
+    return {
+
+      ...wallet,
+
+      id_prtfl:
+        Number(wallet.id_prtfl),
+
+      id_user:
+        Number(wallet.id_user),
+
+      solde_total_prtfl:
+        Number(wallet.solde_total_prtfl),
+
+    };
 
   },
 

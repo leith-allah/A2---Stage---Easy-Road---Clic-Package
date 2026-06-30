@@ -1,84 +1,98 @@
 
 import { Wallet } from "@/features/wallet/types/wallet.types";
 
-export const mockWallet: Wallet = {
-  id: 1,
 
-  balance: 850000,
+async function apiFetch(
+  url: string,
+  options?: RequestInit
+) {
 
-  currency: "DZD",
+const response = await fetch(url, {
+  credentials: "include",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  ...options,
+});
 
-  transactions: [
-    {
-      id: 1,
-      type: "TOP_UP",
-      amount: 300000,
-      createdAt: "2026-05-20",
-      description:
-        "Recharge portefeuille",
-    },
+let data = null;
 
-    {
-      id: 2,
-      type: "PAYMENT",
-      amount: -120000,
-      createdAt: "2026-05-22",
-      description:
-        "Réservation Istanbul Premium",
-    },
-  ],
-};
+try {
 
-export async function getWallet() {
-  return mockWallet;
+  data = await response.json();
+
+} catch {
+
+  data = {};
+
 }
 
-export async function debitWallet(
-  amount: number
-) {
-  if (mockWallet.balance < amount) {
-    throw new Error(
-      "Solde insuffisant"
-    );
-  }
+if (!response.ok) {
 
-  mockWallet.balance -= amount;
+  throw new Error(
+    data?.message ||
+    `Erreur ${response.status}`
+  );
 
-  mockWallet.transactions.unshift({
-    id: Date.now(),
+}
 
-    type: "PAYMENT",
+return data;
+}
 
-    amount: -amount,
+export async function getWallet() {
 
-    createdAt:
-      new Date().toISOString(),
+const result =
+await apiFetch(
+"/api/wallets/me"
+);
 
-    description:
-      "Paiement réservation",
-  });
+return result.data;
+}
 
-  return mockWallet;
+export async function getBalance() {
+
+const result =
+await apiFetch(
+"/api/wallets/balance"
+);
+
+return result.data.balance;
 }
 
 export async function topUpWallet(
-  amount: number
+amount: number
 ) {
-  mockWallet.balance += amount;
 
-  mockWallet.transactions.unshift({
-    id: Date.now(),
+const result =
+await apiFetch(
+"/api/wallets/topup",
+{
+method: "POST",
+body: JSON.stringify({
+amount,
+}),
+}
+);
 
-    type: "TOP_UP",
+return result.data;
+}
 
-    amount,
+export async function transferWallet(
+recipientId: number,
+amount: number
+) {
 
-    createdAt:
-      new Date().toISOString(),
+const result =
+await apiFetch(
+"/api/wallets/transfer",
+{
+method: "POST",
+body: JSON.stringify({
+recipientId,
+amount,
+}),
+}
+);
 
-    description:
-      "Recharge portefeuille",
-  });
-
-  return mockWallet;
+return result.data;
 }

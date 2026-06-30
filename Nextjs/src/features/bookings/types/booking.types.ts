@@ -1,9 +1,8 @@
 
 export type BookingStatus =
-  | "CONFIRMED"
-  | "PENDING"
-  | "CANCELLED"
-  | "REFUNDED";
+  | "CONFIRME"
+  | "ANNULE"
+  | "REMBOURSE";
 
 export type Booking = {
   id: number;

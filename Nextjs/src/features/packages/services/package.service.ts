@@ -1,78 +1,84 @@
 
-import {api} from "@/lib/api";
+import { api } from "@/lib/api";
+
+import { PackageDto }
+from "@/server/dto/package/package.dto";
+
 
 export type Package = {
   id: number;
 
-  title: string;
+  name: string;
 
-  remainingTickets: number;
+  country: string;
 
-  price: number;
+  destination: string;
+
+  image?: string;
+
+  description?: string;
+
+  departureDate: string;
+
+  returnDate: string;
+
+  basePrice: number;
+
+  availableSeats: number;
 };
 
-export let mockPackages:
-  Package[] = [
-  {
-    id: 1,
+function mapPackage(
+  dto: PackageDto
+): Package {
 
-    title: "Dubai Luxury",
+  return {
 
-    remainingTickets: 12,
+    id: dto.id,
 
-    price: 180000,
-  },
+    name: dto.name,
 
-  {
-    id: 2,
+    country: dto.country,
 
-    title: "Istanbul Premium",
+    destination: dto.destination,
 
-    remainingTickets: 4,
+    image: dto.image ?? undefined,
 
-    price: 120000,
-  },
-];
+    description:
+      dto.description ?? undefined,
 
-export async function
-getPackages() {
-  return mockPackages;
+    departureDate:
+      dto.departureDate,
+
+    returnDate:
+      dto.returnDate,
+
+    basePrice:
+      dto.basePrice,
+
+    availableSeats:
+      dto.availableSeats,
+  };
 }
 
-export async function
-decreasePackageStock(
-  packageId: number,
-  quantity: number
-) {
+export async function fetchPackages() {
 
-  mockPackages =
-    mockPackages.map((pkg) => {
+  const data =
+    await api("/packages");
 
-      if (pkg.id !== packageId)
-        return pkg;
+  console.log(
+    "API Packages :",
+    data
+  );
 
-      return {
-        ...pkg,
-
-        remainingTickets:
-          pkg.remainingTickets -
-          quantity,
-      };
-    });
+  return data.map(mapPackage);
 }
 
-export async function
-fetchPackages() {
+export async function fetchPackageById(
+  id: number
+): Promise<Package> {
 
-  try {
+  const data =
+    await api(`/packages/${id}`);
 
-    return await api(
-      "/packages"
-    );
-
-  } catch {
-
-    // FALLBACK MOCK
-    return mockPackages;
-  }
+  return mapPackage(data);
 }

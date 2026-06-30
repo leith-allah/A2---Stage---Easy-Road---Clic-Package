@@ -1,20 +1,19 @@
 
-import { NextResponse }
-from "next/server";
+import { NextResponse } from "next/server";
 
-import { deleteAuthCookie } from "@/server/auth/cookies";
-
-import { deleteRefreshCookie } from "@/server/auth/cookies";
-
+import {
+    deleteAuthCookie,
+    deleteRefreshCookie,
+} from "@/server/auth/cookies";
 
 export async function POST() {
 
-  await deleteAuthCookie();
-  
-  await deleteRefreshCookie();
+    await deleteAuthCookie();
 
-  return NextResponse.json({
-    message:
-      "Déconnexion réussie",
-  });
+    await deleteRefreshCookie();
+
+    return NextResponse.json({
+        success: true,
+    });
+
 }

@@ -50,7 +50,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/server/mock-data/bookings.ts.old", "src/features/account-requests/components/AccountRequestTable.tss"  ],
 
   "exclude": [
     "node_modules"

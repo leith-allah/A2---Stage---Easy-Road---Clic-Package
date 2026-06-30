@@ -1,14 +1,16 @@
 
 import {
   FlightClass,
-  PensionType,
   RoomType,
-} from "@/features/offers/types/offer.types";
+  PensionType,
+}
+from "@/features/purchases/types/purchase-options.types";
 
 type Params = {
-  basePrice: number;
 
-  travelers: number;
+  packageData: any;
+
+  travellers: number;
 
   flightClass: FlightClass;
 
@@ -18,40 +20,80 @@ type Params = {
 };
 
 export function calculatePrice({
-  basePrice,
-  travelers,
+  packageData,
+  travellers,
   flightClass,
   roomType,
   pension,
 }: Params) {
-  let total = basePrice;
 
-  // Classe vol
+  let total =
+    packageData.basePrice;
+
   if (flightClass === "Business") {
-    total += 120000;
+
+    total +=
+      packageData.suppBusiness ?? 0;
+
   }
 
   if (flightClass === "First") {
-    total += 250000;
+
+    total +=
+      packageData.suppFirst ?? 0;
+
   }
 
-  // Chambre
-  if (roomType === "Deluxe") {
-    total += 50000;
+  switch (roomType) {
+
+    case "Single":
+      total +=
+        packageData.suppSingle ?? 0;
+      break;
+
+    case "Double":
+      total +=
+        packageData.suppDouble ?? 0;
+      break;
+
+    case "Triple":
+      total +=
+        packageData.suppTriple ?? 0;
+      break;
+
+    case "Quadruple":
+      total +=
+        packageData.suppQuadruple ?? 0;
+      break;
+
+    case "Suite":
+      total +=
+        packageData.suppSuite ?? 0;
+      break;
   }
 
-  if (roomType === "Suite") {
-    total += 120000;
+  switch (pension) {
+
+    case "BedBreakfast":
+      total +=
+        packageData.suppBedBreakfast ?? 0;
+      break;
+
+    case "HalfBoard":
+      total +=
+        packageData.suppHalfBoard ?? 0;
+      break;
+
+    case "FullBoard":
+      total +=
+        packageData.suppFullBoard ?? 0;
+      break;
+
+    case "AllInclusive":
+      total +=
+        packageData.suppAllInclusive ?? 0;
+      break;
   }
 
-  // Pension
-  if (pension === "Demi-pension") {
-    total += 30000;
-  }
-
-  if (pension === "Pension complète") {
-    total += 60000;
-  }
-
-  return total * travelers;
+  return total * travellers;
 }

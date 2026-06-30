@@ -3,57 +3,49 @@ import {
   Transaction,
 } from "@/features/transactions/types/transaction.types";
 
-export let mockTransactions:
-  Transaction[] = [
-  {
-    id: 1,
+async function apiFetch(
+  url: string,
+  options?: RequestInit
+) {
 
-    type: "TOP_UP",
+  const response = await fetch(
+    url,
+    {
+      credentials: "include",
 
-    amount: 300000,
+      headers: {
+        "Content-Type":
+          "application/json",
+      },
 
-    description:
-      "Recharge portefeuille",
+      ...options,
+    }
+  );
 
-    createdAt: "2026-05-20",
-  },
-];
+  const data =
+    await response.json();
+
+  if (!response.ok) {
+
+    throw new Error(
+      data?.message ||
+      "Erreur API"
+    );
+
+  }
+
+  return data;
+
+}
 
 export async function
 getTransactions() {
-  return mockTransactions;
-}
 
-type CreateTransactionData = {
-  type: Transaction["type"];
+  const result =
+    await apiFetch(
+      "/api/transactions/me"
+    );
 
-  amount: number;
+  return result.data;
 
-  description: string;
-};
-
-export async function
-createTransaction(
-  data: CreateTransactionData
-) {
-
-  const transaction: Transaction = {
-    id: Date.now(),
-
-    type: data.type,
-
-    amount: data.amount,
-
-    description:
-      data.description,
-
-    createdAt:
-      new Date().toISOString(),
-  };
-
-  mockTransactions.unshift(
-    transaction
-  );
-
-  return transaction;
 }

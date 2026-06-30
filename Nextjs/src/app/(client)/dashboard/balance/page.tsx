@@ -1,7 +1,54 @@
 
+"use client";
+
 import Link from "next/link";
 
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  getBalance,
+} from "@/features/wallet/services/wallet.service";
+
+
 export default function BalancePage() {
+
+  const [balance, setBalance] =
+    useState<number>(0);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  useEffect(() => {
+
+    async function load() {
+
+      try {
+
+        const result =
+          await getBalance();
+
+        setBalance(
+          Number(result)
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    }
+
+    load();
+
+  }, []);
+
   return (
     <section
       className="
@@ -62,7 +109,11 @@ export default function BalancePage() {
               text-blue-600
             "
           >
-            125 000 DZD
+            {
+              loading
+                ? "..."
+                : `${balance.toLocaleString()} DZD`
+            }
           </h2>
 
           <p className="text-gray-400 mt-4">

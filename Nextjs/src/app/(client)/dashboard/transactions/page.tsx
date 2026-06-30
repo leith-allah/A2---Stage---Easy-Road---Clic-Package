@@ -1,30 +1,56 @@
 
+"use client";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  getTransactions,
+} from "@/features/transactions/services/transaction.service";
+
 import BackButton from "@/components/navigation/BackButton";
 
+
 export default function TransactionsPage() {
-  const transactions = [
-    {
-      id: 1,
-      type: "Envoi",
-      user: "Agence Horizon",
-      account: "ER-4582",
-      amount: "- 35 000 DZD",
-    },
-    {
-      id: 2,
-      type: "Réception",
-      user: "Travel Pro",
-      account: "ER-9821",
-      amount: "+ 20 000 DZD",
-    },
-    {
-      id: 3,
-      type: "Paiement",
-      user: "Clic Package",
-      account: "ER-0001",
-      amount: "- 120 000 DZD",
-    },
-  ];
+  const [
+    transactions,
+    setTransactions,
+  ] = useState<any[]>([]);
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  useEffect(() => {
+
+    async function load() {
+
+      try {
+
+        const result =
+          await getTransactions();
+
+        setTransactions(
+          result
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    }
+
+    load();
+
+  }, []);
 
   return (
     <section className="min-h-screen bg-gray-50 py-16 px-6">
@@ -69,6 +95,13 @@ export default function TransactionsPage() {
         </div>
 
         {/* Liste */}
+        {
+          loading && (
+            <p>
+              Chargement...
+            </p>
+          )
+        }
         <div className="space-y-4">
           {transactions.map((transaction) => (
             <div
@@ -97,22 +130,17 @@ export default function TransactionsPage() {
                 </span>
 
                 <h2 className="font-bold text-lg">
-                  {transaction.user}
+                  {transaction.type}
                 </h2>
 
                 <p className="text-gray-500 text-sm">
-                  {transaction.account}
+                  {transaction.status}
                 </p>
               </div>
 
               <div>
-                <h3
-                  className="
-                    text-xl
-                    font-bold
-                  "
-                >
-                  {transaction.amount}
+                <h3 className="text-xl font-bold">
+                  {transaction.amount} DZD
                 </h3>
               </div>
             </div>

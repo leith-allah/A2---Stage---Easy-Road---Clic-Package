@@ -103,5 +103,26 @@ export const userRepository = {
       },
 
     });
-  }
+  },
+
+  async softDelete(id: number) {
+
+      return prisma.utilisateur.update({
+
+          where: {
+
+              id_user: BigInt(id),
+
+          },
+
+          data: {
+
+              statut_user: USER_STATUS.DELETED,
+
+          },
+
+      });
+
+  },
+
 };

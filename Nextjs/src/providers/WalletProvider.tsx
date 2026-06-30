@@ -10,13 +10,14 @@ import {
 
 import {
   getWallet,
-  debitWallet,
+  transferWallet,
   topUpWallet,
 } from "@/features/wallet/services/wallet.service";
 
 import {
   Wallet,
 } from "@/features/wallet/types/wallet.types";
+
 
 type WalletContextType = {
   wallet: Wallet | null;
@@ -77,7 +78,10 @@ export function WalletProvider({
     amount: number
   ) {
 
-    await debitWallet(amount);
+    console.log(
+      "pay() temporairement désactivé",
+      amount
+    );
 
     await refresh();
   }

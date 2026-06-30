@@ -5,15 +5,18 @@ export type FlightClass =
   | "First";
 
 export type RoomType =
-  | "Standard"
-  | "Deluxe"
+  | "Single"
+  | "Double"
+  | "Triple"
+  | "Quadruple"
   | "Suite";
 
 export type PensionType =
-  | "Aucune"
-  | "Petit-déjeuner"
-  | "Demi-pension"
-  | "Pension complète";
+  | "BedOnly"
+  | "BedBreakfast"
+  | "HalfBoard"
+  | "FullBoard"
+  | "AllInclusive";
 
 export interface Offer {
   id: number;

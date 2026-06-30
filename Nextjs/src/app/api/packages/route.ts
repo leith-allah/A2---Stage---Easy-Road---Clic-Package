@@ -65,12 +65,12 @@ export async function POST(
       await request.json();
 
   const createdPackage =
-    await packageService.createPackage(
-      body
-    );
+    await packageService.createPackage(body);
 
-  return Response.json(
-    createdPackage,
+  return NextResponse.json(
+    {
+      id: Number(createdPackage.id_pack),
+    },
     {
       status: 201,
     }

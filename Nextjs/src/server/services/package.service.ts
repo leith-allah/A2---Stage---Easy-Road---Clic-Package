@@ -20,8 +20,37 @@ from "@/server/exceptions/not-found.exception";
 import { PACKAGE_STATUS }
 from "@/server/constants/package-status";
 
+import { PackageDetailsMapper }
+from "@/server/mappers/package-details.mapper";
+
 import { prisma }
 from "@/server/db/prisma";
+
+import crypto from "crypto";
+
+import { packageFlightService }
+from "@/server/services/package-flight.service";
+
+import { packageHotelService }
+from "@/server/services/package-hotel.service";
+
+import { packageTransportService }
+from "@/server/services/package-transport.service";
+
+import { packageExcursionService }
+from "@/server/services/package-excursion.service";
+
+import { FlightMapper }
+from "@/server/mappers/flight.mapper";
+
+import { HotelMapper }
+from "@/server/mappers/hotel.mapper";
+
+import { TransportMapper }
+from "@/server/mappers/transport.mapper";
+
+import { ExcursionMapper }
+from "@/server/mappers/excursion.mapper";
 
 
 export const packageService = {
@@ -68,7 +97,7 @@ export const packageService = {
         : await packageRepository.findAll();
 
     return packages.map(
-      (pkg) =>
+      (pkg: any) =>
         PackageMapper.toDto(
           PackageMapper.fromPrisma(pkg)
         )
@@ -82,20 +111,51 @@ export const packageService = {
     await this.archiveExpiredPackages();
 
     const pkg =
-      await packageRepository.findById(
-        id
-      );
+      await packageRepository.findById(id);
 
     if (!pkg) {
 
       throw new NotFoundException(
         "Package introuvable"
       );
+
     }
 
-    return PackageMapper.toDto(
-      PackageMapper.fromPrisma(pkg)
-    );
+    const flights =
+      await packageFlightService.getFlightsByPackage(id);
+
+    const hotels =
+      await packageHotelService.getHotelsByPackage(id);
+
+    const transports =
+      await packageTransportService.getTransportsByPackage(id);
+
+    const excursions =
+      await packageExcursionService.getExcursionsByPackage(id);
+
+    const dto =
+      PackageDetailsMapper.toDto(pkg);
+
+    return {
+      ...dto,
+
+      flights: flights.map((f: any) =>
+        FlightMapper.toDto(f.vol)
+      ),
+
+      hotels: hotels.map((h: any) =>
+        HotelMapper.toDto(h.hotel)
+      ),
+
+      transports: transports.map((t: any) =>
+        TransportMapper.toDto(t.transport)
+      ),
+
+      excursions: excursions.map((e: any) =>
+        ExcursionMapper.toDto(e.excursion)
+      ),
+    };
+
   },
 
 
@@ -105,7 +165,7 @@ export const packageService = {
       await packageRepository.findArchived();
 
     return packages.map(
-      (pkg) =>
+      (pkg: any) =>
         PackageMapper.toDto(
           PackageMapper.fromPrisma(pkg)
         )

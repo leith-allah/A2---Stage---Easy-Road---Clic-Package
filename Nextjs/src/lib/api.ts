@@ -1,9 +1,7 @@
 
 import {ApiError} from "./api-error";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "/api";
+const API_URL = "/api";
 
 type ApiOptions = {
   method?: string;

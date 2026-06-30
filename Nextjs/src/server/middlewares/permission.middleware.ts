@@ -11,12 +11,18 @@ from "@/server/auth/permissions";
 import { ROLE_PERMISSIONS }
 from "@/server/auth/roles";
 
+
 export async function requirePermission(
   permission: Permission
 ) {
 
   const user =
     await getCurrentUser();
+
+  console.log(
+    "CURRENT USER:",
+    user
+  );
 
   if (!user) {
 

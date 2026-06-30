@@ -56,9 +56,30 @@ PackageProvider({
 
     async function load() {
 
-      await refresh();
+      try {
 
-      setLoading(false);
+        console.log(
+          "Loading packages..."
+        );
+
+        await refresh();
+
+        console.log(
+          "Packages loaded"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Erreur packages :",
+          error
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
     }
 
     load();

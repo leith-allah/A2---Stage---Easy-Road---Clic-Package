@@ -1,4 +1,4 @@
-
+/*
 import { BookingCardData }
 from "@/features/bookings/types/booking-card.types";
 
@@ -72,4 +72,4 @@ export const mockBookings: BookingCardData[] =
         "PENDING",
     },
   ];
-  
+*/

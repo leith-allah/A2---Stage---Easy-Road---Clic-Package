@@ -1,4 +1,4 @@
-
+/*
 "use client";
 
 import useAuth from "@/features/auth/hooks/useAuth";
@@ -193,3 +193,4 @@ RoleSwitcher() {
     </div>
   );
 }
+*/

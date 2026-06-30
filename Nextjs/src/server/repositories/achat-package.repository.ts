@@ -1,3 +1,4 @@
+
 import { prisma } from "@/server/db/prisma";
 
 export const achatPackageRepository = {
@@ -38,10 +39,17 @@ export const achatPackageRepository = {
   },
 
   findByUser(id_user: bigint) {
+
     return prisma.achat_package.findMany({
+
       where: {
         id_user,
       },
+
+      include: {
+        package_voyage: true,
+      },
+
       orderBy: {
         date_heure_achat_pack: "desc",
       },
@@ -49,7 +57,13 @@ export const achatPackageRepository = {
   },
 
   findAll() {
+
     return prisma.achat_package.findMany({
+
+      include: {
+        package_voyage: true,
+      },
+
       orderBy: {
         date_heure_achat_pack: "desc",
       },
