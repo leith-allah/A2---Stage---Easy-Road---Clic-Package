@@ -11,7 +11,7 @@ export const updateHotelSchema =
       z.number()
        .int()
        .min(1)
-       .max(5)
+       .max(7)
        .optional(),
 
     pays_hot:

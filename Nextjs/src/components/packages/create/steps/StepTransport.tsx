@@ -29,14 +29,6 @@ export default function StepTransport({
 
     const [loading,setLoading]=useState(false);
 
-    const [transport,setTransport]=useState({
-
-        route:"",
-
-        company:""
-
-    });
-
     async function handleSubmit(){
 
         setLoading(true);
@@ -55,7 +47,7 @@ export default function StepTransport({
                     "Content-Type":"application/json"
                 },
 
-                body:JSON.stringify(transport)
+                body: JSON.stringify(data.transport)
 
             });
 
@@ -65,7 +57,16 @@ export default function StepTransport({
 
             }
 
-            const createdTransport=await transportResponse.json();
+            const createdTransport = await transportResponse.json();
+
+            console.log("createdTransport =", createdTransport);
+            console.log("id =", createdTransport.id);
+            console.log("typeof =", typeof createdTransport.id);
+
+            console.log("BODY ENVOYÉ :", {
+                id_pack: data.id_pack,
+                id_transp: createdTransport.id,
+            });
 
             /*
              * Liaison Package ↔ Transport
@@ -83,7 +84,7 @@ export default function StepTransport({
 
                     id_pack:data.id_pack,
 
-                    id_transp:createdTransport.id_transp
+                    id_transp:createdTransport.id
 
                 })
 
@@ -99,9 +100,7 @@ export default function StepTransport({
 
                 ...previous,
 
-                id_transp:createdTransport.id_transp,
-
-                transport
+                id_transp: createdTransport.id,
 
             }));
 
@@ -141,18 +140,22 @@ export default function StepTransport({
 
                 placeholder="Trajet"
 
-                value={transport.route}
+                value={data.transport.route}
 
                 onChange={(e)=>
+                setData((prev:any)=>({
 
-                    setTransport({
+                    ...prev,
 
-                        ...transport,
+                    transport:{
 
-                        route:e.target.value
+                        ...prev.transport,
 
-                    })
+                        route:e.target.value,
 
+                    }
+
+                }))
                 }
 
             />
@@ -163,18 +166,22 @@ export default function StepTransport({
 
                 placeholder="Société"
 
-                value={transport.company}
+                value={data.transport.company}
 
                 onChange={(e)=>
+                setData((prev:any)=>({
 
-                    setTransport({
+                    ...prev,
 
-                        ...transport,
+                    transport:{
 
-                        company:e.target.value
+                        ...prev.transport,
 
-                    })
+                        company:e.target.value,
 
+                    }
+
+                }))
                 }
 
             />

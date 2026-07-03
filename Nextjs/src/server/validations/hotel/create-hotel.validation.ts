@@ -11,7 +11,7 @@ export const createHotelSchema =
       z.number()
        .int()
        .min(1)
-       .max(5),
+       .max(7),
 
     pays_hot:
       z.string().min(1).max(50),

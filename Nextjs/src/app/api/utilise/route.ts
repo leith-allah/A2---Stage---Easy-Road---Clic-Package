@@ -24,33 +24,15 @@ export async function GET() {
 
 }
 
-export async function POST(
-  request: NextRequest
-) {
+export async function POST(request: NextRequest) {
 
-  await requirePermission(
-    "package:update"
-  );
+    const body = await request.json();
 
-  const body =
-    await request.json();
+    console.log("======== UTILISE ========");
+    console.log(body);
+    console.log(typeof body.id_pack);
+    console.log(typeof body.id_transp);
+    console.log("=========================");
 
-  const data =
-    createUtiliseSchema.parse(
-      body
-    );
-
-  return Response.json(
-
-    await utiliseService.create(
-      data.id_pack,
-      data.id_transp
-    ),
-
-    {
-      status: 201,
-    }
-
-  );
-
+    return Response.json(body);
 }

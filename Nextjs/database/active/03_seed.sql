@@ -17,17 +17,38 @@ VALUES
 
 INSERT INTO agence (mle_agence, nom_agence, dc_agence, sj_agence)
 VALUES 
-('AG001', 'EasyRoad Alger', '2025-01-01', 'SARL');
+('AG001', 'EasyRoad Voyages', '2025-01-01', 'SARL'),
+('AG002', 'Gouraya Tours', '2011-01-01', 'SARL'),
+('AG003', 'Cheval Blanc Voyages', '2018-01-01', 'EURL'),
+('AG004', 'Maestro Team Voyages', '2017-01-01', 'SARL'),
+('AG005', 'Le Relais Voyages', '2012-01-01', 'SARL');
 
 INSERT INTO bureau_agence (
     mle_bureau, type_bureau, dc_bureau,
     pays_bureau, ville_bureau, adresse_bureau,
     num_agr_bureau, dcc_bureau, id_agence
 )
+
 VALUES 
 ('BR001', 'Principal', '2009-04-01',
  'Algeria', 'Alger', 'Dar Diaf, Cheraga',
- 'AGR001', '2026-06-28', 1);
+ 'AGR001', '2026-06-28', 1),
+
+('BR002', 'Principal', '2011-01-01',
+ 'Algeria', 'Béjaïa', 'Gouraya, Béjaia',
+ 'AGR002', '2026-07-01', 2),
+
+('BR003', 'Principal', '2018-01-01',
+ 'Algeria', 'Alger', 'Bir Mourad Raïs, Alger',
+ 'AGR003', '2026-07-01', 3),
+
+('BR004', 'Principal', '2017-01-01',
+ 'Algeria', 'Alger', 'Birkhadem, Alger',
+ 'AGR004', '2026-07-01', 4),
+
+('BR005', 'Principal', '2012-01-01',
+ 'Algeria', 'Boumerdès', 'Dar Diaf, Cheraga',
+ 'AGR005', '2026-07-01', 5);
 
 -- =========================
 -- UTILISATEURS
@@ -36,13 +57,14 @@ VALUES
 INSERT INTO utilisateur (
     mle_user, nin_user, nom_user, prenom_user,
     ddn_user, nat_user, statut_user, email_pro_user,
-    mdp_user, dcc_user, id_role, id_bureau
+    mdp_user, 
+    dcc_user, id_role, id_bureau
 )
 VALUES
 
 -- OWNER (moi)
 (
-'U001', '111111111', 'Amokrane', 'Owner',
+'BOSS000', '000000000', 'Amokrane', 'Owner',
 '2000-01-01', 'DZ', 'ACTIVE', 'owner@easyroad.com',
 '$2b$12$CLexYndLIfJaLuivlUeqAON8CPAu94w/6FPZJv7q2HPYy8GMUfCH6',
 '2025-01-01', 1, 1
@@ -50,7 +72,7 @@ VALUES
 
 -- SUPER ADMIN
 (
-'U002', '222222222', 'Super', 'Admin',
+'SAD001', '010000000', 'Super', 'Admin',
 '1995-01-01', 'DZ', 'ACTIVE', 'superadmin@easyroad.com',
 '$2b$12$9SYKEIG9VJH0efsPHgnvwuxTvyMQJY4CMCvYVHOX1tRtRMLxPrxqG',
 '2025-01-01', 2, 1
@@ -58,26 +80,144 @@ VALUES
 
 -- ADMIN
 (
-'U003', '333333333', 'System', 'Admin',
-'1995-01-01', 'DZ', 'ACTIVE', 'admin@easyroad.com',
+'AD001', '020000000', 'System', 'Admin',
+'1995-01-01', 'DZ', 'ACTIVE', 'admin1@easyroad.com',
+'$2b$12$dRA.5xF85Net.fh4bOtFU.565XOVDsntOCBia6ThS6BWphMz3iR/G',
+'2025-01-01', 3, 1
+),
+(
+'AD002', '020000001', 'System', 'Admin',
+'1995-01-01', 'DZ', 'ACTIVE', 'admin2@easyroad.com',
 '$2b$12$dRA.5xF85Net.fh4bOtFU.565XOVDsntOCBia6ThS6BWphMz3iR/G',
 '2025-01-01', 3, 1
 ),
 
 -- AGENCY
 (
-'U004', '444444444', 'Agence', 'Partner',
+'AG000', '030000000', 'Agence', 'Principal',
 '1995-01-01', 'DZ', 'ACTIVE', 'agency@easyroad.com',
 '$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
 '2025-01-01', 4, 1
 ),
 
--- CLIENT
+-- AGENCY - GOURAYA TOURS
 (
-'U005', '555555555', 'Client', 'Demo',
+'AG001', '130000000', 'AgencePartenaire', 'GourayaTours',
+'1995-01-01', 'DZ', 'ACTIVE', 'agency@gourayatours.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 4, 2
+),
+
+-- AGENCY - CHEVAL BLANC VOYAGES
+(
+'AG002', '230000000', 'AgencePartenaire', 'ChevalBlancVoyages',
+'1995-01-01', 'DZ', 'ACTIVE', 'agency@chevalblanc.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 4, 3
+),
+
+-- AGENCY - MAESTRO TEAM VOYAGES
+(
+'AG003', '330000000', 'AgencePartenaire', 'MaestroTeamVoyages',
+'1995-01-01', 'DZ', 'ACTIVE', 'agency@maestroteam.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 4, 4
+),
+
+-- AGENCY - LE RELAIS VOYAGES
+(
+'AG004', '430000000', 'AgencePartenaire', 'LeRelaisVoyages',
+'1995-01-01', 'DZ', 'ACTIVE', 'agency@lerelais.com',
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 4, 5
+),
+
+-- CLIENT - EASY ROAD VOYAGES 
+(
+'U000', '040000000', 'Client', 'Demo',
 '1998-05-10', 'DZ', 'ACTIVE', 'client@easyroad.com',    
 '$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
 '2025-01-01', 5, 1
+),
+
+-- CLIENT - GOURAYA TOURS 
+(
+'U100', '140000000', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client1@gourayatours.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U101', '140000001', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client2@gourayatours.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U102', '140000002', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client3@gourayatours.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+
+-- CLIENT - CHEVAL BLANC VOYAGES 
+(
+'U200', '240000000', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client1@chevalblanc.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 3
+),
+(
+'U201', '240000001', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client2@chevalblanc.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 3
+),
+(
+'U202', '240000002', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client3@chevalblanc.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 3
+),
+
+-- CLIENT - MAESTRO TEAM VOYAGES 
+(
+'U300', '340000000', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client1@maestroteam.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U301', '340000001', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client2@maestroteam.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U302', '340000002', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client3@maestroteam.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+
+-- CLIENT - LE RELAIS VOYAGES 
+(
+'U400', '440000000', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client1@lerelais.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U401', '440000001', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client2@lerelais.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
+),
+(
+'U402', '440000002', 'Client', 'Demo',
+'1998-05-10', 'DZ', 'ACTIVE', 'client3@lerelais.com',    
+'$2b$12$CRorRAhIwZYeTjALjahCQOIc26duMRtq9MCkhpHLBSqOuYkfPTjKa',
+'2025-01-01', 5, 2
 );
 
 -- =========================
@@ -91,11 +231,28 @@ INSERT INTO portefeuille (
     id_user
 )
 VALUES
-('PRT000', 1000000, NOW(), 1), -- OWNER
-('PRT001', 0, NOW(), 2), -- SUPER_ADMIN
-('PRT002', 0, NOW(), 3), -- ADMIN
-('PRT003', 500000, NOW(), 4), -- AGENCY
-('PRT004', 300000, NOW(), 5); -- CLIENT
+('PRT0000', 10000000, NOW(), 1), -- OWNER
+('PRT0101', 0, NOW(), 2), -- SUPER_ADMIN
+('PRT0201', 0, NOW(), 3), -- ADMIN 1
+('PRT0202', 0, NOW(), 4), -- ADMIN 2
+('PRT0300', 5000000, NOW(), 5), -- AGENCY
+('PRT1300', 5000000, NOW(), 6), -- AGENCY - GOURAYA TOURS
+('PRT2300', 5000000, NOW(), 7), -- AGENCY - CHEVAL BLANC VOYAGES
+('PRT3300', 5000000, NOW(), 8), -- AGENCY - MAESTRO TEAM VOYAGES
+('PRT4300', 5000000, NOW(), 9), -- AGENCY - LE RELAIS VOYAGES
+('PRT0401', 500000, NOW(), 10), -- CLIENT
+('PRT1401', 200000, NOW(), 11), -- CLIENT - GOURAYA TOURS
+('PRT1402', 150000, NOW(), 12), -- CLIENT - GOURAYA TOURS
+('PRT1403', 100000, NOW(), 13), -- CLIENT - GOURAYA TOURS
+('PRT2401', 550000, NOW(), 14), -- CLIENT - CHEVAL BLANC VOYAGES
+('PRT2402', 25000, NOW(), 15), -- CLIENT - CHEVAL BLANC VOYAGES
+('PRT2403', 10000, NOW(), 16), -- CLIENT - CHEVAL BLANC VOYAGES
+('PRT3401', 5000, NOW(), 17), -- CLIENT - MAESTRO TEAM VOYAGES
+('PRT3402', 80000, NOW(), 18), -- CLIENT - MAESTRO TEAM VOYAGES
+('PRT3403', 260000, NOW(), 19), -- CLIENT - MAESTRO TEAM VOYAGES
+('PRT4401', 220000, NOW(), 20), -- CLIENT - LE RELAIS VOYAGES
+('PRT4402', 20000, NOW(), 21), -- CLIENT - LE RELAIS VOYAGES
+('PRT4403', 40000, NOW(), 22); -- CLIENT - LE RELAIS VOYAGES
 
 -- =========================
 -- VOLS
@@ -394,7 +551,7 @@ VALUES
 0,25000,60000,
 30000,15000,10000,5000,50000,
 0,5000,10000,15000,20000,
-2),
+3),
 
 ('PK002','ACTIVE','Dubai Luxury','Émirats Arabes Unis','Dubai',
 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c',
@@ -403,7 +560,7 @@ VALUES
 0,40000,90000,
 35000,15000,10000,5000,70000,
 0,10000,20000,30000,50000,
-1),
+3),
 
 ('PK003','ACTIVE','Istanbul Premium','Turquie','Istanbul',
 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200',
@@ -412,7 +569,7 @@ VALUES
 0,30000,70000,
 25000,10000,5000,0,50000,
 0,5000,10000,20000,40000,
-1),
+3),
 
 ('PK004','ACTIVE','Rome Historique','Italie','Rome',
 'https://images.unsplash.com/photo-1552832230-c0197dd311b5',
@@ -421,7 +578,7 @@ VALUES
 0,25000,65000,
 20000,10000,5000,0,45000,
 0,5000,10000,15000,30000,
-1),
+3),
 
 ('PK005','ACTIVE','Barcelone Évasion','Espagne','Barcelone',
 'https://images.unsplash.com/photo-1583422409516-2895a77efded',
@@ -430,7 +587,7 @@ VALUES
 0,25000,60000,
 20000,10000,5000,0,40000,
 0,5000,10000,15000,25000,
-1),
+3),
 
 ('PK006','ACTIVE','Maldives Paradise','Maldives','Malé',
 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd',
@@ -439,7 +596,7 @@ VALUES
 0,60000,150000,
 50000,20000,15000,10000,120000,
 0,15000,30000,50000,80000,
-1);
+3);
 
 -- =========================
 -- RELATIONS N-N
@@ -483,7 +640,7 @@ INSERT INTO propose VALUES
 
 INSERT INTO favorise (id_user, id_pack, date_ajout_fav)
 VALUES 
-(5,1,NOW());
+(10,1,NOW());
 
 -- =========================
 -- DEMANDES DE RECHARGEMENT
@@ -499,10 +656,10 @@ INSERT INTO demande_rechargement (
 VALUES
 (
     'VALIDEE',
-    20000,
+    200000,
     NOW(),
     'Recharge initiale',
-    5
+    10
 );
 
 -- =========================
@@ -581,13 +738,25 @@ VALUES
     'TRX001',
     'RECHARGE',
     'SUCCESS',
-    20000,
+    200000,
     'Recharge portefeuille',
     NOW(),
     1,
-    5,
-    2,
-    1
+    3,
+    1,
+    10
+),
+(
+    'TRX002',
+    'ACHAT_PACKAGE',
+    'SUCCESS',
+    200000,
+    'Achat Package Paris Découverte',
+    NOW(),
+    NULL,
+    10,
+    10,
+    3
 );
 
 -- =========================
@@ -621,7 +790,7 @@ VALUES
     108000,
     NOW(),
     'CONFIRMED',
+    2,
     1,
-    1,
-    5
+    10
 );

@@ -29,16 +29,6 @@ export default function StepExcursion({
 
     const [loading,setLoading]=useState(false);
 
-    const [excursion,setExcursion]=useState({
-
-        nom_exc:"",
-
-        lieu_exc:"",
-
-        description_exc:""
-
-    });
-
     async function handleSubmit(){
 
         setLoading(true);
@@ -46,20 +36,26 @@ export default function StepExcursion({
         try{
 
             /*
-             * Création Excursion
-             */
+            * Création Excursion
+            */
 
-            const excursionResponse=await fetch("/api/excursions",{
+            const excursionResponse = await fetch("/api/excursions",{
 
                 method:"POST",
 
                 headers:{
-
                     "Content-Type":"application/json"
-
                 },
 
-                body:JSON.stringify(excursion)
+                body:JSON.stringify({
+
+                    nom_exc:data.excursion.name,
+
+                    lieu_exc:data.excursion.location,
+
+                    description_exc:data.excursion.description
+
+                })
 
             });
 
@@ -69,27 +65,34 @@ export default function StepExcursion({
 
             }
 
-            const createdExcursion=await excursionResponse.json();
+            const createdExcursion = await excursionResponse.json();
+
+            console.log(createdExcursion);
+            console.log(createdExcursion.id);
+            console.log(typeof createdExcursion.id);
+
+            console.log({
+                id_pack: data.id_pack,
+                id_exc: createdExcursion.id
+            });
 
             /*
-             * Relation Package ↔ Excursion
-             */
+            * Relation Package ↔ Excursion
+            */
 
-            const relationResponse=await fetch("/api/propose",{
+            const relationResponse = await fetch("/api/propose",{
 
                 method:"POST",
 
                 headers:{
-
                     "Content-Type":"application/json"
-
                 },
 
                 body:JSON.stringify({
 
                     id_pack:data.id_pack,
 
-                    id_exc:createdExcursion.id_exc
+                    id_exc:createdExcursion.id
 
                 })
 
@@ -105,9 +108,7 @@ export default function StepExcursion({
 
                 ...previous,
 
-                id_exc:createdExcursion.id,
-
-                excursion
+                id_exc: createdExcursion.id,
 
             }));
 
@@ -147,18 +148,22 @@ export default function StepExcursion({
 
                 placeholder="Nom"
 
-                value={excursion.nom_exc}
+                value={data.excursion.name}
 
                 onChange={(e)=>
+                setData((prev:any)=>({
 
-                    setExcursion({
+                    ...prev,
 
-                        ...excursion,
+                    excursion:{
 
-                        nom_exc:e.target.value
+                        ...prev.excursion,
 
-                    })
+                        name:e.target.value
 
+                    }
+
+                }))
                 }
 
             />
@@ -169,18 +174,22 @@ export default function StepExcursion({
 
                 placeholder="Lieu"
 
-                value={excursion.lieu_exc}
+                value={data.excursion.location}
 
                 onChange={(e)=>
+                setData((prev:any)=>({
 
-                    setExcursion({
+                    ...prev,
 
-                        ...excursion,
+                    excursion:{
 
-                        lieu_exc:e.target.value
+                        ...prev.excursion,
 
-                    })
+                        location:e.target.value,
 
+                    }
+
+                }))
                 }
 
             />
@@ -193,18 +202,22 @@ export default function StepExcursion({
 
                 placeholder="Description"
 
-                value={excursion.description_exc}
+                value={data.excursion.description}
 
                 onChange={(e)=>
 
-                    setExcursion({
+                    setData((prev:any)=>({
 
-                        ...excursion,
+                        ...prev,
 
-                        description_exc:e.target.value
+                        excursion:{
 
-                    })
+                            ...prev.excursion,
 
+                        description:e.target.value
+
+                        }
+                    }))
                 }
 
             />

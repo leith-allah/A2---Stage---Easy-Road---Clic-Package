@@ -23,52 +23,16 @@ export default function StepReview({
     const router=useRouter();
 
     const packagePrice =
-        Number(data.package?.prix_base_pack ?? 0);
+        Number(data.package?.basePrice ?? 0);
 
     const total =
         packagePrice;
     
-    const validatePurchase = async () => {
+    const validatePackage = () => {
 
-        const response = await fetch("/api/purchases",{
+        alert("Package créé avec succès !");
 
-            method:"POST",
-
-            headers:{
-
-                "Content-Type":"application/json",
-
-            },
-
-            body:JSON.stringify({
-
-                packageId:data.id_pack,
-
-                nbVoyageurs:data.nbVoyageurs,
-
-                classeVol:data.classeVol,
-
-                typeChambre:data.typeChambre,
-
-                pension:data.pension,
-
-            }),
-
-        });
-
-        if(!response.ok){
-
-            const error=await response.json();
-
-            alert(error.message ?? "Erreur");
-
-            return;
-
-        }
-
-        alert("Package acheté avec succès !");
-
-        router.push("/dashboard/client/voyages");
+        router.push("/dashboard/admin/packages");
 
     };
 
@@ -92,15 +56,14 @@ export default function StepReview({
 
                 </h3>
 
-                <p><b>Nom :</b> {data.package?.nom_pack}</p>
-
-                <p><b>Pays :</b> {data.package?.pays_pack}</p>
-
-                <p><b>Destination :</b> {data.package?.destination_pack}</p>
-
-                <p><b>Date Aller :</b> {data.package?.date_depart_pack}</p>
-
-                <p><b>Date Retour :</b> {data.package?.date_retour_pack}</p>
+                <p><b>Nom :</b> {data.package?.name}</p>
+                <p><b>Pays :</b> {data.package?.country}</p>
+                <p><b>Destination :</b> {data.package?.destination}</p>
+                <p><b>Description :</b> {data.package?.description}</p>
+                <p><b>Image :</b> {data.package?.image}</p>
+                <p><b>Date Aller :</b> {data.package?.departureDate}</p>
+                <p><b>Date Retour :</b> {data.package?.returnDate}</p>
+                <p><b>Places :</b> {data.package?.availableSeats}</p>
 
             </div>
 
@@ -109,18 +72,32 @@ export default function StepReview({
             <div className="rounded-lg border p-6">
 
                 <h3 className="font-bold text-lg mb-4">
-
                     Vol
-
                 </h3>
 
-                <p><b>Compagnie :</b> {data.flight?.compagnie_vol}</p>
+                <p><b>Compagnie :</b> {data.flight.airline}</p>
 
-                <p><b>Départ :</b> {data.flight?.lieu_depart_vol}</p>
+                <p><b>Numéro :</b> {data.flight.flightNumber}</p>
 
-                <p><b>Destination :</b> {data.flight?.destination_vol}</p>
+                <p><b>Départ :</b> {data.flight.departureLocation}</p>
 
-                <p><b>Numéro :</b> {data.flight?.num_vol}</p>
+                <p><b>Destination :</b> {data.flight.destination}</p>
+
+                <hr className="my-3"/>
+
+                <p><b>Date Aller :</b> {data.flight.departureDate}</p>
+
+                <p><b>Heure Départ Aller :</b> {data.flight.departureTime}</p>
+
+                <p><b>Heure Arrivée Aller :</b> {data.flight.arrivalTime}</p>
+
+                <hr className="my-3"/>
+
+                <p><b>Date Retour :</b> {data.flight.returnDate}</p>
+
+                <p><b>Heure Départ Retour :</b> {data.flight.returnDepartureTime}</p>
+
+                <p><b>Heure Arrivée Retour :</b> {data.flight.returnArrivalTime}</p>
 
             </div>
 
@@ -134,13 +111,11 @@ export default function StepReview({
 
                 </h3>
 
-                <p><b>Nom :</b> {data.hotel?.nom_hot}</p>
-
-                <p><b>Pays :</b> {data.hotel?.pays_hot}</p>
-
-                <p><b>Ville :</b> {data.hotel?.ville_hot}</p>
-
-                <p><b>Etoiles :</b> {data.hotel?.nb_etoiles_hot} ⭐</p>
+                <p><b>Nom :</b> {data.hotel?.name}</p>
+                <p><b>Pays :</b> {data.hotel?.country}</p>
+                <p><b>Ville :</b> {data.hotel?.city}</p>
+                <p><b>Etoiles :</b> {data.hotel?.stars} ⭐</p>
+                <p><b>Adresse :</b> {data.hotel?.address}</p>
 
             </div>
 
@@ -155,7 +130,6 @@ export default function StepReview({
                 </h3>
 
                 <p><b>Trajet :</b> {data.transport?.route}</p>
-
                 <p><b>Société :</b> {data.transport?.company}</p>
 
             </div>
@@ -170,11 +144,9 @@ export default function StepReview({
 
                 </h3>
 
-                <p><b>Nom :</b> {data.excursion?.nom_exc}</p>
-
-                <p><b>Lieu :</b> {data.excursion?.lieu_exc}</p>
-
-                <p>{data.excursion?.description_exc}</p>
+                <p><b>Nom :</b> {data.excursion?.name}</p>
+                <p><b>Lieu :</b> {data.excursion?.location}</p>
+                <p>{data.excursion?.description}</p>
 
             </div>
 
@@ -223,15 +195,10 @@ export default function StepReview({
                 </button>
 
                 <button
-
                     className="btn btn-success"
-
-                    onClick={validatePurchase}
-
+                    onClick={validatePackage}
                 >
-
                     Valider le Package
-
                 </button>
 
             </div>

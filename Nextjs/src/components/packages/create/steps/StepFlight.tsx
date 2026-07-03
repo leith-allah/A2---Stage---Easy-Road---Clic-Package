@@ -47,51 +47,59 @@ export default function StepFlight({
 
     setLoading(true);
 
-    const response = await fetch("/api/flights", {
+    try {
 
-      method: "POST",
+      const response = await fetch("/api/flights", {
 
-      headers: {
+        method: "POST",
 
-        "Content-Type": "application/json",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      },
+        body: JSON.stringify(form),
 
-      body: JSON.stringify(form),
+      });
 
-    });
+      const createdFlight = await response.json();
 
-    const text = await response.text();
+      console.log(createdFlight);
 
-    console.log("STATUS :", response.status);
+      if (!response.ok) {
 
-    console.log("BODY :", text);
-
-    if (!response.ok) {
-
-        alert(text);
+        alert(createdFlight.message ?? "Erreur");
 
         return;
 
+      }
+
+      setData((previousData:any)=>({
+
+          ...previousData,
+
+          id_vol: createdFlight.id,
+
+          flight:{
+
+              ...form,
+
+          },
+
+      }));
+
+      next();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Erreur création du vol");
+
+    } finally {
+
+      setLoading(false);
+
     }
-
-    const createdFlight = await response.json();
-
-    setData((previousData: any) => ({
-
-      ...previousData,
-
-      id_vol: createdFlight.id_vol,
-
-      flight: form,
-
-    }));
-
-    console.log(createdFlight);
-
-    setLoading(false);
-
-    next();
 
   }
 

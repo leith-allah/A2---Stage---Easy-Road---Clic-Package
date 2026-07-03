@@ -13,7 +13,81 @@ import StepExcursion from "./steps/StepExcursion";
 import StepReview from "./steps/StepReview";
 
 
-interface WizardData{
+interface PackageData {
+
+    name:string;
+
+    country:string;
+
+    destination:string;
+
+    departureDate:string;
+
+    returnDate:string;
+
+    description?:string;
+
+    basePrice:number;
+
+}
+
+interface FlightData {
+
+    airline:string;
+
+    departureLocation:string;
+
+    destination:string;
+
+    departureDate:string;
+
+    departureTime:string;
+
+    arrivalTime:string;
+
+    returnDate:string;
+
+    returnDepartureTime:string;
+
+    returnArrivalTime:string;
+
+    flightNumber:string;
+
+}
+
+interface HotelData {
+
+    name:string;
+
+    stars:number;
+
+    country:string;
+
+    city:string;
+
+    address:string;
+
+}
+
+interface TransportData {
+
+    route:string;
+
+    company:string;
+
+}
+
+interface ExcursionData {
+
+    name:string;
+
+    location:string;
+
+    description:string;
+
+}
+
+interface WizardData {
 
     id_pack?:number;
 
@@ -25,23 +99,15 @@ interface WizardData{
 
     id_exc?:number;
 
-    nbVoyageurs:number;
+    package:PackageData;
 
-    classeVol:string;
+    flight:FlightData;
 
-    typeChambre:string;
+    hotel:HotelData;
 
-    pension:string;
+    transport:TransportData;
 
-    package:any;
-
-    flight:any;
-
-    hotel:any;
-
-    transport:any;
-
-    excursion:any;
+    excursion:ExcursionData;
 
 }
 
@@ -52,23 +118,57 @@ export default function PackageCreationWizard(){
 
     const [wizardData,setWizardData]=useState<WizardData>({
 
-        package:{},
+        package:{
 
-        flight:{},
+            name:"",
+            country:"",
+            destination:"",
+            departureDate:"",
+            returnDate:"",
+            description:"",
+            basePrice:0
 
-        hotel:{},
+        },
 
-        transport:{},
+        flight:{
 
-        excursion:{},
+            airline:"",
+            departureLocation:"",
+            destination:"",
+            departureDate:"",
+            departureTime:"",
+            arrivalTime:"",
+            returnDate:"",
+            returnDepartureTime:"",
+            returnArrivalTime:"",
+            flightNumber:""
 
-        nbVoyageurs:1,
+        },
 
-        classeVol:"ECONOMY",
+        hotel:{
 
-        typeChambre:"DOUBLE",
+            name:"",
+            stars:3,
+            country:"",
+            city:"",
+            address:""
 
-        pension:"BED_BREAKFAST",
+        },
+
+        transport:{
+
+            route:"",
+            company:""
+
+        },
+
+        excursion:{
+
+            name:"",
+            location:"",
+            description:""
+
+        }
 
     });
 

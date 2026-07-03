@@ -19,20 +19,6 @@ export default function StepHotel({
 
   const [loading, setLoading] = useState(false);
 
-  const [hotel, setHotel] = useState({
-
-    nom_hot: "",
-
-    nb_etoiles_hot: 3,
-
-    pays_hot: "",
-
-    ville_hot: "",
-
-    adresse_hot: "",
-
-  });
-
   async function handleSubmit() {
 
     setLoading(true);
@@ -51,7 +37,19 @@ export default function StepHotel({
 
         },
 
-        body: JSON.stringify(hotel),
+        body: JSON.stringify({
+
+            nom_hot:data.hotel.name,
+
+            nb_etoiles_hot:data.hotel.stars,
+
+            pays_hot:data.hotel.country,
+
+            ville_hot:data.hotel.city,
+
+            adresse_hot:data.hotel.address,
+
+        })
 
       });
 
@@ -59,6 +57,8 @@ export default function StepHotel({
         throw new Error("Impossible de créer l'hôtel");
 
       const createdHotel = await hotelResponse.json();
+
+      console.log(createdHotel);
 
       // Liaison Package ↔ Hôtel
 
@@ -76,7 +76,7 @@ export default function StepHotel({
 
           id_pack: data.id_pack,
 
-          id_hot: createdHotel.id_hot,
+          id_hot: createdHotel.id,
 
         }),
 
@@ -85,13 +85,25 @@ export default function StepHotel({
       if (!relationResponse.ok)
         throw new Error("Impossible de lier l'hôtel au package");
 
-      setData((previous: any) => ({
+      setData((previous:any)=>({
 
-        ...previous,
+          ...previous,
 
-        id_hot: createdHotel.id_hot,
+          id_hot: createdHotel.id,
 
-        hotel,
+          hotel:{
+
+              name:data.hotel.name,
+
+              stars:data.hotel.stars,
+
+              country:data.hotel.country,
+
+              city:data.hotel.city,
+
+              address:data.hotel.address
+
+          }
 
       }));
 
@@ -127,18 +139,22 @@ export default function StepHotel({
 
         placeholder="Nom"
 
-        value={hotel.nom_hot}
+        value={data.hotel.name}
 
-        onChange={(e) =>
+        onChange={(e)=>
+        setData((prev:any)=>({
 
-          setHotel({
+            ...prev,
 
-            ...hotel,
+            hotel:{
 
-            nom_hot: e.target.value,
+                ...prev.hotel,
 
-          })
+                name:e.target.value,
 
+            }
+
+        }))
         }
 
       />
@@ -153,18 +169,22 @@ export default function StepHotel({
 
         max={5}
 
-        value={hotel.nb_etoiles_hot}
+        value={data.hotel.stars}
 
-        onChange={(e) =>
+        onChange={(e)=>
+        setData((prev:any)=>({
 
-          setHotel({
+            ...prev,
 
-            ...hotel,
+            hotel:{
 
-            nb_etoiles_hot: Number(e.target.value),
+                ...prev.hotel,
 
-          })
+                name:e.target.value,
 
+            }
+
+        }))
         }
 
       />
@@ -175,18 +195,22 @@ export default function StepHotel({
 
         placeholder="Pays"
 
-        value={hotel.pays_hot}
+        value={data.hotel.country}
 
-        onChange={(e) =>
+        onChange={(e)=>
+        setData((prev:any)=>({
 
-          setHotel({
+            ...prev,
 
-            ...hotel,
+            hotel:{
 
-            pays_hot: e.target.value,
+                ...prev.hotel,
 
-          })
+                name:e.target.value,
 
+            }
+
+        }))
         }
 
       />
@@ -197,18 +221,22 @@ export default function StepHotel({
 
         placeholder="Ville"
 
-        value={hotel.ville_hot}
+        value={data.hotel.city}
 
-        onChange={(e) =>
+        onChange={(e)=>
+        setData((prev:any)=>({
 
-          setHotel({
+            ...prev,
 
-            ...hotel,
+            hotel:{
 
-            ville_hot: e.target.value,
+                ...prev.hotel,
 
-          })
+                name:e.target.value,
 
+            }
+
+        }))
         }
 
       />
@@ -219,18 +247,22 @@ export default function StepHotel({
 
         placeholder="Adresse"
 
-        value={hotel.adresse_hot}
+        value={data.hotel.address}
 
-        onChange={(e) =>
+        onChange={(e)=>
+        setData((prev:any)=>({
 
-          setHotel({
+            ...prev,
 
-            ...hotel,
+            hotel:{
 
-            adresse_hot: e.target.value,
+                ...prev.hotel,
 
-          })
+                name:e.target.value,
 
+            }
+
+        }))
         }
 
       />

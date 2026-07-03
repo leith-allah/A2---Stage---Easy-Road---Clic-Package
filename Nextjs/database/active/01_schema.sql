@@ -32,7 +32,7 @@ CREATE TABLE transport (
 CREATE TABLE hotel (
     id_hot BIGSERIAL PRIMARY KEY,
     nom_hot VARCHAR(100) NOT NULL,
-    nb_etoiles_hot SMALLINT NOT NULL CHECK (nb_etoiles_hot BETWEEN 1 AND 5),
+    nb_etoiles_hot SMALLINT NOT NULL CHECK (nb_etoiles_hot BETWEEN 1 AND 7),
     pays_hot VARCHAR(50) NOT NULL,
     ville_hot VARCHAR(50) NOT NULL,
     adresse_hot VARCHAR(255) NOT NULL

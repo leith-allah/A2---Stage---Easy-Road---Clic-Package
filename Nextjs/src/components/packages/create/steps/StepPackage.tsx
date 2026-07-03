@@ -57,11 +57,20 @@ export default function StepPackage({
       }
 
       const createdPackage =
-        await response.json();
+          await response.json();
 
-      setData((prev: any) => ({
-        ...prev,
-        id_pack: createdPackage.id,
+      setData((prev:any)=>({
+
+          ...prev,
+
+          id_pack: createdPackage.id,
+
+          package: {
+
+              ...prev.package,
+
+          },
+
       }));
 
       next();
