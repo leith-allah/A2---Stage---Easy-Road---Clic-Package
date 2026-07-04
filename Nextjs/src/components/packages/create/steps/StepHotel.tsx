@@ -133,6 +133,7 @@ export default function StepHotel({
 
       </h2>
 
+      <label>Nom</label>
       <input
 
         className="input input-bordered w-full"
@@ -159,6 +160,7 @@ export default function StepHotel({
 
       />
 
+      <label>Nombre d'étoiles</label>
       <input
 
         className="input input-bordered w-full"
@@ -180,7 +182,7 @@ export default function StepHotel({
 
                 ...prev.hotel,
 
-                name:e.target.value,
+                stars:Number(e.target.value),
 
             }
 
@@ -189,6 +191,7 @@ export default function StepHotel({
 
       />
 
+      <label>Pays</label>
       <input
 
         className="input input-bordered w-full"
@@ -206,7 +209,7 @@ export default function StepHotel({
 
                 ...prev.hotel,
 
-                name:e.target.value,
+                country:e.target.value,
 
             }
 
@@ -215,6 +218,7 @@ export default function StepHotel({
 
       />
 
+      <label>Ville</label>
       <input
 
         className="input input-bordered w-full"
@@ -232,7 +236,7 @@ export default function StepHotel({
 
                 ...prev.hotel,
 
-                name:e.target.value,
+                city:e.target.value,
 
             }
 
@@ -241,6 +245,7 @@ export default function StepHotel({
 
       />
 
+      <label>Adresse</label>
       <input
 
         className="input input-bordered w-full"
@@ -258,7 +263,7 @@ export default function StepHotel({
 
                 ...prev.hotel,
 
-                name:e.target.value,
+                address:e.target.value,
 
             }
 

@@ -1,11 +1,27 @@
 
+"use client";
+
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import NotificationBell from
+
 "@/features/notifications/components/NotificationBell";
 
 export default function AdminHeader() {
+
+    const router = useRouter();
+
+    async function logout() {
+
+        await fetch("/api/auth/logout", {
+            method: "POST",
+        });
+
+        router.push("/");
+        router.refresh();
+
+    }
 
     return (
 
@@ -65,15 +81,16 @@ export default function AdminHeader() {
                     Transactions
                 </Link>
 
-                <NotificationBell />
-
                 <Link href="/dashboard/profile">
                     Profil
                 </Link>
 
-                <Link href="/logout">
+                <button
+                    onClick={logout}
+                    className="hover:text-red-500"
+                >
                     Déconnexion
-                </Link>
+                </button>
 
             </nav>
 
