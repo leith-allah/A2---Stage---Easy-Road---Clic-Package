@@ -5,6 +5,6 @@ export interface TransportDto {
 
   route: string;
 
-  company?: string | null;
+  company: string | null;
 
 }

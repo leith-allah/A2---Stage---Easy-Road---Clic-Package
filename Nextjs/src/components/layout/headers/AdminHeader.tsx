@@ -6,8 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 
-"@/features/notifications/components/NotificationBell";
-
 export default function AdminHeader() {
 
     const router = useRouter();

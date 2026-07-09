@@ -7,17 +7,17 @@ export interface CreateFlightDto {
 
   destination: string;
 
-  departureDate: string;
+  departureDate: Date;
 
-  departureTime: string;
+  departureTime: Date;
 
-  arrivalTime: string;
+  arrivalTime: Date;
 
-  returnDate?: string;
+  returnDate?: Date | null;
 
-  returnDepartureTime?: string;
+  returnDepartureTime?: Date | null;
 
-  returnArrivalTime?: string;
+  returnArrivalTime?: Date | null;
 
   flightNumber: string;
 

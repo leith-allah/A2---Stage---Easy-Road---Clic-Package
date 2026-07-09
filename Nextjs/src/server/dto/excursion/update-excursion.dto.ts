@@ -1,10 +1,10 @@
 
 export interface UpdateExcursionDto {
 
-  nom_exc?: string;
+  name?: string;
 
-  lieu_exc?: string;
+  location?: string;
 
-  description_exc?: string;
+  description?: string;
 
 }

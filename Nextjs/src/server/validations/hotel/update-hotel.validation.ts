@@ -4,24 +4,39 @@ import { z } from "zod";
 export const updateHotelSchema =
   z.object({
 
-    nom_hot:
-      z.string().min(1).max(100).optional(),
+    name:
+      z.string()
+        .min(2)
+        .max(100)
+        .optional(),
 
-    nb_etoiles_hot:
+    stars:
       z.number()
-       .int()
-       .min(1)
-       .max(7)
-       .optional(),
+        .min(1)
+        .max(7)
+        .optional(),
 
-    pays_hot:
-      z.string().min(1).max(50).optional(),
+    country:
+      z.string()
+        .min(2)
+        .max(50)
+        .optional(),
 
-    ville_hot:
-      z.string().min(1).max(50).optional(),
+    city:
+      z.string()
+        .min(2)
+        .max(50)
+        .optional(),
 
-    adresse_hot:
-      z.string().min(1).max(255).optional(),
+    address:
+      z.string()
+        .min(2)
+        .max(255)
+        .optional(),
 
   });
-  
+
+export type UpdateHotelInput =
+  z.infer<
+    typeof updateHotelSchema
+  >;

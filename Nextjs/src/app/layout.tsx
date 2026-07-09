@@ -9,7 +9,7 @@ import Footer from "@/components/layout/Footer";
 
 import {WalletProvider} from "@/providers/WalletProvider";
 
-import {NotificationProvider} from "@/providers/NotificationProvider";
+//import {NotificationProvider} from "@/providers/NotificationProvider";
 
 import {BookingProvider} from "@/providers/BookingProvider";
 
@@ -69,7 +69,7 @@ export default function RootLayout({
             <LoadingProvider>
               <AuthProvider>
                 <WalletProvider>
-                  <NotificationProvider>
+                  {/* <NotificationProvider> */}
                     <PurchaseProvider>
                       <TransactionProvider>
                          <PackageProvider>
@@ -79,7 +79,7 @@ export default function RootLayout({
                         </PackageProvider>
                       </TransactionProvider>
                     </PurchaseProvider>
-                  </NotificationProvider>
+                  {/* </NotificationProvider> */}
                 </WalletProvider>
               </AuthProvider>
             </LoadingProvider>

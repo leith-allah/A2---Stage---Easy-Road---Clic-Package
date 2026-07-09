@@ -1,94 +1,124 @@
 
-import { excursionService }
-from "@/server/services/excursion.service";
+import { NextRequest } from "next/server";
 
-import { requirePermission }
-from "@/server/middlewares/permission.middleware";
+import { excursionController }
+
+from "@/server/container/controllers/excursion.controller";
 
 import { updateExcursionSchema }
+
 from "@/server/validations/excursion/update-excursion.validation";
 
+import { requirePermission }
+
+from "@/server/middlewares/permission.middleware";
 
 type Params = {
 
   params: Promise<{
+
     id: string;
+
   }>;
 
 };
 
 export async function GET(
-  _: Request,
-  { params }: Params
+
+  _: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
-    "excursion:view"
+
+    "excursion:view",
+
   );
 
   const { id } =
+
     await params;
 
-  const excursion =
-    await excursionService.getExcursionById(
-      Number(id)
-    );
-
   return Response.json(
-    excursion
+
+    await excursionController.getById(
+
+      Number(id),
+
+    ),
+
   );
+
 }
 
 export async function PATCH(
-  request: Request,
-  { params }: Params
+
+  request: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
-    "excursion:update"
+
+    "excursion:update",
+
   );
 
   const { id } =
+
     await params;
 
   const body =
+
     await request.json();
 
   const data =
-    updateExcursionSchema.parse(
-      body
-    );
 
-  const excursion =
-    await excursionService.updateExcursion(
-      Number(id),
-      data
-    );
+    updateExcursionSchema.parse(body);
 
   return Response.json(
-    excursion
+
+    await excursionController.update(
+
+      Number(id),
+
+      data,
+
+    ),
+
   );
+
 }
 
 export async function DELETE(
-  _: Request,
-  { params }: Params
+
+  _: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
-    "excursion:delete"
+
+    "excursion:delete",
+
   );
 
   const { id } =
+
     await params;
 
-  await excursionService.deleteExcursion(
-    Number(id)
+  return Response.json(
+
+    await excursionController.delete(
+
+      Number(id),
+
+    ),
+
   );
 
-  return Response.json({
-
-    success: true,
-
-  });
 }

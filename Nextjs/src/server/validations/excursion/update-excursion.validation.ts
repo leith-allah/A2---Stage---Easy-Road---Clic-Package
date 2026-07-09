@@ -1,27 +1,49 @@
 
 import { z } from "zod";
 
-export const updateExcursionSchema = z.object({
+export const updateExcursionSchema =
 
-  nom_exc: z
-    .string()
-    .min(2)
-    .max(255)
-    .optional(),
+  z.object({
 
-  lieu_exc: z
-    .string()
-    .min(2)
-    .max(50)
-    .optional(),
+    name:
 
-  description_exc: z
-    .string()
-    .min(5)
-    .optional(),
+      z.string()
 
-});
+        .trim()
+
+        .min(2)
+
+        .max(255)
+
+        .optional(),
+
+    location:
+
+      z.string()
+
+        .trim()
+
+        .min(2)
+
+        .max(50)
+
+        .optional(),
+
+    description:
+
+      z.string()
+
+        .trim()
+
+        .min(5)
+
+        .max(5000)
+
+        .optional(),
+
+  });
 
 export type UpdateExcursionInput =
+
   z.infer<typeof updateExcursionSchema>;
   

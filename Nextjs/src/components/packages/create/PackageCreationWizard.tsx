@@ -89,25 +89,15 @@ interface ExcursionData {
 
 interface WizardData {
 
-    id_pack?:number;
-
-    id_vol?:number;
-
-    id_hot?:number;
-
-    id_transp?:number;
-
-    id_exc?:number;
-
     package:PackageData;
 
-    flight:FlightData;
+    flights: FlightData[];
 
-    hotel:HotelData;
+    hotels: HotelData[];
 
-    transport:TransportData;
+    transports: TransportData[];
 
-    excursion:ExcursionData;
+    excursions: ExcursionData[];
 
 }
 
@@ -130,8 +120,8 @@ export default function PackageCreationWizard(){
 
         },
 
-        flight:{
-
+        flights:[
+        {
             airline:"",
             departureLocation:"",
             destination:"",
@@ -142,33 +132,27 @@ export default function PackageCreationWizard(){
             returnDepartureTime:"",
             returnArrivalTime:"",
             flightNumber:""
+        }
+        ],
 
-        },
-
-        hotel:{
-
+        hotels:[{
             name:"",
             stars:3,
             country:"",
             city:"",
             address:""
+        }],
 
-        },
-
-        transport:{
-
+        transports:[{
             route:"",
             company:""
+        }],
 
-        },
-
-        excursion:{
-
+        excursions:[{
             name:"",
             location:"",
             description:""
-
-        }
+        }]
 
     });
 

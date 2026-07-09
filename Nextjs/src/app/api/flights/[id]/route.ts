@@ -1,19 +1,11 @@
 
-import {
-  flightService,
-}
-from "@/server/services/flight.service";
+import { NextRequest } from "next/server";
 
-import {
-  updateFlightSchema,
-}
-from "@/server/validations/flight/update-flight.validation";
+import { flightController } from "@/server/container";
 
-import {
-  requirePermission,
-}
-from "@/server/middlewares/permission.middleware";
+import { requirePermission } from "@/server/middlewares/permission.middleware";
 
+import { updateFlightSchema } from "@/server/validations/flight/update-flight.validation";
 
 type Params = {
 
@@ -23,9 +15,8 @@ type Params = {
 
 };
 
-
 export async function GET(
-  _: Request,
+  _: NextRequest,
   { params }: Params
 ) {
 
@@ -37,7 +28,7 @@ export async function GET(
     await params;
 
   const flight =
-    await flightService.getFlightById(
+    await flightController.findById(
       Number(id)
     );
 
@@ -47,9 +38,8 @@ export async function GET(
 
 }
 
-
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: Params
 ) {
 
@@ -63,49 +53,18 @@ export async function PATCH(
   const body =
     await request.json();
 
-  const data =
+  const dto =
     updateFlightSchema.parse(
       body
     );
 
   const flight =
-    await flightService.updateFlight(
+    await flightController.update(
+
       Number(id),
-      {
 
-        ...data,
+      dto
 
-        departureDate:
-          data.departureDate
-            ? new Date(data.departureDate)
-            : undefined,
-
-        departureTime:
-          data.departureTime
-            ? new Date(data.departureTime)
-            : undefined,
-
-        arrivalTime:
-          data.arrivalTime
-            ? new Date(data.arrivalTime)
-            : undefined,
-
-        returnDate:
-          data.returnDate
-            ? new Date(data.returnDate)
-            : undefined,
-
-        returnDepartureTime:
-          data.returnDepartureTime
-            ? new Date(data.returnDepartureTime)
-            : undefined,
-
-        returnArrivalTime:
-          data.returnArrivalTime
-            ? new Date(data.returnArrivalTime)
-            : undefined,
-
-      }
     );
 
   return Response.json(
@@ -114,9 +73,8 @@ export async function PATCH(
 
 }
 
-
 export async function DELETE(
-  _: Request,
+  _: NextRequest,
   { params }: Params
 ) {
 
@@ -127,7 +85,7 @@ export async function DELETE(
   const { id } =
     await params;
 
-  await flightService.deleteFlight(
+  await flightController.delete(
     Number(id)
   );
 

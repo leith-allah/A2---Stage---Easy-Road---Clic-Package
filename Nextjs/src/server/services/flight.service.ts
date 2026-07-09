@@ -1,6 +1,8 @@
 
-import { flightRepository }
-from "@/server/repositories/flight.repository";
+import { Flight } from "@/server/entities/flight.entity";
+
+import { FlightRepository }
+from "@/server/repositories/interfaces/flight.repository.interface";
 
 import { FlightMapper }
 from "@/server/mappers/flight.mapper";
@@ -8,32 +10,43 @@ from "@/server/mappers/flight.mapper";
 import { CreateFlightDto }
 from "@/server/dto/flight/create-flight.dto";
 
+import { FlightDto }
+from "@/server/dto/flight/flight.dto";
+
 import { UpdateFlightDto }
 from "@/server/dto/flight/update-flight.dto";
 
 import { NotFoundException }
 from "@/server/utils/api-error";
 
-export const flightService = {
+export class FlightService {
 
-  async getAllFlights() {
+  constructor(
+
+    private repository: FlightRepository
+
+  ) {}
+
+  async findAll(): Promise<FlightDto[]> {
 
     const flights =
-      await flightRepository.findAll();
+      await this.repository.findAll();
 
     return flights.map(
+
       (flight) =>
         FlightMapper.toDto(flight)
+
     );
 
-  },
+  }
 
-  async getFlightById(
+  async findById(
     id: number
-  ) {
+  ): Promise<FlightDto> {
 
     const flight =
-      await flightRepository.findById(id);
+      await this.repository.findById(id);
 
     if (!flight) {
 
@@ -43,99 +56,66 @@ export const flightService = {
 
     }
 
-    return FlightMapper.toDto(
-      flight
-    );
+    return FlightMapper.toDto(flight);
 
-  },
+  }
 
-  async createFlight(
+  async create(
     dto: CreateFlightDto
-  ) {
+  ): Promise<FlightDto> {
 
-    if (
+    const flight =
+      new Flight(
 
-      dto.returnDate &&
+        0,
 
-      new Date(dto.returnDate)
-        <
-      new Date(dto.departureDate)
-
-    ) {
-
-      throw new Error(
-        "La date de retour doit être après la date aller"
-      );
-
-    }
-
-    if (
-
-      new Date(dto.arrivalTime)
-        <=
-      new Date(dto.departureTime)
-
-    ) {
-
-      throw new Error(
-        "L'heure d'arrivée doit être après l'heure de départ"
-      );
-
-    }
-
-    return flightRepository.create({
-
-      airline:
         dto.airline,
 
-      departureLocation:
         dto.departureLocation,
 
-      destination:
         dto.destination,
 
-      departureDate:
         new Date(dto.departureDate),
 
-      departureTime:
         new Date(`1970-01-01T${dto.departureTime}:00`),
 
-      arrivalTime:
         new Date(`1970-01-01T${dto.arrivalTime}:00`),
 
-      returnDate:
         dto.returnDate
           ? new Date(dto.returnDate)
           : null,
 
-      returnDepartureTime:
         dto.returnDepartureTime
           ? new Date(`1970-01-01T${dto.returnDepartureTime}:00`)
           : null,
 
-      returnArrivalTime:
         dto.returnArrivalTime
           ? new Date(`1970-01-01T${dto.returnArrivalTime}:00`)
           : null,
 
-      flightNumber:
-        dto.flightNumber,
+        dto.flightNumber
 
-    });
-  },
+      );
 
-  async updateFlight(
+    const created =
+      await this.repository.create(flight);
+
+    return FlightMapper.toDto(created);
+
+  }
+
+  async update(
 
     id: number,
 
     dto: UpdateFlightDto
 
-  ) {
+  ): Promise<FlightDto> {
 
-    const existingFlight =
-      await flightRepository.findById(id);
+    const existing =
+      await this.repository.findById(id);
 
-    if (!existingFlight) {
+    if (!existing) {
 
       throw new NotFoundException(
         "Vol introuvable"
@@ -143,60 +123,62 @@ export const flightService = {
 
     }
 
-    if (
+    const updated =
+      await this.repository.update(id, {
 
-      dto.departureDate &&
-      dto.returnDate &&
+        airline: dto.airline,
 
-      new Date(dto.returnDate)
-        <
-      new Date(dto.departureDate)
+        departureLocation: dto.departureLocation,
 
-    ) {
+        destination: dto.destination,
 
-      throw new Error(
-        "La date de retour doit être après la date aller"
-      );
+        departureDate:
+          dto.departureDate
+            ? new Date(dto.departureDate)
+            : undefined,
 
-    }
+        departureTime:
+          dto.departureTime
+            ? new Date(`1970-01-01T${dto.departureTime}:00`)
+            : undefined,
 
-    if (
+        arrivalTime:
+          dto.arrivalTime
+            ? new Date(`1970-01-01T${dto.arrivalTime}:00`)
+            : undefined,
 
-      dto.departureTime &&
-      dto.arrivalTime &&
+        returnDate:
+          dto.returnDate
+            ? new Date(dto.returnDate)
+            : undefined,
 
-      new Date(dto.arrivalTime)
-        <=
-      new Date(dto.departureTime)
+        returnDepartureTime:
+          dto.returnDepartureTime
+            ? new Date(`1970-01-01T${dto.returnDepartureTime}:00`)
+            : undefined,
 
-    ) {
+        returnArrivalTime:
+          dto.returnArrivalTime
+            ? new Date(`1970-01-01T${dto.returnArrivalTime}:00`)
+            : undefined,
 
-      throw new Error(
-        "L'heure d'arrivée doit être après l'heure de départ"
-      );
+        flightNumber:
+          dto.flightNumber,
 
-    }
+      });
 
-    const flight =
-      await flightRepository.update(
-        id,
-        dto
-      );
+    return FlightMapper.toDto(updated);
 
-    return FlightMapper.toDto(
-      flight
-    );
+  }
 
-  },
-
-  async deleteFlight(
+  async delete(
     id: number
-  ) {
+  ): Promise<void> {
 
-    const existingFlight =
-      await flightRepository.findById(id);
+    const existing =
+      await this.repository.findById(id);
 
-    if (!existingFlight) {
+    if (!existing) {
 
       throw new NotFoundException(
         "Vol introuvable"
@@ -204,8 +186,8 @@ export const flightService = {
 
     }
 
-    return flightRepository.delete(id);
+    await this.repository.delete(id);
 
-  },
+  }
 
-};
+}

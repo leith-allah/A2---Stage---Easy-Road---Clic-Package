@@ -1,52 +1,139 @@
 
+import { Flight } from "@/server/entities/flight.entity";
+
 import { FlightDto }
 from "@/server/dto/flight/flight.dto";
 
 export class FlightMapper {
 
+  static toEntity(prismaFlight: {
+
+    id_vol: bigint;
+
+    compagnie_vol: string;
+
+    lieu_depart_vol: string;
+
+    destination_vol: string;
+
+    date_aller_vol: Date;
+
+    heure_depart_aller_vol: Date;
+
+    heure_arrivee_aller_vol: Date;
+
+    date_retour_vol: Date | null;
+
+    heure_depart_retour_vol: Date | null;
+
+    heure_arrivee_retour_vol: Date | null;
+
+    num_vol: string;
+
+  }): Flight {
+
+    return new Flight(
+
+      Number(prismaFlight.id_vol),
+
+      prismaFlight.compagnie_vol,
+
+      prismaFlight.lieu_depart_vol,
+
+      prismaFlight.destination_vol,
+
+      prismaFlight.date_aller_vol,
+
+      prismaFlight.heure_depart_aller_vol,
+
+      prismaFlight.heure_arrivee_aller_vol,
+
+      prismaFlight.date_retour_vol,
+
+      prismaFlight.heure_depart_retour_vol,
+
+      prismaFlight.heure_arrivee_retour_vol,
+
+      prismaFlight.num_vol,
+
+    );
+
+  }
+
+  static toEntities(
+
+    flights: {
+
+      id_vol: bigint;
+
+      compagnie_vol: string;
+
+      lieu_depart_vol: string;
+
+      destination_vol: string;
+
+      date_aller_vol: Date;
+
+      heure_depart_aller_vol: Date;
+
+      heure_arrivee_aller_vol: Date;
+
+      date_retour_vol: Date | null;
+
+      heure_depart_retour_vol: Date | null;
+
+      heure_arrivee_retour_vol: Date | null;
+
+      num_vol: string;
+
+    }[]
+
+  ): Flight[] {
+
+    return flights.map(
+
+      flight => FlightMapper.toEntity(flight)
+
+    );
+
+  }
+
   static toDto(
-    flight: any
+    flight: Flight
   ): FlightDto {
 
     return {
 
-      id:
-        Number(
-          flight.id_vol
-        ),
+      id: flight.id,
 
-      airline:
-        flight.compagnie_vol,
+      airline: flight.airline,
 
-      departureLocation:
-        flight.lieu_depart_vol,
+      departureLocation: flight.departureLocation,
 
-      destination:
-        flight.destination_vol,
+      destination: flight.destination,
 
-      departureDate:
-        flight.date_aller_vol.toISOString(),
+      departureDate: flight.departureDate.toISOString(),
 
-      departureTime:
-        flight.heure_depart_aller_vol.toISOString(),
+      departureTime: flight.departureTime.toISOString(),
 
-      arrivalTime:
-        flight.heure_arrivee_aller_vol.toISOString(),
+      arrivalTime: flight.arrivalTime.toISOString(),
 
       returnDate:
-        flight.date_retour_vol
-          ?.toISOString(),
+        flight.returnDate
+          ? flight.returnDate.toISOString()
+          : null,
 
       returnDepartureTime:
-        flight.heure_depart_retour_vol
-          ?.toISOString(),
+        flight.returnDepartureTime
+          ? flight.returnDepartureTime.toISOString()
+          : null,
 
       returnArrivalTime:
-        flight.heure_arrivee_retour_vol
-          ?.toISOString(),
+        flight.returnArrivalTime
+          ? flight.returnArrivalTime.toISOString()
+          : null,
 
-      flightNumber:
-        flight.num_vol,
+      flightNumber: flight.flightNumber,
 
     };
 

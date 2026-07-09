@@ -1,41 +1,58 @@
 
 import { NextRequest } from "next/server";
 
-import { hotelService } from "@/server/services/hotel.service";
+import { hotelController } from "@/server/container/controllers/hotel.controller";
 
 import { createHotelSchema } from "@/server/validations/hotel/create-hotel.validation";
-import { updateHotelSchema } from "@/server/validations/hotel/update-hotel.validation";
 
 import { requirePermission } from "@/server/middlewares/permission.middleware";
 
-
 export async function GET() {
-  await requirePermission("hotel:view");
+
+  await requirePermission(
+    "hotel:view"
+  );
 
   const hotels =
-    await hotelService.getAllHotels();
+    await hotelController.getAll();
 
-  return Response.json(hotels);
+  return Response.json(
+    hotels
+  );
+
 }
 
 export async function POST(
   request: NextRequest
 ) {
-  await requirePermission("hotel:create");
+
+  await requirePermission(
+    "hotel:create"
+  );
 
   const body =
     await request.json();
-  
+
   const data =
-    createHotelSchema.parse(body);
+    createHotelSchema.parse(
+      body
+    );
 
   const hotel =
-    await hotelService.createHotel(data);
+    await hotelController.create(
+      data
+    );
 
   return Response.json(
+
     hotel,
+
     {
+
       status: 201,
+
     }
+
   );
+
 }

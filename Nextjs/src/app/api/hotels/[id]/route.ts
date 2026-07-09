@@ -1,44 +1,61 @@
 
-import {
-  hotelService,
-} from "@/server/services/hotel.service";
+import { NextRequest } from "next/server";
 
-import {
-  updateHotelSchema,
-} from "@/server/validations/hotel/update-hotel.validation";
+import { hotelController } from "@/server/container/controllers/hotel.controller";
 
-import {
-  requirePermission,
-} from "@/server/middlewares/permission.middleware";
+import { updateHotelSchema } from "@/server/validations/hotel/update-hotel.validation";
+
+import { requirePermission } from "@/server/middlewares/permission.middleware";
 
 type Params = {
+
   params: Promise<{
+
     id: string;
+
   }>;
+
 };
 
 export async function GET(
-  _: Request,
+
+  _: NextRequest,
+
   { params }: Params
+
 ) {
-  await requirePermission("hotel:view");
+
+  await requirePermission(
+    "hotel:view"
+  );
 
   const { id } =
     await params;
 
   const hotel =
-    await hotelService.getHotelById(
+    await hotelController.getById(
+
       Number(id)
+
     );
 
-  return Response.json(hotel);
+  return Response.json(
+    hotel
+  );
+
 }
 
 export async function PATCH(
-  request: Request,
+
+  request: NextRequest,
+
   { params }: Params
+
 ) {
-  await requirePermission("hotel:update");
+
+  await requirePermission(
+    "hotel:update"
+  );
 
   const { id } =
     await params;
@@ -47,31 +64,49 @@ export async function PATCH(
     await request.json();
 
   const data =
-    updateHotelSchema.parse(body);
-
-  const hotel =
-    await hotelService.updateHotel(
-      Number(id),
-      data
+    updateHotelSchema.parse(
+      body
     );
 
-  return Response.json(hotel);
+  const hotel =
+    await hotelController.update(
+
+      Number(id),
+
+      data
+
+    );
+
+  return Response.json(
+    hotel
+  );
+
 }
 
 export async function DELETE(
-  _: Request,
+
+  _: NextRequest,
+
   { params }: Params
+
 ) {
-  await requirePermission("hotel:delete");
+
+  await requirePermission(
+    "hotel:delete"
+  );
 
   const { id } =
     await params;
 
-  await hotelService.deleteHotel(
-    Number(id)
+  const hotel =
+    await hotelController.delete(
+
+      Number(id)
+
+    );
+
+  return Response.json(
+    hotel
   );
 
-  return Response.json({
-    success: true,
-  });
 }

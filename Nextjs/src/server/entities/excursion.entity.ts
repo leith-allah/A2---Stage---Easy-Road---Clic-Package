@@ -1,12 +1,22 @@
 
-export interface ExcursionEntity {
+export class Excursion {
 
-  id_exc: bigint;
+  constructor(
 
-  nom_exc: string;
+    public readonly id: number,
 
-  lieu_exc: string;
+    public name: string,
 
-  description_exc: string;
+    public location: string,
+
+    public description: string,
+
+  ) {}
+
+  hasDescription(): boolean {
+
+    return this.description.trim().length > 0;
+
+  }
 
 }

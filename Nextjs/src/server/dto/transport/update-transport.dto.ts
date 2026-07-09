@@ -3,6 +3,6 @@ export interface UpdateTransportDto {
 
   route?: string;
 
-  company?: string;
+  company?: string | null;
 
 }

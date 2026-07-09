@@ -5,12 +5,12 @@ export interface HotelDto {
 
   name: string;
 
-  stars: number;
-
   country: string;
 
   city: string;
 
   address: string;
+
+  stars: number;
 
 }

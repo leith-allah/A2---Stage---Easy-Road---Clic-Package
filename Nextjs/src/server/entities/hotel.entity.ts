@@ -1,14 +1,26 @@
 
-export interface HotelEntity {
-  id_hot: bigint;
+export class Hotel {
 
-  nom_hot: string;
+  constructor(
 
-  nb_etoiles_hot: number;
+    public readonly id: number,
 
-  pays_hot: string;
+    public name: string,
 
-  ville_hot: string;
+    public country: string,
 
-  adresse_hot: string;
+    public city: string,
+
+    public address: string,
+
+    public stars: number,
+
+  ) {}
+
+  isLuxury(): boolean {
+
+    return this.stars >= 5;
+
+  }
+
 }

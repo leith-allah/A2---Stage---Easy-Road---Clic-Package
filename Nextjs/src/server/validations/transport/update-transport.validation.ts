@@ -1,19 +1,25 @@
 
 import { z } from "zod";
 
-export const updateTransportSchema =
-  z.object({
+export const updateTransportSchema = z.object({
 
-    route:
-      z.string()
-        .min(1)
-        .max(50)
-        .optional(),
+  trajet: z
+    .string()
+    .trim()
+    .min(2)
+    .max(50)
+    .optional(),
 
-    company:
-      z.string()
-        .max(50)
-        .optional(),
+  company: z
+    .string()
+    .trim()
+    .max(50)
+    .optional()
+    .nullable(),
 
-  });
+});
+
+export type UpdateTransportInput =
+
+  z.infer<typeof updateTransportSchema>;
   

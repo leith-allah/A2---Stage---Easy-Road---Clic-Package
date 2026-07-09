@@ -51,28 +51,3 @@ export async function GET(
   );
 
 }
-
-export async function POST(
-  request: NextRequest
-) {
-  
-  await requirePermission(
-    "package:create"
-  );
-  
-  const body:
-    CreatePackageDto =
-      await request.json();
-
-  const createdPackage =
-    await packageService.createPackage(body);
-
-  return NextResponse.json(
-    {
-      id: Number(createdPackage.id_pack),
-    },
-    {
-      status: 201,
-    }
-  );
-}

@@ -3,6 +3,6 @@ export interface CreateTransportDto {
 
   route: string;
 
-  company?: string;
+  company?: string | null;
 
 }

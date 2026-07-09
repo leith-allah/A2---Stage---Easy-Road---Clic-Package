@@ -1,103 +1,136 @@
 
-import {
-  transportService,
-}
-from "@/server/services/transport.service";
+import { NextRequest } from "next/server";
 
-import {
-  updateTransportSchema,
-}
-from "@/server/validations/transport/update-transport.validation";
+import { transportController } from "@/server/container/controllers/transport.controller";
 
-import {
-  requirePermission,
-}
-from "@/server/middlewares/permission.middleware";
+import { updateTransportSchema } from "@/server/validations/transport/update-transport.validation";
 
+import { requirePermission } from "@/server/middlewares/permission.middleware";
 
 type Params = {
 
   params: Promise<{
+
     id: string;
+
   }>;
 
 };
 
 export async function GET(
-  _: Request,
-  { params }: Params
+
+  _: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
+
     "transport:view"
+
   );
 
   const { id } =
+
     await params;
 
   const transport =
-    await transportService.getTransportById(
-      Number(id)
+
+    await transportController.getById(
+
+      Number(id),
+
     );
 
   return Response.json(
-    transport
+
+    transport,
+
   );
 
 }
 
 export async function PATCH(
-  request: Request,
-  { params }: Params
+
+  request: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
+
     "transport:update"
+
   );
 
   const { id } =
+
     await params;
 
   const body =
+
     await request.json();
 
   const data =
-    updateTransportSchema.parse(
-      body
-    );
+
+    updateTransportSchema.parse(body);
 
   const transport =
-    await transportService.updateTransport(
+
+    await transportController.update(
+
       Number(id),
-      data
+
+      {
+
+        route: data.trajet,
+
+        company: data.company,
+
+      },
+
     );
 
   return Response.json(
-    transport
+
+    transport,
+
   );
 
 }
 
 export async function DELETE(
-  _: Request,
-  { params }: Params
+
+  _: NextRequest,
+
+  { params }: Params,
+
 ) {
 
   await requirePermission(
+
     "transport:delete"
+
   );
 
   const { id } =
+
     await params;
 
-  await transportService.deleteTransport(
-    Number(id)
+  const transport =
+
+    await transportController.delete(
+
+      Number(id),
+
+    );
+
+  return Response.json(
+
+    transport,
+
   );
-
-  return Response.json({
-
-    success: true,
-
-  });
 
 }

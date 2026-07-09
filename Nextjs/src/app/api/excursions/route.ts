@@ -1,56 +1,68 @@
 
-import { NextRequest }
-from "next/server";
+import { NextRequest } from "next/server";
 
-import { excursionService }
-from "@/server/services/excursion.service";
+import { excursionController }
 
-import { requirePermission }
-from "@/server/middlewares/permission.middleware";
+from "@/server/container/controllers/excursion.controller";
 
 import { createExcursionSchema }
+
 from "@/server/validations/excursion/create-excursion.validation";
 
+import { requirePermission }
+
+from "@/server/middlewares/permission.middleware";
 
 export async function GET() {
 
   await requirePermission(
-    "excursion:view"
-  );
 
-  const excursions =
-    await excursionService.getAllExcursions();
+    "excursion:view",
+
+  );
 
   return Response.json(
-    excursions
+
+    await excursionController.getAll(),
+
   );
+
 }
 
 export async function POST(
-  request: NextRequest
+
+  request: NextRequest,
+
 ) {
 
   await requirePermission(
-    "excursion:create"
+
+    "excursion:create",
+
   );
 
   const body =
+
     await request.json();
 
   const data =
-    createExcursionSchema.parse(
-      body
-    );
+
+    createExcursionSchema.parse(body);
 
   const excursion =
-    await excursionService.createExcursion(
-      data
-    );
+
+    await excursionController.create(data);
 
   return Response.json(
+
     excursion,
+
     {
+
       status: 201,
-    }
+
+    },
+
   );
+
 }

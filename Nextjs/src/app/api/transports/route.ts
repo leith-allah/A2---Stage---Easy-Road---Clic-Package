@@ -1,64 +1,72 @@
 
-import { NextRequest }
-from "next/server";
+import { NextRequest } from "next/server";
 
-import {
-  transportService,
-}
-from "@/server/services/transport.service";
+import { transportController } from "@/server/container/controllers/transport.controller";
 
-import {
-  createTransportSchema,
-}
-from "@/server/validations/transport/create-transport.validation";
+import { createTransportSchema } from "@/server/validations/transport/create-transport.validation";
 
-import {
-  requirePermission,
-}
-from "@/server/middlewares/permission.middleware";
-
+import { requirePermission } from "@/server/middlewares/permission.middleware";
 
 export async function GET() {
 
   await requirePermission(
+
     "transport:view"
+
   );
 
   const transports =
-    await transportService.getAllTransports();
+
+    await transportController.getAll();
 
   return Response.json(
+
     transports
+
   );
 
 }
 
 export async function POST(
-  request: NextRequest
+
+  request: NextRequest,
+
 ) {
 
   await requirePermission(
+
     "transport:create"
+
   );
 
   const body =
+
     await request.json();
 
   const data =
-    createTransportSchema.parse(
-      body
-    );
+
+    createTransportSchema.parse(body);
 
   const transport =
-    await transportService.createTransport(
-      data
-    );
+
+    await transportController.create({
+
+      route: data.trajet,
+
+      company: data.company ?? null,
+
+    });
 
   return Response.json(
+
     transport,
+
     {
+
       status: 201,
-    }
+
+    },
+
   );
 
 }

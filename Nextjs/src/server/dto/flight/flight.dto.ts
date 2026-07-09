@@ -15,11 +15,11 @@ export interface FlightDto {
 
   arrivalTime: string;
 
-  returnDate?: string | null;
+  returnDate: string | null;
 
-  returnDepartureTime?: string | null;
+  returnDepartureTime: string | null;
 
-  returnArrivalTime?: string | null;
+  returnArrivalTime: string | null;
 
   flightNumber: string;
 

@@ -1,123 +1,144 @@
 
-import { hotelRepository }
-from "@/server/repositories/hotel.repository";
+import { HotelRepository } from "@/server/repositories/interfaces/hotel.repository.interface";
 
-import { NotFoundException }
-from "@/server/utils/api-error";
+import { HotelMapper } from "@/server/mappers/hotel.mapper";
 
-import { HotelMapper }
-from "@/server/mappers/hotel.mapper";
+import { CreateHotelDto } from "@/server/dto/hotel/create-hotel.dto";
 
+import { UpdateHotelDto } from "@/server/dto/hotel/update-hotel.dto";
 
-export const hotelService = {
+import { Hotel } from "@/server/entities/hotel.entity";
+
+import { NotFoundException } from "@/server/utils/api-error";
+
+export class HotelService {
+
+  constructor(
+
+    private readonly repository: HotelRepository,
+
+  ) {}
 
   async getAllHotels() {
 
-    const hotels =
-      await hotelRepository.findAll();
+    const hotels = await this.repository.findAll();
 
     return hotels.map(
-      (hotel) =>
-        HotelMapper.toDto(
-          hotel
-        )
+
+      hotel => HotelMapper.toDto(hotel)
+
     );
-  },
+
+  }
 
   async getHotelById(
-    id: number
+
+    id: number,
+
   ) {
 
-    const hotel =
-      await hotelRepository.findById(
-        id
-      );
+    const hotel = await this.repository.findById(id);
 
     if (!hotel) {
 
       throw new NotFoundException(
-        "Hotel introuvable"
+
+        "Hôtel introuvable"
+
       );
+
     }
 
-    return HotelMapper.toDto(
-      hotel
-    );
+    return HotelMapper.toDto(hotel);
 
-  },
+  }
 
   async createHotel(
-    data: {
 
-      nom_hot: string;
+    dto: CreateHotelDto,
 
-      nb_etoiles_hot: number;
-
-      pays_hot: string;
-
-      ville_hot: string;
-
-      adresse_hot: string;
-
-    }
   ) {
 
-    const hotel =
-      await hotelRepository.create(
-        data
-      );
+    const hotel = new Hotel(
 
-    return HotelMapper.toDto(
-      hotel
+      0,
+
+      dto.name,
+
+      dto.country,
+
+      dto.city,
+
+      dto.address,
+
+      dto.stars,
+
     );
 
-  },
+    const created = await this.repository.create(
+
+      hotel
+
+    );
+
+    return HotelMapper.toDto(created);
+
+  }
 
   async updateHotel(
+
     id: number,
-    data: {
 
-      nom_hot?: string;
+    dto: UpdateHotelDto,
 
-      nb_etoiles_hot?: number;
-
-      pays_hot?: string;
-
-      ville_hot?: string;
-
-      adresse_hot?: string;
-
-    }
   ) {
 
-    await this.getHotelById(
-      id
-    );
+    const exists = await this.repository.findById(id);
 
-    const hotel =
-      await hotelRepository.update(
-        id,
-        data
+    if (!exists) {
+
+      throw new NotFoundException(
+
+        "Hôtel introuvable"
+
       );
 
-    return HotelMapper.toDto(
-      hotel
+    }
+
+    const updated = await this.repository.update(
+
+      id,
+
+      dto,
+
     );
 
-  },
+    return HotelMapper.toDto(updated);
+
+  }
 
   async deleteHotel(
-    id: number
+
+    id: number,
+
   ) {
 
-    await this.getHotelById(
-      id
-    );
+    const exists = await this.repository.findById(id);
 
-    return hotelRepository.delete(
-      id
-    );
+    if (!exists) {
 
-  },
+      throw new NotFoundException(
 
-};
+        "Hôtel introuvable"
+
+      );
+
+    }
+
+    const deleted = await this.repository.delete(id);
+
+    return HotelMapper.toDto(deleted);
+
+  }
+
+}

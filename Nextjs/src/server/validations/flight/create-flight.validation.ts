@@ -1,54 +1,40 @@
 
 import { z } from "zod";
 
-export const createFlightSchema =
-  z.object({
+export const createFlightSchema = z.object({
 
-    airline:
-      z.string()
-        .min(2)
-        .max(50),
+  airline:
+    z.string().min(2).max(50),
 
-    departureLocation:
-      z.string()
-        .min(2)
-        .max(50),
+  departureLocation:
+    z.string().min(2).max(50),
 
-    destination:
-      z.string()
-        .min(2)
-        .max(50),
+  destination:
+    z.string().min(2).max(50),
 
-    departureDate:
-      z.string(),
+  departureDate:
+    z.coerce.date(),
 
-    departureTime:
-      z.string(),
+  departureTime:
+    z.coerce.date(),
 
-    arrivalTime:
-      z.string(),
+  arrivalTime:
+    z.coerce.date(),
 
-    returnDate:
-      z.string()
-       .optional(),
+  returnDate:
+    z.coerce.date().nullable().optional(),
 
-    returnDepartureTime:
-      z.string()
-       .optional(),
+  returnDepartureTime:
+    z.coerce.date().nullable().optional(),
 
-    returnArrivalTime:
-      z.string()
-       .optional(),
+  returnArrivalTime:
+    z.coerce.date().nullable().optional(),
 
-    flightNumber:
-      z.string()
-        .min(2)
-        .max(50),
+  flightNumber:
+    z.string().min(2).max(50),
 
-  });
+});
 
 export type CreateFlightInput =
-  z.infer<
-    typeof createFlightSchema
-  >;
+  z.infer<typeof createFlightSchema>;
   

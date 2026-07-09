@@ -1,7 +1,8 @@
 
 "use client";
 
-import { useState } from "react";
+import { useWizardUpdater } from "@/hooks/useWizardUpdater";
+
 
 interface Props {
   data: any;
@@ -17,91 +18,12 @@ export default function StepFlight({
   previous,
 }: Props) {
 
-  const [loading, setLoading] = useState(false);
-
-  const [form, setForm] = useState({
-
-    airline: data.flight.airline ?? "",
-
-    departureLocation: data.flight.departureLocation ?? "",
-
-    destination: data.flight.destination ?? "",
-
-    departureDate: data.flight.departureDate ?? "",
-
-    departureTime: data.flight.departureTime ?? "",
-
-    arrivalTime: data.flight.arrivalTime ?? "",
-
-    returnDate: data.flight.returnDate ?? "",
-
-    returnDepartureTime: data.flight.returnDepartureTime ?? "",
-
-    returnArrivalTime: data.flight.returnArrivalTime ?? "",
-
-    flightNumber: data.flight.flightNumber ?? "",
-
-  });
-
-  async function handleNext() {
-
-    setLoading(true);
-
-    try {
-
-      const response = await fetch("/api/flights", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify(form),
-
-      });
-
-      const createdFlight = await response.json();
-
-      console.log(createdFlight);
-
-      if (!response.ok) {
-
-        alert(createdFlight.message ?? "Erreur");
-
-        return;
-
-      }
-
-      setData((previousData:any)=>({
-
-          ...previousData,
-
-          id_vol: createdFlight.id,
-
-          flight:{
-
-              ...form,
-
-          },
-
-      }));
-
-      next();
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert("Erreur création du vol");
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
+  function handleNext() {
+    next();
   }
+
+  const { updateItem } =
+    useWizardUpdater(setData);
 
   return (
 
@@ -114,121 +36,141 @@ export default function StepFlight({
       <div className="grid grid-cols-2 gap-4">
 
         <input
-          placeholder="Compagnie"
-          value={form.airline}
-          onChange={(e)=>
-            setForm({
-              ...form,
-              airline:e.target.value
-            })
-          }
-          className="border rounded p-2"
+            placeholder="Compagnie"
+            value={data.flights[0].airline}
+            onChange={(e)=>
+                updateItem(
+                    "flights",
+                    0,
+                    "airline",
+                    e.target.value
+                )
+            }
+            className="border rounded p-2"
         />
 
         <input
-          placeholder="Numéro de vol"
-          value={form.flightNumber}
-          onChange={(e)=>
-            setForm({
-              ...form,
-              flightNumber:e.target.value
-            })
-          }
-          className="border rounded p-2"
+            placeholder="Numéro de vol"
+            value={data.flights[0].flightNumber}
+            onChange={(e)=>
+                updateItem(
+                    "flights",
+                    0,
+                    "flightNumber",
+                    e.target.value
+                )
+            }
+            className="border rounded p-2"
         />
 
         <input
           placeholder="Lieu de départ"
-          value={form.departureLocation}
+          value={data.flights[0].departureLocation}
           onChange={(e)=>
-            setForm({
-              ...form,
-              departureLocation:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "departureLocation",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           placeholder="Destination"
-          value={form.destination}
+          value={data.flights[0].destination}
           onChange={(e)=>
-            setForm({
-              ...form,
-              destination:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "destination",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="date"
-          value={form.departureDate}
+          value={data.flights[0].departureDate}
           onChange={(e)=>
-            setForm({
-              ...form,
-              departureDate:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "departureDate",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="time"
-          value={form.departureTime}
+          value={data.flights[0].departureTime}
           onChange={(e)=>
-            setForm({
-              ...form,
-              departureTime:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "departureTime",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="time"
-          value={form.arrivalTime}
+          value={data.flights[0].arrivalTime}
           onChange={(e)=>
-            setForm({
-              ...form,
-              arrivalTime:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "arrivalTime",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="date"
-          value={form.returnDate}
+          value={data.flights[0].returnDate}
           onChange={(e)=>
-            setForm({
-              ...form,
-              returnDate:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "returnDate",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="time"
-          value={form.returnDepartureTime}
+          value={data.flights[0].returnDepartureTime}
           onChange={(e)=>
-            setForm({
-              ...form,
-              returnDepartureTime:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "returnDepartureTime",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
 
         <input
           type="time"
-          value={form.returnArrivalTime}
+          value={data.flights[0].returnArrivalTime}
           onChange={(e)=>
-            setForm({
-              ...form,
-              returnArrivalTime:e.target.value
-            })
+                updateItem(
+                    "flights",
+                    0,
+                    "returnArrivalTime",
+                    e.target.value
+                )
           }
           className="border rounded p-2"
         />
@@ -246,10 +188,9 @@ export default function StepFlight({
 
         <button
           onClick={handleNext}
-          disabled={loading}
           className="px-4 py-2 bg-blue-600 text-white rounded"
         >
-          {loading ? "Création..." : "Continuer"}
+          Continuer
         </button>
 
       </div>
