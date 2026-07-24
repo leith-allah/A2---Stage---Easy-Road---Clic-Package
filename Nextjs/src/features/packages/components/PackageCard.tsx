@@ -54,8 +54,9 @@ export default function PackageCard({
 
           <img
             src={
-              image ??
-              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
+              image?.trim()
+                ? image
+                : "https://images.unsplash.com/photo-1507525428034-b723cf961d3e"
             }
             alt={name}
             className="

@@ -3,28 +3,50 @@ import { favoriteRepository } from "@/server/repositories/favorite.repository";
 import { getCurrentUserId } from "@/server/auth/session";
 import { PackageMapper } from "@/server/mappers/package.mapper";
 
+import { PrismaPackageRepository }
+from "@/server/repositories/prisma/prisma-package.repository";
+
+const packageRepository =
+    new PrismaPackageRepository();
+
 export const favoriteService = {
 
   async getMyFavorites() {
 
-    const userId = await getCurrentUserId();
+    const userId =
+        await getCurrentUserId();
 
     const favorites =
-      await favoriteRepository.findByUser(userId);
+        await favoriteRepository.findByUser(userId);
 
-    return favorites.map((favorite) =>
+    const packages = await Promise.all(
 
-      PackageMapper.toDto(
+        favorites.map(favorite =>
 
-        PackageMapper.fromPrisma(
+            packageRepository.findById(
 
-          favorite.package_voyage
+                Number(favorite.id_pack)
+
+            )
 
         )
 
-      )
-
     );
+
+    return packages
+
+        .filter(
+
+            (pkg): pkg is NonNullable<typeof pkg> =>
+                pkg !== null
+
+        )
+
+        .map(pkg =>
+
+            PackageMapper.toDto(pkg)
+
+        );
 
   },
 

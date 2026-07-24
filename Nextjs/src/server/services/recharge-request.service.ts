@@ -274,7 +274,7 @@ export const rechargeRequestService = {
                 crypto.randomUUID(),
 
               type_transac:
-                TRANSACTION_TYPE.TOPUP,
+                TRANSACTION_TYPE.TOP_UP,
 
               statut_transac:
                 TRANSACTION_STATUS.SUCCESS,

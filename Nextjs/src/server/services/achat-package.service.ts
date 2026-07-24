@@ -4,14 +4,11 @@ import crypto from "crypto";
 import { achatPackageRepository }
 from "@/server/repositories/achat-package.repository";
 
-import { packageRepository }
-from "@/server/repositories/package.repository";
+import { PrismaPackageRepository }
+from "@/server/repositories/prisma/prisma-package.repository";
 
 import { walletRepository }
 from "@/server/repositories/wallet.repository";
-
-import { transactionRepository }
-from "@/server/repositories/transaction.repository";
 
 import { getCurrentUserId }
 from "@/server/auth/session";
@@ -44,6 +41,9 @@ import { prisma }
 from "@/server/db/prisma";
 
 
+const packageRepository =
+    new PrismaPackageRepository();
+
 export const achatPackageService = {
 
   async createPurchase(
@@ -66,10 +66,7 @@ export const achatPackageService = {
 
     }
 
-    if (
-      packageData.statut_pack !==
-      PACKAGE_STATUS.ACTIVE
-    ) {
+    if (!packageData.isPublished()) {
 
       throw new Error(
         "Package non disponible"
@@ -78,8 +75,10 @@ export const achatPackageService = {
     }
 
     if (
-      packageData.stock_dispo_pack <
+
+      packageData.getAvailableStock() <
       dto.nbVoyageurs
+
     ) {
 
       throw new Error(
@@ -103,7 +102,7 @@ export const achatPackageService = {
 
     const ownerWallet =
       await walletRepository.findByUserId(
-        Number(packageData.id_user)
+        packageData.ownerId
       );
 
     if (!ownerWallet) {
@@ -212,7 +211,7 @@ export const achatPackageService = {
                 crypto.randomUUID(),
 
               type_transac:
-                TRANSACTION_TYPE.PURCHASE,
+                TRANSACTION_TYPE.PACKAGE_PURCHASE,
 
               statut_transac:
                 TRANSACTION_STATUS.SUCCESS,
@@ -265,7 +264,7 @@ export const achatPackageService = {
                 PURCHASE_STATUS.CONFIRMED,
 
               id_pack:
-                packageData.id_pack,
+                BigInt(packageData.id),
 
               id_user:
                 BigInt(userId),
@@ -292,13 +291,13 @@ export const achatPackageService = {
 
         const newStock = Math.max(
           0,
-          packageData.stock_dispo_pack - dto.nbVoyageurs
+          packageData.getAvailableStock() - dto.nbVoyageurs
         );
 
         await tx.package_voyage.update({
 
           where: {
-            id_pack: packageData.id_pack,
+            id_pack: BigInt(packageData.id),
           },
 
           data: {
@@ -502,12 +501,9 @@ export const achatPackageService = {
     }
 
     const ownerWallet =
-
-      await walletRepository.findByUserId(
-        Number(
-          packageData.id_user
-        )
-      );
+        await walletRepository.findByUserId(
+            packageData.ownerId
+        );
 
     if (!ownerWallet) {
 
@@ -629,15 +625,15 @@ export const achatPackageService = {
           where: {
 
             id_pack:
-              packageData.id_pack,
+              BigInt(packageData.id),
 
           },
 
           data: {
 
-            stock_dispo_pack:
-
-              packageData.stock_dispo_pack + purchase.nb_voyageurs,
+            stock_dispo_pack: {
+                increment: purchase.nb_voyageurs,
+            }
 
           },
 

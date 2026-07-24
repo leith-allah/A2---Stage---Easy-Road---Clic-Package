@@ -1,6 +1,8 @@
 
 export interface UpdateExcursionDto {
 
+  id?: number;
+
   name?: string;
 
   location?: string;

@@ -17,7 +17,7 @@ export default function UserDetailsPage() {
   const [user, setUser] = useState({
     id: 1,
 
-    firstname: "Thomas",
+    FIRSTname: "Thomas",
     lastname: "Dubois",
 
     email:
@@ -105,7 +105,7 @@ export default function UserDetailsPage() {
             {/* INFOS */}
             <div>
               <h1 className="text-5xl font-bold text-blue-600">
-                {user.firstname}
+                {user.FIRSTname}
                 {" "}
                 {user.lastname}
               </h1>

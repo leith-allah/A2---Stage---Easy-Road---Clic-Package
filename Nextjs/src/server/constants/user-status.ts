@@ -1,12 +1,12 @@
 
 export const USER_STATUS = {
 
-  ACTIVE: "ACTIF",
-
-  SUSPENDED: "SUSPENDU",
-
-  PENDING: "EN_ATTENTE" ,
-
-  DELETED: "SUPPRIME",
+  ACTIVE: "ACTIVE",
+  
+  SUSPENDED: "SUSPENDED",
+  
+  PENDING: "PENDING",
+  
+  DELETED: "DELETED",
 
 } as const;

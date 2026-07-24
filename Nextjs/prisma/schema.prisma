@@ -108,41 +108,44 @@ model hotel {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model package_voyage {
-  id_pack                  BigInt          @id @default(autoincrement())
-  mle_pack                 String          @unique @db.VarChar(255)
-  statut_pack              String          @db.VarChar(100)
-  nom_pack                 String          @db.VarChar(255)
-  pays_pack                String          @db.VarChar(50)
-  destination_pack         String          @db.VarChar(50)
-  image_pack               String?         @db.VarChar(255)
-  description_pack         String?
-  date_depart_pack         DateTime        @db.Date
-  date_retour_pack         DateTime        @db.Date
-  prix_base_pack           Decimal         @db.Decimal(10, 2)
-  stock_total_pack         Int
-  stock_dispo_pack         Int
-  date_heure_creation_pack DateTime        @db.Timestamp(6)
-  supp_economy_pack        Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_business_pack       Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_first_pack          Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_single_pack         Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_double_pack         Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_triple_pack         Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_quadruple_pack      Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_suite_pack          Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_bed_only_pack       Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_bed_breakfast_pack  Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_half_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_full_board_pack     Decimal?        @default(0) @db.Decimal(10, 2)
-  supp_all_inclusive_pack  Decimal?        @default(0) @db.Decimal(10, 2)
-  id_user                  BigInt
-  achat_package            achat_package[]
-  favorise                 favorise[]
-  heberge                  heberge[]
-  utilisateur              utilisateur     @relation(fields: [id_user], references: [id_user], onUpdate: NoAction)
-  possede                  possede[]
-  propose                  propose[]
-  utilise                  utilise[]
+  id_pack                   BigInt          @id @default(autoincrement())
+  mle_pack                  String          @unique @db.VarChar(255)
+  statut_pack               String          @db.VarChar(100)
+  nom_pack                  String          @db.VarChar(255)
+  pays_pack                 String          @db.VarChar(50)
+  destination_pack          String          @db.VarChar(50)
+  image_pack                String?         @db.VarChar(255)
+  description_pack          String?
+  date_depart_pack          DateTime        @db.Date
+  date_retour_pack          DateTime        @db.Date
+  prix_base_pack            Decimal         @db.Decimal(10, 2)
+  stock_total_pack          Int
+  stock_dispo_pack          Int
+  date_heure_creation_pack  DateTime        @db.Timestamp(6)
+  supp_economy_pack         Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_business_pack        Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_first_pack           Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_single_pack          Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_double_pack          Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_triple_pack          Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_quadruple_pack       Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_suite_pack           Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_bed_only_pack        Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_bed_breakfast_pack   Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_half_board_pack      Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_full_board_pack      Decimal?        @default(0) @db.Decimal(10, 2)
+  supp_all_inclusive_pack   Decimal?        @default(0) @db.Decimal(10, 2)
+  default_flight_class_pack String          @db.VarChar(50)
+  default_room_type_pack    String          @db.VarChar(50)
+  default_board_type_pack   String          @db.VarChar(50)
+  id_user                   BigInt
+  achat_package             achat_package[]
+  favorise                  favorise[]
+  heberge                   heberge[]
+  utilisateur               utilisateur     @relation(fields: [id_user], references: [id_user], onUpdate: NoAction)
+  possede                   possede[]
+  propose                   propose[]
+  utilise                   utilise[]
 
   @@index([destination_pack], map: "idx_package_destination")
   @@index([statut_pack], map: "idx_package_statut")
@@ -164,6 +167,7 @@ model portefeuille {
 model possede {
   id_vol         BigInt
   id_pack        BigInt
+  ordre          Int            @db.SmallInt
   package_voyage package_voyage @relation(fields: [id_pack], references: [id_pack], onDelete: Cascade, onUpdate: NoAction)
   vol            vol            @relation(fields: [id_vol], references: [id_vol], onDelete: Cascade, onUpdate: NoAction)
 
@@ -255,19 +259,24 @@ model utilise {
 }
 
 model vol {
-  id_vol                   BigInt    @id @default(autoincrement())
-  statut_vol               String    @default("ACTIF") @db.VarChar(50)
-  compagnie_vol            String    @db.VarChar(50)
-  lieu_depart_vol          String    @db.VarChar(50)
-  destination_vol          String    @db.VarChar(50)
-  date_aller_vol           DateTime  @db.Date
-  heure_depart_aller_vol   DateTime  @db.Time(6)
-  heure_arrivee_aller_vol  DateTime  @db.Time(6)
-  date_retour_vol          DateTime? @db.Date
-  heure_depart_retour_vol  DateTime? @db.Time(6)
-  heure_arrivee_retour_vol DateTime? @db.Time(6)
-  num_vol                  String    @db.VarChar(50)
-  possede                  possede[]
+  id_vol                                     BigInt             @id @default(autoincrement())
+  statut_vol                                 String             @default("ACTIVE") @db.VarChar(50)
+  num_vol                                    String             @db.VarChar(10)
+  depart_vol                                 DateTime           @db.Timestamp(6)
+  arrivee_vol                                DateTime           @db.Timestamp(6)
+  id_aeroport_depart                         Int                @db.SmallInt
+  id_aeroport_arrivee                        Int                @db.SmallInt
+  id_compagnie                               Int                @db.SmallInt
+  possede                                    possede[]
+  aeroport_vol_id_aeroport_arriveeToaeroport aeroport           @relation("vol_id_aeroport_arriveeToaeroport", fields: [id_aeroport_arrivee], references: [id_aeroport], onUpdate: NoAction)
+  aeroport_vol_id_aeroport_departToaeroport  aeroport           @relation("vol_id_aeroport_departToaeroport", fields: [id_aeroport_depart], references: [id_aeroport], onUpdate: NoAction)
+  compagnie_aerienne                         compagnie_aerienne @relation(fields: [id_compagnie], references: [id_compagnie], onUpdate: NoAction)
+
+  @@unique([num_vol, depart_vol])
+  @@index([id_aeroport_arrivee], map: "idx_vol_arrivee")
+  @@index([id_compagnie], map: "idx_vol_compagnie")
+  @@index([depart_vol], map: "idx_vol_datetime")
+  @@index([id_aeroport_depart], map: "idx_vol_depart")
 }
 
 model demande_creation_compte {
@@ -293,4 +302,52 @@ model demande_creation_compte {
   @@index([statut_demande_creation], map: "idx_demande_creation_statut")
   @@index([id_bureau], map: "idx_demande_creation_bureau")
   @@index([id_role], map: "idx_demande_creation_role")
+}
+
+model aeroport {
+  id_aeroport                           Int    @id @db.SmallInt
+  code_iata_aeroport                    String @unique @db.Char(3)
+  code_icao_aeroport                    String @unique @db.Char(4)
+  nom_aeroport                          String @db.VarChar(150)
+  latitude_aeroport                     Float
+  longitude_aeroport                    Float
+  id_ville                              Int
+  ville                                 ville  @relation(fields: [id_ville], references: [id_ville], onUpdate: NoAction)
+  vol_vol_id_aeroport_arriveeToaeroport vol[]  @relation("vol_id_aeroport_arriveeToaeroport")
+  vol_vol_id_aeroport_departToaeroport  vol[]  @relation("vol_id_aeroport_departToaeroport")
+
+  @@unique([nom_aeroport, id_ville])
+  @@index([id_ville], map: "idx_aeroport_ville")
+}
+
+model compagnie_aerienne {
+  id_compagnie        Int     @id @db.SmallInt
+  code_iata_compagnie String  @unique @db.Char(2)
+  code_icao_compagnie String  @unique @db.Char(4)
+  nom_compagnie       String  @unique @db.VarChar(100)
+  site_compagnie      String? @db.VarChar(255)
+  vol                 vol[]
+}
+
+model pays {
+  id_pays            Int     @id @db.SmallInt
+  code_iso2_pays     String  @unique @db.Char(2)
+  code_iso3_pays     String  @unique @db.Char(3)
+  nom_pays           String  @unique @db.VarChar(100)
+  indicatif_tel_pays String  @db.VarChar(10)
+  ville              ville[]
+}
+
+model ville {
+  id_ville             Int        @id
+  code_iata_ville      String?    @db.Char(3)
+  nom_ville            String     @db.VarChar(100)
+  latitude_ville       Float
+  longitude_ville      Float
+  fuseau_horaire_ville String     @db.VarChar(50)
+  id_pays              Int        @db.SmallInt
+  aeroport             aeroport[]
+  pays                 pays       @relation(fields: [id_pays], references: [id_pays], onUpdate: NoAction)
+
+  @@index([id_pays], map: "idx_ville_pays")
 }

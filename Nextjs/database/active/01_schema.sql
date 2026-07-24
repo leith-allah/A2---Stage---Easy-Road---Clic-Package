@@ -5,22 +5,95 @@
 -- =========================
 
 -- =========================
+-- TABLES MONDIALES
+-- =========================
+
+CREATE TABLE pays (
+    id_pays SMALLINT PRIMARY KEY,
+
+    code_iso2_pays CHAR(2) NOT NULL UNIQUE,
+    code_iso3_pays CHAR(3) NOT NULL UNIQUE,
+
+    nom_pays VARCHAR(100) NOT NULL UNIQUE,
+
+    indicatif_tel_pays VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE ville (
+    id_ville INTEGER PRIMARY KEY,
+
+    code_iata_ville CHAR(3),
+
+    nom_ville VARCHAR(100) NOT NULL,
+
+    latitude_ville double PRECISION NOT NULL,
+    longitude_ville double PRECISION NOT NULL,
+
+    fuseau_horaire_ville VARCHAR(50) NOT NULL,
+
+    id_pays SMALLINT NOT NULL
+        REFERENCES pays(id_pays)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE aeroport (
+    id_aeroport SMALLINT PRIMARY KEY,
+
+    code_iata_aeroport CHAR(3) NOT NULL UNIQUE,
+    code_icao_aeroport CHAR(4) NOT NULL UNIQUE,
+
+    nom_aeroport VARCHAR(150) NOT NULL,
+
+    latitude_aeroport double PRECISION NOT NULL,
+    longitude_aeroport double PRECISION NOT NULL,
+
+    id_ville INTEGER NOT NULL
+        REFERENCES ville(id_ville)
+        ON DELETE RESTRICT,
+
+    UNIQUE(nom_aeroport, id_ville)
+);
+
+CREATE TABLE compagnie_aerienne (
+    id_compagnie SMALLINT PRIMARY KEY,
+
+    code_iata_compagnie CHAR(2) NOT NULL UNIQUE,
+    code_icao_compagnie CHAR(4) NOT NULL UNIQUE,
+
+    nom_compagnie VARCHAR(100) NOT NULL UNIQUE,
+
+    site_compagnie VARCHAR(255)
+);
+
+-- =========================
 -- TABLES DE BASE
 -- =========================
 
 CREATE TABLE vol (
     id_vol BIGSERIAL PRIMARY KEY,
-    statut_vol VARCHAR(50) NOT NULL DEFAULT 'ACTIF',
-    compagnie_vol VARCHAR(50) NOT NULL,
-    lieu_depart_vol VARCHAR(50) NOT NULL,
-    destination_vol VARCHAR(50) NOT NULL,
-    date_aller_vol DATE NOT NULL,
-    heure_depart_aller_vol TIME NOT NULL,
-    heure_arrivee_aller_vol TIME NOT NULL,
-    date_retour_vol DATE,
-    heure_depart_retour_vol TIME,
-    heure_arrivee_retour_vol TIME,
-    num_vol VARCHAR(50) NOT NULL 
+
+    statut_vol VARCHAR(50) NOT NULL DEFAULT 'ACTIVE',
+
+    num_vol VARCHAR(10) NOT NULL,
+
+    depart_vol TIMESTAMP NOT NULL,
+    arrivee_vol TIMESTAMP NOT NULL,
+
+    id_aeroport_depart SMALLINT NOT NULL
+        REFERENCES aeroport(id_aeroport)
+        ON DELETE RESTRICT,
+
+    id_aeroport_arrivee SMALLINT NOT NULL
+        REFERENCES aeroport(id_aeroport)
+        ON DELETE RESTRICT,
+
+    id_compagnie SMALLINT NOT NULL
+        REFERENCES compagnie_aerienne(id_compagnie)
+        ON DELETE RESTRICT,
+
+    CHECK (depart_vol < arrivee_vol),
+
+    UNIQUE(num_vol, depart_vol)
 );
 
 CREATE TABLE transport (
@@ -227,6 +300,10 @@ CREATE TABLE package_voyage (
     supp_full_board_pack DECIMAL(10,2) DEFAULT 0,
     supp_all_inclusive_pack DECIMAL(10,2) DEFAULT 0,
 
+    default_flight_class_pack VARCHAR(50) NOT NULL,
+    default_room_type_pack VARCHAR(50) NOT NULL,
+    default_board_type_pack VARCHAR(50) NOT NULL,
+
     id_user BIGINT NOT NULL
     REFERENCES utilisateur(id_user)
     ON DELETE RESTRICT,
@@ -268,6 +345,7 @@ CREATE TABLE achat_package (
 CREATE TABLE possede (
     id_vol BIGINT REFERENCES vol(id_vol) ON DELETE CASCADE,
     id_pack BIGINT REFERENCES package_voyage(id_pack) ON DELETE CASCADE,
+    ordre SMALLINT NOT NULL,
     PRIMARY KEY (id_vol, id_pack)
 );
 

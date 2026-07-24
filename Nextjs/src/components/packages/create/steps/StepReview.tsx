@@ -2,59 +2,249 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { useState } from "react";
 
+import { usePackageWizard } from "@/context/usePackageWizard";
 
-interface Props{
+import FormSection from "@/components/packages/create/ui/FormSection";
 
-    data:any;
 
-    previous:()=>void;
+export default function StepReview() {
 
-}
+    const {
 
-export default function StepReview({
+        data,
 
-    data,
+        previous,
 
-    previous
-
-}:Props){
+    } = usePackageWizard();
 
     const [loading, setLoading] = useState(false);
 
-    const router=useRouter();
+    const router = useRouter();
+
+    const pack = data.package;
+
+    const flight = data.flights[0];
+
+    const hotel = data.hotels[0];
+
+    const transport = data.transports[0];
+
+    const excursion = data.excursions[0];
+
+    const flightSupplements = [
+        {
+            label: "Economy",
+            value: data.supplements.ECONOMY,
+        },
+        {
+            label: "Business",
+            value: data.supplements.BUSINESS,
+        },
+        {
+            label: "First",
+            value: data.supplements.FIRST,
+        },
+    ];
+
+    const roomSupplements = [
+        {
+            label: "Single",
+            value: data.supplements.SINGLE,
+        },
+        {
+            label: "Double",
+            value: data.supplements.DOUBLE,
+        },
+        {
+            label: "Triple",
+            value: data.supplements.TRIPLE,
+        },
+        {
+            label: "Quadruple",
+            value: data.supplements.QUADRUPLE,
+        },
+        {
+            label: "Suite",
+            value: data.supplements.SUITE,
+        },
+    ];
+
+    const boardSupplements = [
+        {
+            label: "Bed Only",
+            value: data.supplements.BED_ONLY,
+        },
+        {
+            label: "Bed & Breakfast",
+            value: data.supplements.BED_BREAKFAST,
+        },
+        {
+            label: "Half Board",
+            value: data.supplements.HALF_BOARD,
+        },
+        {
+            label: "Full Board",
+            value: data.supplements.FULL_BOARD,
+        },
+        {
+            label: "All Inclusive",
+            value: data.supplements.ALL_INCLUSIVE,
+        },
+    ];
 
     const packagePrice =
-        Number(data.package?.basePrice ?? 0);
+        Number(pack.basePrice ?? 0);
 
-    const total =
-        packagePrice;
+    const formatDate = (date?: string | null) =>
+        date
+            ? new Date(date).toLocaleDateString("fr-FR")
+            : "-";
     
+    function renderSupplements(
+        supplements: {
+            label: string;
+            value: number;
+        }[]
+    ) {
+
+        const active = supplements.filter(
+            supplement => supplement.value > 0
+        );
+
+        if (active.length === 0) {
+
+            return (
+
+                <p className="italic text-gray-500">
+
+                    Aucun supplément disponible.
+
+                </p>
+
+            );
+
+        }
+
+        return active.map(supplement => (
+
+            <p key={supplement.label}>
+
+                ✓ <b>{supplement.label}</b> : +{supplement.value} DZD
+
+            </p>
+
+        ));
+
+    }
+
     const validatePackage = async () => {
 
         try {
 
             setLoading(true);
 
-            const response = await fetch("/api/packages", {
+            const dto = {
 
-                method: "POST",
+                package: {
 
-                headers: {
-
-                    "Content-Type": "application/json",
+                    ...data.package,
 
                 },
 
-                body: JSON.stringify(data),
+                supplements: {
+                    ...data.supplements,
+                },
 
-            });
+                flights: data.flights.map(flight => ({
+
+                    status: flight.status,
+
+                    flightNumber: flight.flightNumber,
+
+                    departureDateTime: flight.departureDateTime,
+
+                    arrivalDateTime: flight.arrivalDateTime,
+
+                    airlineId:
+
+                        flight.airline!.id,
+
+                    departureAirportId:
+
+                        flight.departureAirport!.id,
+
+                    arrivalAirportId:
+
+                        flight.arrivalAirport!.id,
+
+                })),
+
+                hotels: data.hotels.map(hotel => ({
+
+                    name: hotel.name,
+
+                    stars: hotel.stars,
+
+                    country: hotel.country,
+
+                    city: hotel.city,
+
+                    address: hotel.address,
+
+                })),
+
+                transports: data.transports.map(transport => ({
+
+                    route: transport.route,
+
+                    company: transport.company,
+
+                })),
+
+                excursions: data.excursions.map(excursion => ({
+
+                    name: excursion.name,
+
+                    location: excursion.location,
+
+                    description: excursion.description,
+
+                })),
+
+            };
+
+            console.log(
+                "DTO envoyé",
+                JSON.stringify(dto, null, 2)
+            );
+
+            const response = await fetch(
+
+                "/api/packages",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type": "application/json",
+
+                    },
+
+                    body: JSON.stringify(dto),
+
+                }
+
+            );
 
             if (!response.ok) {
 
-                throw new Error("Erreur création package");
+                const error = await response.json();
+
+                throw new Error(error.message);
 
             }
 
@@ -62,15 +252,31 @@ export default function StepReview({
 
             alert("Package créé avec succès !");
 
-            router.push(`/dashboard/admin/packages/${result.id}`);
+            router.push(
 
-        } catch (error) {
+                `/dashboard/admin/packages/${result.id}`
+
+            );
+
+        }
+
+        catch (error) {
 
             console.error(error);
 
-            alert("Impossible de créer le package");
+            alert(
 
-        } finally {
+                error instanceof Error
+
+                    ? error.message
+
+                    : "Erreur"
+
+            );
+
+        }
+
+        finally {
 
             setLoading(false);
 
@@ -90,137 +296,174 @@ export default function StepReview({
 
             {/* PACKAGE */}
 
-            <div className="rounded-lg border p-6">
+            <FormSection title="Package">
 
-                <h3 className="font-bold text-lg mb-4">
+                <p><b>Nom :</b> {pack.name}</p>
 
-                    Package
+                <p><b>Pays :</b> {pack.country}</p>
 
-                </h3>
+                <p><b>Destination :</b> {pack.destination}</p>
 
-                <p><b>Nom :</b> {data.package?.name}</p>
-                <p><b>Pays :</b> {data.package?.country}</p>
-                <p><b>Destination :</b> {data.package?.destination}</p>
-                <p><b>Description :</b> {data.package?.description}</p>
-                <p><b>Image :</b> {data.package?.image}</p>
-                <p><b>Date Aller :</b> {data.package?.departureDate}</p>
-                <p><b>Date Retour :</b> {data.package?.returnDate}</p>
-                <p><b>Places :</b> {data.package?.availableSeats}</p>
+                <p><b>Description :</b> {pack.description || "-"}</p>
 
-            </div>
+                <p><b>Image :</b> {pack.image || "-"}</p>
+
+
+                <p>
+                    <b>Date aller :</b>{" "}
+                    {formatDate(pack.departureDate)}
+                </p>
+
+                <p>
+                    <b>Date retour :</b>{" "}
+                    {formatDate(pack.returnDate)}
+                </p>
+
+                <p>
+                    <b>Stock total :</b>{" "}
+                    {pack.totalStock} places
+                </p>
+
+            </FormSection>
 
             {/* VOL */}
 
-            <div className="rounded-lg border p-6">
+            <FormSection title="Vol">
 
-                <h3 className="font-bold text-lg mb-4">
-                    Vol
-                </h3>
+                <p><b>Statut :</b> {flight?.status}</p>
 
-                <p><b>Compagnie :</b> {data.flights[0]?.airline}</p>
+                <p><b>Numéro :</b> {flight?.flightNumber}</p>
 
-                <p><b>Numéro :</b> {data.flights[0]?.flightNumber}</p>
+                <p>
+                    <b>Compagnie :</b>{" "}
+                    {flight?.airline?.name ?? "-"}
+                </p>
 
-                <p><b>Départ :</b> {data.flights[0]?.departureLocation}</p>
+                <p>
+                    <b>Aéroport de départ :</b>{" "}
+                    {flight?.departureAirport?.name ?? "-"}
+                </p>
 
-                <p><b>Destination :</b> {data.flights[0]?.destination}</p>
+                <p>
+                    <b>Aéroport d'arrivée :</b>{" "}
+                    {flight?.arrivalAirport?.name ?? "-"}
+                </p>
 
-                <hr className="my-3"/>
 
-                <p><b>Date Aller :</b> {data.flights[0]?.departureDate}</p>
+                <p>
+                    <b>Départ :</b>{" "}
+                    {flight?.departureDateTime
+                        ? new Date(flight.departureDateTime).toLocaleString("fr-FR")
+                        : "-"}
+                </p>
 
-                <p><b>Heure Départ Aller :</b> {data.flights[0]?.departureTime}</p>
+                <p>
+                    <b>Arrivée :</b>{" "}
+                    {flight?.arrivalDateTime
+                        ? new Date(flight.arrivalDateTime).toLocaleString("fr-FR")
+                        : "-"}
+                </p>
 
-                <p><b>Heure Arrivée Aller :</b> {data.flights[0]?.arrivalTime}</p>
 
-                <hr className="my-3"/>
+                <p>
+                    <b>Classe par défaut :</b>{" "}
+                    {data.supplements.defaultFlightClass}
+                </p>
 
-                <p><b>Date Retour :</b> {data.flights[0]?.returnDate}</p>
 
-                <p><b>Heure Départ Retour :</b> {data.flights[0]?.returnDepartureTime}</p>
+                <h4 className="font-semibold">
+                    Suppléments de vol
+                </h4>
 
-                <p><b>Heure Arrivée Retour :</b> {data.flights[0]?.returnArrivalTime}</p>
+                {renderSupplements(flightSupplements)}
 
-            </div>
+            </FormSection>
 
             {/* HOTEL */}
 
-            <div className="rounded-lg border p-6">
+            <FormSection title="Hôtel">
 
-                <h3 className="font-bold text-lg mb-4">
+                <p><b>Nom :</b> {hotel?.name}</p>
+                <p><b>Pays :</b> {hotel?.country}</p>
+                <p><b>Ville :</b> {hotel?.city}</p>
+                <p><b>Etoiles :</b> {hotel?.stars} ⭐</p>
+                <p><b>Adresse :</b> {hotel?.address}</p>
 
-                    Hôtel
 
-                </h3>
+                <p>
+                <b>Chambre par défaut :</b>{" "}
+                    {data.supplements.defaultRoomType}
+                </p>
 
-                <p><b>Nom :</b> {data.hotels[0]?.name}</p>
-                <p><b>Pays :</b> {data.hotels[0]?.country}</p>
-                <p><b>Ville :</b> {data.hotels[0]?.city}</p>
-                <p><b>Etoiles :</b> {data.hotels[0]?.stars} ⭐</p>
-                <p><b>Adresse :</b> {data.hotels[0]?.address}</p>
+                <p>
+                <b>Pension par défaut :</b>{" "}
+                    {data.supplements.defaultBoardType}
+                </p>
 
-            </div>
+
+                <h4 className="font-semibold">
+                    Suppléments Chambre
+                </h4>
+
+                {renderSupplements(roomSupplements)}
+
+
+                <h4 className="font-semibold">
+                    Suppléments Pension
+                </h4>
+
+                {renderSupplements(boardSupplements)}
+
+            </FormSection>
 
             {/* TRANSPORT */}
 
-            <div className="rounded-lg border p-6">
+            <FormSection title="Transport">
 
-                <h3 className="font-bold text-lg mb-4">
+                <p><b>Trajet :</b> {transport?.route}</p>
+                <p><b>Société :</b> {transport?.company}</p>
 
-                    Transport
-
-                </h3>
-
-                <p><b>Trajet :</b> {data.transports[0]?.route}</p>
-                <p><b>Société :</b> {data.transports[0]?.company}</p>
-
-            </div>
+            </FormSection>
 
             {/* EXCURSION */}
 
-            <div className="rounded-lg border p-6">
+            <FormSection title="Excursion">
 
-                <h3 className="font-bold text-lg mb-4">
+                <p><b>Nom :</b> {excursion?.name}</p>
+                <p><b>Lieu :</b> {excursion?.location}</p>
+                <p><b>Description :</b> {excursion?.description}</p>
 
-                    Excursion
-
-                </h3>
-
-                <p><b>Nom :</b> {data.excursions[0]?.name}</p>
-                <p><b>Lieu :</b> {data.excursions[0]?.location}</p>
-                <p>{data.excursions[0]?.description}</p>
-
-            </div>
+            </FormSection>
 
             {/* PRIX */}
 
-            <div className="rounded-lg border-2 border-primary p-6">
+            <FormSection title="Prix">
 
-                <h3 className="text-xl font-bold">
+                <div className="flex items-center justify-between">
 
-                    Prix
+                    <span className="font-medium">
 
-                </h3>
+                        Prix de base du package
 
-                <div className="mt-3 flex justify-between">
+                    </span>
 
-                    <span>Prix du Package</span>
+                    <span className="text-2xl font-bold text-primary">
 
-                    <span>{packagePrice} DZD</span>
+                        {packagePrice.toLocaleString("fr-FR")} DZD
 
-                </div>
-
-                <hr className="my-3"/>
-
-                <div className="flex justify-between text-2xl font-bold">
-
-                    <span>Total</span>
-
-                    <span>{total} DZD</span>
+                    </span>
 
                 </div>
 
-            </div>
+                <p className="text-sm text-gray-500 italic">
+
+                    Les suppléments affichés ci-dessus seront appliqués
+                    uniquement lors de la réservation selon les choix
+                    du client (classe de vol, chambre, pension).
+
+                </p>
+
+            </FormSection>
 
             <div className="flex justify-between">
 

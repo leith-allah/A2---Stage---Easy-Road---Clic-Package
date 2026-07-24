@@ -1,202 +1,227 @@
 
 "use client";
 
+import { usePackageWizard } from "@/context/usePackageWizard";
 import { useWizardUpdater } from "@/hooks/useWizardUpdater";
 
+import { useAirlines } from "@/hooks/useAirlines";
+import { useAirports } from "@/hooks/useAirports";
 
-interface Props {
-  data: any;
-  setData: any;
-  next: () => void;
-  previous: () => void;
-}
+import FlightCard from "./flight/FlightCard";
 
-export default function StepFlight({
-  data,
-  setData,
-  next,
-  previous,
-}: Props) {
+import StepNavigation from "@/components/packages/create/ui/StepNavigation";
 
-  function handleNext() {
-    next();
-  }
+import { useWizardValidation } from "@/hooks/useWizardValidation";
 
-  const { updateItem } =
-    useWizardUpdater(setData);
+import { createEmptyFlight } from "@/types/package/defaults";
 
-  return (
 
-    <div className="space-y-6">
+export default function StepFlight() {
 
-      <h2 className="text-2xl font-bold">
-        Informations du Vol
-      </h2>
+    const {
+        data,
+        setData,
+        next,
+        previous,
+    } = usePackageWizard();
 
-      <div className="grid grid-cols-2 gap-4">
+    const {
+        updateFlight,
+    } = useWizardUpdater(setData);
 
-        <input
-            placeholder="Compagnie"
-            value={data.flights[0].airline}
-            onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "airline",
-                    e.target.value
-                )
-            }
-            className="border rounded p-2"
-        />
+    const {
+        errors,
+        canGoNext,
+    } = useWizardValidation();
 
-        <input
-            placeholder="Numéro de vol"
-            value={data.flights[0].flightNumber}
-            onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "flightNumber",
-                    e.target.value
-                )
-            }
-            className="border rounded p-2"
-        />
+    const flightErrors = errors.flights;
 
-        <input
-          placeholder="Lieu de départ"
-          value={data.flights[0].departureLocation}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "departureLocation",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+    const {
+        airlines,
+        loading: loadingAirlines,
+    } = useAirlines();
 
-        <input
-          placeholder="Destination"
-          value={data.flights[0].destination}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "destination",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+    const {
+        airports,
+        loading: loadingAirports,
+    } = useAirports();
 
-        <input
-          type="date"
-          value={data.flights[0].departureDate}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "departureDate",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+    function addFlight() {
 
-        <input
-          type="time"
-          value={data.flights[0].departureTime}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "departureTime",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+        setData(previous => ({
 
-        <input
-          type="time"
-          value={data.flights[0].arrivalTime}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "arrivalTime",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+            ...previous,
 
-        <input
-          type="date"
-          value={data.flights[0].returnDate}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "returnDate",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+            flights: [
 
-        <input
-          type="time"
-          value={data.flights[0].returnDepartureTime}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "returnDepartureTime",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+                ...previous.flights,
 
-        <input
-          type="time"
-          value={data.flights[0].returnArrivalTime}
-          onChange={(e)=>
-                updateItem(
-                    "flights",
-                    0,
-                    "returnArrivalTime",
-                    e.target.value
-                )
-          }
-          className="border rounded p-2"
-        />
+                createEmptyFlight(),
 
-      </div>
+            ],
 
-      <div className="flex justify-between">
+        }));
 
-        <button
-          onClick={previous}
-          className="px-4 py-2 bg-gray-200 rounded"
-        >
-          Retour
-        </button>
+    }
 
-        <button
-          onClick={handleNext}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
-          Continuer
-        </button>
+    function duplicateFlight(index: number) {
 
-      </div>
+        setData(previous => {
 
-    </div>
+            const flights = [...previous.flights];
 
-  );
+            flights.splice(index + 1, 0, {
+
+                ...previous.flights[index],
+
+            });
+
+            return {
+
+                ...previous,
+
+                flights,
+
+            };
+
+        });
+
+    }
+
+    function removeFlight(index: number) {
+
+        if (data.flights.length === 1) return;
+
+        setData(previous => ({
+
+            ...previous,
+
+            flights: previous.flights.filter(
+
+                (_, i) => i !== index,
+
+            ),
+
+        }));
+
+    }
+
+    function handleNext() {
+
+        if (!canGoNext()) return;
+
+        next();
+
+    }
+
+    return (
+
+        <div className="space-y-8">
+
+            <h2 className="text-2xl font-bold">
+
+                Informations des vols
+
+            </h2>
+
+
+            {data.flights.map((flight, index) => (
+
+                <FlightCard
+
+                    key={index}
+
+                    index={index}
+
+                    flight={flight}
+
+                    errors={flightErrors[index]}
+
+                    airlines={airlines}
+
+                    airports={airports}
+
+                    loadingAirlines={loadingAirlines}
+
+                    loadingAirports={loadingAirports}
+
+                    defaultFlightClass={flight.supplement.defaultFlightClass}
+
+                    ECONOMYPrice={flight.supplement.ECONOMY}
+
+                    BUSINESSPrice={flight.supplement.BUSINESS}
+
+                    FIRSTPrice={flight.supplement.FIRST}
+
+                    onFlightChange={(field, value) =>
+                        updateFlight(index, field, value)
+                    }
+
+                    onDefaultClassChange={(value) =>
+                        updateFlight(index, "supplement", {
+                            ...flight.supplement,
+                            defaultFlightClass: value,
+                        })
+                    }
+
+                    onEconomyPriceChange={(value) =>
+                        updateFlight(index, "supplement", {
+                            ...flight.supplement,
+                            ECONOMY: value,
+                        })
+                    }
+
+                    onBusinessPriceChange={(value) =>
+                        updateFlight(index, "supplement", {
+                            ...flight.supplement,
+                            BUSINESS: value,
+                        })
+                    }
+
+                    onFirstPriceChange={(value) =>
+                        updateFlight(index, "supplement", {
+                            ...flight.supplement,
+                            FIRST: value,
+                        })
+                    }
+
+                    onDuplicate={() =>
+                        duplicateFlight(index)
+                    }
+
+                    onDelete={() =>
+                        removeFlight(index)
+                    }
+
+                    canDelete={data.flights.length > 1}
+
+                />
+
+            ))}
+
+
+            <div className="flex justify-center">
+
+                <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={addFlight}
+                >
+                    + Ajouter un vol
+                </button>
+
+            </div>
+
+            <hr className="my-6" />
+
+            <StepNavigation
+                onPrevious={previous}
+                onNext={handleNext}
+                nextDisabled={!canGoNext()}
+            />
+
+        </div>
+
+    );
 
 }

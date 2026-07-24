@@ -1,7 +1,7 @@
 
 export interface UpdateMyProfileDto {
 
-  firstName?: string;
+  FIRSTName?: string;
 
   lastName?: string;
 

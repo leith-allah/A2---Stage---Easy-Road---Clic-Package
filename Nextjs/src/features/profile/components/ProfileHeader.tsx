@@ -89,7 +89,7 @@ async function supprimerCompte() {
         "
       >
 
-        {user.firstName.charAt(0)}
+        {user.FIRSTName.charAt(0)}
 
       </div>
 
@@ -97,7 +97,7 @@ async function supprimerCompte() {
 
         <h1 className="text-4xl font-bold">
 
-          {user.firstName} {user.lastName}
+          {user.FIRSTName} {user.lastName}
 
         </h1>
 

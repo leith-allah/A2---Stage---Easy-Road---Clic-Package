@@ -1,40 +1,35 @@
 
 import { z } from "zod";
 
+import {
+  FlightStatusValue,
+} from "@/server/entities/value-objects/flight-status.value-object";
+
 export const createFlightSchema = z.object({
 
-  airline:
-    z.string().min(2).max(50),
-
-  departureLocation:
-    z.string().min(2).max(50),
-
-  destination:
-    z.string().min(2).max(50),
-
-  departureDate:
-    z.coerce.date(),
-
-  departureTime:
-    z.coerce.date(),
-
-  arrivalTime:
-    z.coerce.date(),
-
-  returnDate:
-    z.coerce.date().nullable().optional(),
-
-  returnDepartureTime:
-    z.coerce.date().nullable().optional(),
-
-  returnArrivalTime:
-    z.coerce.date().nullable().optional(),
+  status: z.nativeEnum(FlightStatusValue).default(
+    FlightStatusValue.ACTIVE,
+  ),
 
   flightNumber:
     z.string().min(2).max(50),
+
+  departureDateTime:
+    z.string().datetime(),
+
+  arrivalDateTime:
+    z.string().datetime(),
+
+  departureAirportId:
+    z.number().int().positive(),
+
+  arrivalAirportId:
+    z.number().int().positive(),
+
+  airlineId:
+    z.number().int().positive(),
 
 });
 
 export type CreateFlightInput =
   z.infer<typeof createFlightSchema>;
-  

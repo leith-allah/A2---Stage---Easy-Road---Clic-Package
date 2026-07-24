@@ -1,0 +1,14 @@
+
+export const BOARD_TYPE = {
+
+  BED_ONLY: "BED_ONLY",
+  
+  BED_BREAKFAST: "BED_BREAKFAST",
+  
+  HALF_BOARD: "HALF_BOARD",
+  
+  FULL_BOARD: "FULL_BOARD",
+  
+  ALL_INCLUSIVE: "ALL_INCLUSIVE",
+
+} as const;

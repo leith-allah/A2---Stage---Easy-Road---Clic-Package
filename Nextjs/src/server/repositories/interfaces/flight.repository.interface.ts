@@ -1,5 +1,6 @@
 
 import { Flight } from "@/server/entities/flight.entity";
+import { FlightAggregate } from "@/server/aggregates/flight.aggregate";
 
 export interface FlightRepository {
 
@@ -10,11 +11,11 @@ export interface FlightRepository {
   ): Promise<Flight | null>;
 
   createAggregate(
-    flight: Flight,
+    aggregate: FlightAggregate,
   ): Promise<Flight>;
 
   updateAggregate(
-    flight: Flight,
+    aggregate: FlightAggregate,
   ): Promise<Flight>;
 
   delete(

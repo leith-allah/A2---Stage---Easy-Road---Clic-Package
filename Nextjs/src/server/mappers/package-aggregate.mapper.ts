@@ -1,41 +1,24 @@
 
 import { PackageAggregate }
-
 from "@/server/aggregates/package.aggregate";
 
-import {
-
-  PackagePersistence,
-
-}
-
+import {PackagePersistence}
 from "@/server/persistence/package.persistence";
 
-import {
-
-  Supplements,
-
-}
-
+import {Supplements}
 from "@/server/entities/value-objects/supplements.value-object";
 
-import {
-
-  PackageStock,
-
-}
-
+import {PackageStock}
 from "@/server/entities/value-objects/package-stock.value-object";
 
 import {
-
   PackageStatus,
-
   PackageStatusValue,
-
 }
-
 from "@/server/entities/value-objects/package-status.value-object";
+
+
+
 
 export class PackageAggregateMapper {
 
@@ -75,35 +58,41 @@ export class PackageAggregateMapper {
 
       status: aggregate.getStatus(),
 
+      defaultFlightClass: aggregate.defaultFlightClass,
+
+      defaultRoomType: aggregate.defaultRoomType,
+
+      defaultBoardType: aggregate.defaultBoardType,
+
       ownerId: aggregate.ownerId,
 
       supplements: {
 
-        economy: aggregate.supplements.economy,
+        ECONOMY: aggregate.supplements.ECONOMY,
 
-        business: aggregate.supplements.business,
+        BUSINESS: aggregate.supplements.BUSINESS,
 
-        first: aggregate.supplements.first,
+        FIRST: aggregate.supplements.FIRST,
 
-        single: aggregate.supplements.single,
+        SINGLE: aggregate.supplements.SINGLE,
 
-        double: aggregate.supplements.double,
+        DOUBLE: aggregate.supplements.DOUBLE,
 
-        triple: aggregate.supplements.triple,
+        TRIPLE: aggregate.supplements.TRIPLE,
 
-        quadruple: aggregate.supplements.quadruple,
+        QUADRUPLE: aggregate.supplements.QUADRUPLE,
 
-        suite: aggregate.supplements.suite,
+        SUITE: aggregate.supplements.SUITE,
 
-        bedOnly: aggregate.supplements.bedOnly,
+        BED_ONLY: aggregate.supplements.BED_ONLY,
 
-        bedBreakfast: aggregate.supplements.bedBreakfast,
+        BED_BREAKFAST: aggregate.supplements.BED_BREAKFAST,
 
-        halfBoard: aggregate.supplements.halfBoard,
+        HALF_BOARD: aggregate.supplements.HALF_BOARD,
 
-        fullBoard: aggregate.supplements.fullBoard,
+        FULL_BOARD: aggregate.supplements.FULL_BOARD,
 
-        allInclusive: aggregate.supplements.allInclusive,
+        ALL_INCLUSIVE: aggregate.supplements.ALL_INCLUSIVE,
 
       },
 
@@ -165,33 +154,39 @@ export class PackageAggregateMapper {
 
       new Supplements(
 
-        persistence.supplements.economy,
+        persistence.supplements.ECONOMY,
 
-        persistence.supplements.business,
+        persistence.supplements.BUSINESS,
 
-        persistence.supplements.first,
+        persistence.supplements.FIRST,
 
-        persistence.supplements.single,
+        persistence.supplements.SINGLE,
 
-        persistence.supplements.double,
+        persistence.supplements.DOUBLE,
 
-        persistence.supplements.triple,
+        persistence.supplements.TRIPLE,
 
-        persistence.supplements.quadruple,
+        persistence.supplements.QUADRUPLE,
 
-        persistence.supplements.suite,
+        persistence.supplements.SUITE,
 
-        persistence.supplements.bedOnly,
+        persistence.supplements.BED_ONLY,
 
-        persistence.supplements.bedBreakfast,
+        persistence.supplements.BED_BREAKFAST,
 
-        persistence.supplements.halfBoard,
+        persistence.supplements.HALF_BOARD,
 
-        persistence.supplements.fullBoard,
+        persistence.supplements.FULL_BOARD,
 
-        persistence.supplements.allInclusive,
+        persistence.supplements.ALL_INCLUSIVE,
 
       ),
+
+      persistence.defaultFlightClass,
+
+      persistence.defaultRoomType,
+
+      persistence.defaultBoardType,
 
       persistence.ownerId,
 

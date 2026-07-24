@@ -29,7 +29,7 @@ export const authService = {
 
     nin: string;
 
-    firstName: string;
+    FIRSTName: string;
 
     lastName: string;
 
@@ -84,7 +84,7 @@ export const authService = {
                   data.lastName,
 
                 prenom_user:
-                  data.firstName,
+                  data.FIRSTName,
 
                 ddn_user:
                   new Date(
@@ -186,7 +186,7 @@ export const authService = {
         email:
           user.email_pro_user,
 
-        firstName:
+        FIRSTName:
           user.prenom_user,
 
         lastName:

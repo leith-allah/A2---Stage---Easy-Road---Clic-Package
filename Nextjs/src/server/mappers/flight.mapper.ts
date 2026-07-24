@@ -1,139 +1,100 @@
 
 import { Flight } from "@/server/entities/flight.entity";
 
-import { FlightDto }
-from "@/server/dto/flight/flight.dto";
+import { FlightDto } from "@/server/dto/flight/flight.dto";
+
+import { FlightPersistence } from "@/server/persistence/flight.persistence";
+
+import {
+  FlightStatus,
+  FlightStatusValue,
+} from "@/server/entities/value-objects/flight-status.value-object";
+
+import { AirlineMapper } from "./airline.mapper";
+import { AirportMapper } from "./airport.mapper";
 
 export class FlightMapper {
 
-  static toEntity(prismaFlight: {
-
-    id_vol: bigint;
-
-    compagnie_vol: string;
-
-    lieu_depart_vol: string;
-
-    destination_vol: string;
-
-    date_aller_vol: Date;
-
-    heure_depart_aller_vol: Date;
-
-    heure_arrivee_aller_vol: Date;
-
-    date_retour_vol: Date | null;
-
-    heure_depart_retour_vol: Date | null;
-
-    heure_arrivee_retour_vol: Date | null;
-
-    num_vol: string;
-
-  }): Flight {
+  static toEntity(
+    persistence: FlightPersistence,
+  ): Flight {
 
     return new Flight(
 
-      Number(prismaFlight.id_vol),
+      Number(persistence.id_vol),
 
-      prismaFlight.compagnie_vol,
+      new FlightStatus(
+        persistence.statut_vol as FlightStatusValue,
+      ),
 
-      prismaFlight.lieu_depart_vol,
+      persistence.num_vol,
 
-      prismaFlight.destination_vol,
+      persistence.depart_vol,
 
-      prismaFlight.date_aller_vol,
+      persistence.arrivee_vol,
 
-      prismaFlight.heure_depart_aller_vol,
+      AirportMapper.toEntity(
+        persistence.aeroport_vol_id_aeroport_departToaeroport,
+      ),
 
-      prismaFlight.heure_arrivee_aller_vol,
+      AirportMapper.toEntity(
+        persistence.aeroport_vol_id_aeroport_arriveeToaeroport,
+      ),
 
-      prismaFlight.date_retour_vol,
-
-      prismaFlight.heure_depart_retour_vol,
-
-      prismaFlight.heure_arrivee_retour_vol,
-
-      prismaFlight.num_vol,
+      AirlineMapper.toEntity(
+        persistence.compagnie_aerienne,
+      ),
 
     );
 
   }
 
   static toEntities(
-
-    flights: {
-
-      id_vol: bigint;
-
-      compagnie_vol: string;
-
-      lieu_depart_vol: string;
-
-      destination_vol: string;
-
-      date_aller_vol: Date;
-
-      heure_depart_aller_vol: Date;
-
-      heure_arrivee_aller_vol: Date;
-
-      date_retour_vol: Date | null;
-
-      heure_depart_retour_vol: Date | null;
-
-      heure_arrivee_retour_vol: Date | null;
-
-      num_vol: string;
-
-    }[]
-
+    persistences: FlightPersistence[],
   ): Flight[] {
 
-    return flights.map(
-
-      flight => FlightMapper.toEntity(flight)
-
+    return persistences.map(
+      (persistence) => FlightMapper.toEntity(persistence),
     );
 
   }
 
   static toDto(
-    flight: Flight
+    flight: Flight,
   ): FlightDto {
 
     return {
 
-      id: flight.id,
+      id: flight.getId(),
 
-      airline: flight.airline,
+      status: flight.getStatus().getValue(),
 
-      departureLocation: flight.departureLocation,
+      flightNumber: flight.getFlightNumber(),
 
-      destination: flight.destination,
+      departureDateTime:
+        flight
+          .getDepartureDateTime()
+          .toISOString(),
 
-      departureDate: flight.departureDate.toISOString(),
+      arrivalDateTime:
+        flight
+          .getArrivalDateTime()
+          .toISOString(),
 
-      departureTime: flight.departureTime.toISOString(),
+      airline:
+        AirlineMapper.toDto(
+          flight.getAirline(),
+        ),
 
-      arrivalTime: flight.arrivalTime.toISOString(),
+      departureAirport:
+        AirportMapper.toDto(
+          flight.getDepartureAirport(),
+        ),
 
-      returnDate:
-        flight.returnDate
-          ? flight.returnDate.toISOString()
-          : null,
-
-      returnDepartureTime:
-        flight.returnDepartureTime
-          ? flight.returnDepartureTime.toISOString()
-          : null,
-
-      returnArrivalTime:
-        flight.returnArrivalTime
-          ? flight.returnArrivalTime.toISOString()
-          : null,
-
-      flightNumber: flight.flightNumber,
+      arrivalAirport:
+        AirportMapper.toDto(
+          flight.getArrivalAirport(),
+        ),
 
     };
 

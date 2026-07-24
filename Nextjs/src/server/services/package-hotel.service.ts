@@ -1,7 +1,4 @@
 
-import { packageRepository }
-from "@/server/repositories/package.repository";
-
 import { hotelRepository }
 from "@/server/repositories/hotel.repository";
 
@@ -10,6 +7,12 @@ from "@/server/repositories/package-hotel.repository";
 
 import { NotFoundException }
 from "@/server/exceptions/not-found.exception";
+
+import { PrismaPackageRepository }
+from "@/server/repositories/prisma/prisma-package.repository";
+
+const packageRepository =
+    new PrismaPackageRepository();
 
 export const packageHotelService = {
 

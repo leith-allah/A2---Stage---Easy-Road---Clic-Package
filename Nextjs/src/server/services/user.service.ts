@@ -179,7 +179,7 @@ async updateMyProfile(
   userId: number,
   data: {
 
-    firstName?: string;
+    FIRSTName?: string;
 
     lastName?: string;
 
@@ -196,7 +196,7 @@ async updateMyProfile(
     {
 
       prenom_user:
-        data.firstName,
+        data.FIRSTName,
 
       nom_user:
         data.lastName,

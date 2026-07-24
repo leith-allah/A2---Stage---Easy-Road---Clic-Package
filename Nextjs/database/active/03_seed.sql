@@ -1,5 +1,124 @@
 
 -- =========================
+-- TABLES MONDIALES
+-- =========================
+
+-- =========================
+-- PAYS
+-- =========================
+
+INSERT INTO pays (
+    id_pays,
+    code_iso2_pays,
+    code_iso3_pays,
+    nom_pays,
+    indicatif_tel_pays
+)
+VALUES
+(1,'DZ','DZA','Algérie','+213'),
+(2,'FR','FRA','France','+33'),
+(3,'AE','ARE','Émirats Arabes Unis','+971'),
+(4,'TR','TUR','Turquie','+90'),
+(5,'IT','ITA','Italie','+39'),
+(6,'ES','ESP','Espagne','+34'),
+(7,'MV','MDV','Maldives','+960');
+
+-- =========================
+-- VILLES
+-- =========================
+
+INSERT INTO ville (
+    id_ville,
+    nom_ville,
+    latitude_ville,
+    longitude_ville,
+    fuseau_horaire_ville,
+    id_pays
+)
+VALUES
+(1,'Alger',36.7538,3.0588,'Africa/Algiers',1),
+(2,'Paris',48.8566,2.3522,'Europe/Paris',2),
+(3,'Dubai',25.2048,55.2708,'Asia/Dubai',3),
+(4,'Istanbul',41.0082,28.9784,'Europe/Istanbul',4),
+(5,'Rome',41.9028,12.4964,'Europe/Rome',5),
+(6,'Barcelone',41.3874,2.1686,'Europe/Madrid',6),
+(7,'Malé',4.1755,73.5093,'Indian/Maldives',7);
+
+-- =========================
+-- AEROPORTS
+-- =========================
+
+INSERT INTO aeroport (
+    id_aeroport,
+    code_iata_aeroport,
+    code_icao_aeroport,
+    nom_aeroport,
+    latitude_aeroport,
+    longitude_aeroport,
+    id_ville
+)
+VALUES
+
+(1,'ALG','DAAG','Aéroport Houari Boumediene',
+36.6910,
+3.2154,
+1),
+
+(2,'CDG','LFPG','Aéroport Charles de Gaulle',
+49.0097,
+2.5479,
+2),
+
+(3,'DXB','OMDB','Dubai International Airport',
+25.2532,
+55.3657,
+3),
+
+(4,'IST','LTFM','Istanbul Airport',
+41.2753,
+28.7519,
+4),
+
+(5,'FCO','LIRF','Aéroport Léonard-de-Vinci',
+41.8003,
+12.2389,
+5),
+
+(6,'BCN','LEBL','Aéroport Josep Tarradellas',
+41.2974,
+2.0833,
+6),
+
+(7,'MLE','VRMM','Velana International Airport',
+4.1918,
+73.5291,
+7);
+
+-- =========================
+-- COMPAGNIES AERIENNES
+-- =========================
+
+INSERT INTO compagnie_aerienne (
+    id_compagnie,
+    code_iata_compagnie,
+    code_icao_compagnie,
+    nom_compagnie,
+    site_compagnie
+)
+VALUES
+(1,'AH','DAH','Air Algérie','https://airalgerie.dz'),
+(2,'EK','UAE','Emirates','https://emirates.com'),
+(3,'TK','THY','Turkish Airlines','https://turkishairlines.com'),
+(4,'AZ','ITY','ITA Airways','https://ita-airways.com'),
+(5,'VY','VLG','Vueling','https://vueling.com'),
+(6,'QR','QTR','Qatar Airways','https://qatarairways.com');
+
+
+-- =========================
+-- TABLES METIER
+-- =========================
+
+-- =========================
 -- ROLES
 -- =========================
 
@@ -30,24 +149,24 @@ INSERT INTO bureau_agence (
 )
 
 VALUES 
-('BR001', 'Principal', '2009-04-01',
- 'Algeria', 'Alger', 'Dar Diaf, Cheraga',
+('BR001', 'HEAD_OFFICE', '2009-04-01',
+ 'Algérie', 'Alger', 'Dar Diaf, Cheraga',
  'AGR001', '2026-06-28', 1),
 
-('BR002', 'Principal', '2011-01-01',
- 'Algeria', 'Béjaïa', 'Gouraya, Béjaia',
+('BR002', 'HEAD_OFFICE', '2011-01-01',
+ 'Algérie', 'Béjaïa', 'Gouraya, Béjaia',
  'AGR002', '2026-07-01', 2),
 
-('BR003', 'Principal', '2018-01-01',
- 'Algeria', 'Alger', 'Bir Mourad Raïs, Alger',
+('BR003', 'HEAD_OFFICE', '2018-01-01',
+ 'Algérie', 'Alger', 'Bir Mourad Raïs, Alger',
  'AGR003', '2026-07-01', 3),
 
-('BR004', 'Principal', '2017-01-01',
- 'Algeria', 'Alger', 'Birkhadem, Alger',
+('BR004', 'HEAD_OFFICE', '2017-01-01',
+ 'Algérie', 'Alger', 'Birkhadem, Alger',
  'AGR004', '2026-07-01', 4),
 
-('BR005', 'Principal', '2012-01-01',
- 'Algeria', 'Boumerdès', 'Dar Diaf, Cheraga',
+('BR005', 'HEAD_OFFICE', '2012-01-01',
+ 'Algérie', 'Boumerdès', 'RN.24 Aliliguia, Boumerdès',
  'AGR005', '2026-07-01', 5);
 
 -- =========================
@@ -259,117 +378,189 @@ VALUES
 -- =========================
 
 INSERT INTO vol (
-compagnie_vol,
-lieu_depart_vol,
-destination_vol,
+    
+    statut_vol,
 
-date_aller_vol,
-heure_depart_aller_vol,
-heure_arrivee_aller_vol,
+    num_vol,
 
-date_retour_vol,
-heure_depart_retour_vol,
-heure_arrivee_retour_vol,
+    depart_vol,
+    arrivee_vol,
 
-num_vol
+    id_aeroport_depart,
+    id_aeroport_arrivee,
+
+    id_compagnie
+
 )
 
 VALUES
 
+-- PARIS --
+
 (
-'Air Algérie',
-'Alger',
-'Paris',
+'ACTIVE',
+'AH100',
 
-'2026-06-01',
-'08:00',
-'10:30',
+'2026-06-01 08:00:00',
+'2026-06-01 10:30:00',
 
-'2026-06-10',
-'14:00',
-'16:30',
+1,
+2,
 
-'AH100'
+1
 ),
 
 (
-'Emirates',
-'Alger',
-'Dubai',
+'ACTIVE',
+'AH101',
 
-'2026-12-15',
-'11:00',
-'20:00',
+'2026-06-10 14:00:00',
+'2026-06-10 16:30:00',
 
-'2026-12-22',
-'09:00',
-'18:00',
+2,
+1,
 
-'EK220'
+1
+),
+
+-- DUBAI --
+
+(
+'ACTIVE',
+'EK220',
+
+'2026-12-15 11:00:00',
+'2026-12-15 20:00:00',
+
+1,
+3,
+
+2
 ),
 
 (
-'Turkish Airlines',
-'Alger',
-'Istanbul',
+'ACTIVE',
+'EK221',
 
-'2026-11-10',
-'07:30',
-'11:45',
+'2026-12-22 09:00:00',
+'2026-12-22 18:00:00',
 
-'2026-11-17',
-'15:15',
-'17:45',
+3,
+1,
 
-'TK455'
+2
+),
+
+-- ISTANBUL -- 
+
+(
+'ACTIVE',
+'TK455',
+
+'2026-11-10 07:30:00',
+'2026-11-10 11:45:00',
+
+1,
+4,
+
+3
 ),
 
 (
-'ITA Airways',
-'Alger',
-'Rome',
+'ACTIVE',
+'TK456',
 
-'2026-10-05',
-'09:15',
-'11:20',
+'2026-11-17 15:15:00',
+'2026-11-17 17:45:00',
 
-'2026-10-12',
-'16:00',
-'18:15',
+4,
+1,
 
-'AZ301'
+3
+),
+
+-- ROME --
+
+(
+'ACTIVE',
+'AZ301',
+
+'2026-10-05 09:15:00',
+'2026-10-05 11:20:00',
+
+1,
+5,
+
+4
 ),
 
 (
-'Vueling',
-'Alger',
-'Barcelone',
+'ACTIVE',
+'AZ302',
 
-'2027-01-20',
-'10:30',
-'12:10',
+'2026-10-12 16:00:00',
+'2026-10-12 18:15:00',
 
-'2027-01-27',
-'13:30',
-'15:10',
+5,
+1,
 
-'VY712'
+4
+),
+
+-- BARCELONE --
+
+(
+'ACTIVE',
+'VY712',
+
+'2027-01-20 10:30:00',
+'2027-01-20 12:10:00',
+
+1,
+6,
+
+5
 ),
 
 (
-'Qatar Airways',
-'Alger',
-'Malé',
+'ACTIVE',
+'VY713',
 
-'2027-02-10',
-'06:30',
-'18:45',
+'2027-01-27 13:30:00',
+'2027-01-27 15:10:00',
 
-'2027-02-18',
-'20:15',
-'09:10',
+6,
+1,
 
-'QR805'
+5
+),
+
+-- MALDIVES --
+
+(
+'ACTIVE',
+'QR805',
+
+'2027-02-10 06:30:00',
+'2027-02-10 18:45:00',
+
+1,
+7,
+
+6
+),
+
+(
+'ACTIVE',
+'QR806',
+
+'2027-02-18 20:15:00',
+'2027-02-19 09:10:00',
+
+7,
+1,
+
+6
 );
 
 -- =========================
@@ -539,6 +730,10 @@ supp_triple_pack, supp_quadruple_pack, supp_suite_pack,
 supp_bed_only_pack, supp_bed_breakfast_pack,
 supp_half_board_pack, supp_full_board_pack, supp_all_inclusive_pack,
 
+default_flight_class_pack,
+default_room_type_pack,
+default_board_type_pack,
+
 id_user
 )
 
@@ -549,8 +744,11 @@ VALUES
 'Découvrez la magie de Paris avec un séjour complet incluant vols aller-retour, hébergement idéalement situé, transferts, excursions culturelles et visite des monuments emblématiques tels que la Tour Eiffel, le Louvre et les Champs-Élysées.',
 '2026-06-01','2026-06-10',120000,50,50,NOW(),
 0,25000,60000,
-30000,15000,10000,5000,50000,
+30000,0,10000,5000,50000,
 0,5000,10000,15000,20000,
+'economy',
+'double',
+'bed_only',
 3),
 
 ('PK002','ACTIVE','Dubai Luxury','Émirats Arabes Unis','Dubai',
@@ -558,8 +756,11 @@ VALUES
 'Séjour haut de gamme à Dubai comprenant hôtel 5 étoiles, vols internationaux, transferts privés et excursions exclusives.',
 '2026-12-15','2026-12-22',180000,40,40,NOW(),
 0,40000,90000,
-35000,15000,10000,5000,70000,
+35000,15000,10000,0,70000,
 0,10000,20000,30000,50000,
+'economy',
+'quadruple',
+'bed_only',
 3),
 
 ('PK003','ACTIVE','Istanbul Premium','Turquie','Istanbul',
@@ -569,6 +770,9 @@ VALUES
 0,30000,70000,
 25000,10000,5000,0,50000,
 0,5000,10000,20000,40000,
+'economy',
+'quadruple',
+'bed_only',
 3),
 
 ('PK004','ACTIVE','Rome Historique','Italie','Rome',
@@ -578,6 +782,9 @@ VALUES
 0,25000,65000,
 20000,10000,5000,0,45000,
 0,5000,10000,15000,30000,
+'economy',
+'quadruple',
+'bed_only',
 3),
 
 ('PK005','ACTIVE','Barcelone Évasion','Espagne','Barcelone',
@@ -587,6 +794,9 @@ VALUES
 0,25000,60000,
 20000,10000,5000,0,40000,
 0,5000,10000,15000,25000,
+'economy',
+'quadruple',
+'bed_only',
 3),
 
 ('PK006','ACTIVE','Maldives Paradise','Maldives','Malé',
@@ -594,8 +804,11 @@ VALUES
 'Expérience exceptionnelle dans les Maldives avec bungalow sur pilotis, pension complète et activités nautiques.',
 '2027-02-10','2027-02-18',320000,20,20,NOW(),
 0,60000,150000,
-50000,20000,15000,10000,120000,
-0,15000,30000,50000,80000,
+50000,0,20000,15000,120000,
+0,15000,30000,0,80000,
+'economy',
+'double',
+'full_board',
 3);
 
 -- =========================
@@ -603,12 +816,30 @@ VALUES
 -- =========================
 
 INSERT INTO possede VALUES
-(1,1),
-(2,2),
-(3,3),
-(4,4),
-(5,5),
-(6,6);
+
+-- Paris
+(1,1,1),
+(2,1,2),
+
+-- Dubai
+(3,2,1),
+(4,2,2),
+
+-- Istanbul
+(5,3,1),
+(6,3,2),
+
+-- Rome
+(7,4,1),
+(8,4,2),
+
+-- Barcelone
+(9,5,1),
+(10,5,2),
+
+-- Maldives
+(11,6,1),
+(12,6,2);
 
 INSERT INTO heberge VALUES
 (1,1),
@@ -655,7 +886,7 @@ INSERT INTO demande_rechargement (
 )
 VALUES
 (
-    'VALIDEE',
+    'APPROVED',
     200000,
     NOW(),
     'Recharge initiale',
@@ -693,7 +924,7 @@ INSERT INTO demande_creation_compte (
 
 VALUES (
 
-    'EN_ATTENTE',
+    'PENDING',
 
     'Dupont',
     'Jean',
@@ -736,19 +967,19 @@ INSERT INTO transactions (
 VALUES
 (
     'TRX001',
-    'RECHARGE',
+    'TOP_UP',
     'SUCCESS',
     200000,
     'Recharge portefeuille',
     NOW(),
     1,
-    3,
+    10,
     1,
     10
 ),
 (
     'TRX002',
-    'ACHAT_PACKAGE',
+    'PACKAGE_PURCHASE',
     'SUCCESS',
     200000,
     'Achat Package Paris Découverte',
@@ -782,9 +1013,9 @@ VALUES
 (
     'ACH001',
     2,
-    'ECONOMY',
-    'DOUBLE',
-    'ALL_IN',
+    'economy',
+    'double',
+    'all_inclusive',
     120000,
     10,
     108000,

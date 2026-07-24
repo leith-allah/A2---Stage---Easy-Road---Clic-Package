@@ -244,13 +244,13 @@ export default function PackageDetailsPage() {
               >
 
                 <p className="font-semibold">
-                  {flight.airline}
+                  {flight.airline.name}
                 </p>
 
                 <p>
-                  {flight.departureLocation}
+                  {flight.departureAirport.name}
                   {" → "}
-                  {flight.destination}
+                  {flight.arrivalAirport.name}
                 </p>
 
                 <p>
@@ -260,47 +260,13 @@ export default function PackageDetailsPage() {
                 <p>
                   Départ :
                   {" "}
-                  {new Date(flight.departureDate).toLocaleDateString()}
+                  {new Date(flight.departureDateTime).toLocaleDateString("fr-FR")}
                   {" "}
-                  {new Date(flight.departureTime).toLocaleTimeString([], {
+                  {new Date(flight.departureDateTime).toLocaleTimeString("fr-FR", {
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
                 </p>
-
-                {flight.returnDate && (
-
-                <p>
-
-                  Retour :
-
-                  {" "}
-
-                  {new Date(
-                    flight.returnDate
-                  ).toLocaleDateString()}
-
-                  {" "}
-
-                  {new Date(
-                    flight.returnDepartureTime
-                  ).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-
-                  {" → "}
-
-                  {new Date(
-                    flight.returnArrivalTime
-                  ).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-
-                </p>
-
-              )}
 
               </div>
 

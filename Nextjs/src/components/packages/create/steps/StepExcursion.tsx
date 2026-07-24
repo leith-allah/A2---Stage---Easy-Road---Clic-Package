@@ -2,110 +2,105 @@
 "use client";
 
 import { useWizardUpdater } from "@/hooks/useWizardUpdater";
+import { usePackageWizard } from "@/context/usePackageWizard";
+import { useWizardValidation } from "@/hooks/useWizardValidation";
 
+import FormSection from "../ui/FormSection";
+import FormInput from "../ui/FormInput";
+import FormTextarea from "../ui/FormTextarea";
+import StepNavigation from "../ui/StepNavigation";
 
-interface Props {
-    data:any;
-    setData:any;
-    next:()=>void;
-    previous:()=>void;
-}
+export default function StepExcursion() {
 
-export default function StepExcursion({
-    data,
-    setData,
-    next,
-    previous
-}: Props){
+    const {
+
+        data,
+
+        setData,
+
+        next,
+
+        previous,
+
+    } = usePackageWizard();
+
+    const {
+
+        errors,
+
+        canGoNext,
+
+    } = useWizardValidation();
+
+    const excursionErrors = errors.excursions;
+
+    const {
+
+        updateExcursion,
+
+    } = useWizardUpdater(setData);
 
     function handleNext() {
-      next();
+
+        if (!canGoNext()) return;
+
+        next();
+
     }
 
-    const { updateItem } =
-        useWizardUpdater(setData);
-
-    return(
+    return (
 
         <div className="space-y-6">
 
-            <h2 className="text-xl font-bold">
-                Excursion
-            </h2>
+            <FormSection title="Informations de l'excursion">
 
-            <input
+                <FormInput
+                    label="Nom"
+                    value={data.excursions[0].name}
+                    error={excursionErrors[0]?.name}
+                    onChange={(value) =>
+                        updateExcursion(
+                            0,
+                            "name",
+                            value
+                        )
+                    }
+                />
 
-                className="input input-bordered w-full"
-                placeholder="Nom"
-                value={data.excursions[0].name}
-                onChange={(e)=>
-                    updateItem(
-                        "excursions",
-                        0,
-                        "name",
-                        e.target.value
-                    )
-                }
+                <FormInput
+                    label="Lieu"
+                    value={data.excursions[0].location}
+                    error={excursionErrors[0]?.location}
+                    onChange={(value) =>
+                        updateExcursion(
+                            0,
+                            "location",
+                            value
+                        )
+                    }
+                />
+
+                <FormTextarea
+                    label="Description"
+                    rows={5}
+                    value={data.excursions[0].description}
+                    error={excursionErrors[0]?.description}
+                    onChange={(value) =>
+                        updateExcursion(
+                            0,
+                            "description",
+                            value
+                        )
+                    }
+                />
+
+            </FormSection>
+
+            <StepNavigation
+                onPrevious={previous}
+                onNext={handleNext}
+                nextDisabled={!canGoNext()}
             />
-
-            <input
-
-                className="input input-bordered w-full"
-                placeholder="Lieu"
-                value={data.excursions[0].location}
-                onChange={(e)=>
-                    updateItem(
-                        "excursions",
-                        0,
-                        "location",
-                        e.target.value
-                    )
-                }
-            />
-
-            <textarea
-
-                className="textarea textarea-bordered w-full"
-                rows={5}
-                placeholder="Description"
-                value={data.excursions[0].description}
-                onChange={(e)=>
-                    updateItem(
-                        "excursions",
-                        0,
-                        "description",
-                        e.target.value
-                    )
-                }
-            />
-
-            <div className="flex justify-between">
-
-                <button
-
-                    className="btn"
-
-                    onClick={previous}
-
-                >
-
-                    Retour
-
-                </button>
-
-                <button
-
-                    className="btn btn-primary"
-
-                    onClick={handleNext}
-
-                >
-
-                    Continuer
-
-                </button>
-
-            </div>
 
         </div>
 

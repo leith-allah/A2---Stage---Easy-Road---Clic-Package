@@ -15,15 +15,15 @@ import {
 }
 from "@/server/entities/value-objects/package-status.value-object";
 
-import {
-  PackageStock,
-}
+import { PackageStock }
 from "@/server/entities/value-objects/package-stock.value-object";
 
-import {
-  CreatePackageWizardDto,
-}
+import { CreatePackageWizardDto }
 from "@/server/dto/package/create-package-wizard.dto";
+
+import { UpdatePackageWizardDto }
+from "@/server/dto/package/update-package-wizard.dto";
+
 
 export class PackageBuilder {
 
@@ -45,21 +45,21 @@ export class PackageBuilder {
 
     const supplements = new Supplements(
 
-      dto.supplements.economy ?? 0,
-      dto.supplements.business ?? 0,
-      dto.supplements.first ?? 0,
+        dto.supplements.ECONOMY ?? 0,
+        dto.supplements.BUSINESS ?? 0,
+        dto.supplements.FIRST ?? 0,
 
-      dto.supplements.single ?? 0,
-      dto.supplements.double ?? 0,
-      dto.supplements.triple ?? 0,
-      dto.supplements.quadruple ?? 0,
-      dto.supplements.suite ?? 0,
+        dto.supplements.SINGLE ?? 0,
+        dto.supplements.DOUBLE ?? 0,
+        dto.supplements.TRIPLE ?? 0,
+        dto.supplements.QUADRUPLE ?? 0,
+        dto.supplements.SUITE ?? 0,
 
-      dto.supplements.bedOnly ?? 0,
-      dto.supplements.bedBreakfast ?? 0,
-      dto.supplements.halfBoard ?? 0,
-      dto.supplements.fullBoard ?? 0,
-      dto.supplements.allInclusive ?? 0,
+        dto.supplements.BED_ONLY ?? 0,
+        dto.supplements.BED_BREAKFAST ?? 0,
+        dto.supplements.HALF_BOARD ?? 0,
+        dto.supplements.FULL_BOARD ?? 0,
+        dto.supplements.ALL_INCLUSIVE ?? 0,
 
     );
 
@@ -103,6 +103,12 @@ export class PackageBuilder {
 
       supplements,
 
+      dto.supplements.defaultFlightClass,
+
+      dto.supplements.defaultRoomType,
+
+      dto.supplements.defaultBoardType,
+
       ownerId,
 
       flights,
@@ -114,6 +120,136 @@ export class PackageBuilder {
       excursions,
 
     );
+
+  }
+
+  static updateFromWizard(
+
+      existing: PackageAggregate,
+
+      dto: UpdatePackageWizardDto,
+
+      flights: Flight[],
+
+      hotels: Hotel[],
+
+      transports: Transport[],
+
+      excursions: Excursion[],
+
+  ): PackageAggregate {
+
+      const p = dto.package;
+
+      const supplements = new Supplements(
+
+          p.supplements?.ECONOMY
+              ?? existing.supplements.ECONOMY,
+
+          p.supplements?.BUSINESS
+              ?? existing.supplements.BUSINESS,
+
+          p.supplements?.FIRST
+              ?? existing.supplements.FIRST,
+
+          p.supplements?.SINGLE
+              ?? existing.supplements.SINGLE,
+
+          p.supplements?.DOUBLE
+              ?? existing.supplements.DOUBLE,
+
+          p.supplements?.TRIPLE
+              ?? existing.supplements.TRIPLE,
+
+          p.supplements?.QUADRUPLE
+              ?? existing.supplements.QUADRUPLE,
+
+          p.supplements?.SUITE
+              ?? existing.supplements.SUITE,
+
+          p.supplements?.BED_ONLY
+              ?? existing.supplements.BED_ONLY,
+
+          p.supplements?.BED_BREAKFAST
+              ?? existing.supplements.BED_BREAKFAST,
+
+          p.supplements?.HALF_BOARD
+              ?? existing.supplements.HALF_BOARD,
+
+          p.supplements?.FULL_BOARD
+              ?? existing.supplements.FULL_BOARD,
+
+          p.supplements?.ALL_INCLUSIVE
+              ?? existing.supplements.ALL_INCLUSIVE,
+
+      );
+
+      const stock = new PackageStock(
+
+          p.totalStock
+              ?? existing.getTotalStock(),
+
+          p.totalStock
+              ?? existing.getAvailableStock(),
+
+      );
+
+      return new PackageAggregate(
+
+          existing.id,
+
+          p.name
+              ?? existing.name,
+
+          p.country
+              ?? existing.country,
+
+          p.destination
+              ?? existing.destination,
+
+          p.image
+              ?? existing.image,
+
+          p.description
+              ?? existing.description,
+
+          p.departureDate
+              ? new Date(p.departureDate)
+              : existing.departureDate,
+
+          p.returnDate
+              ? new Date(p.returnDate)
+              : existing.returnDate,
+
+          p.basePrice
+              ?? existing.basePrice,
+
+          stock,
+
+          existing.status,
+
+          supplements,
+
+          p.defaultFlightClass
+              ?? existing.defaultFlightClass,
+
+          p.defaultRoomType
+              ?? existing.defaultRoomType,
+
+          p.defaultBoardType
+              ?? existing.defaultBoardType,
+
+          existing.ownerId,
+
+          flights,
+
+          hotels,
+
+          transports,
+
+          excursions,
+
+      );
 
   }
 

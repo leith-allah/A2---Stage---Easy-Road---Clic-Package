@@ -2,12 +2,11 @@
 import { HotelRepository } from "@/server/repositories/interfaces/hotel.repository.interface";
 
 import { HotelMapper } from "@/server/mappers/hotel.mapper";
+import { HotelBuilder } from "@/server/builders/hotel.builder";
 
 import { CreateHotelDto } from "@/server/dto/hotel/create-hotel.dto";
-
 import { UpdateHotelDto } from "@/server/dto/hotel/update-hotel.dto";
-
-import { Hotel } from "@/server/entities/hotel.entity";
+import { HotelDto } from "@/server/dto/hotel/hotel.dto";
 
 import { NotFoundException } from "@/server/utils/api-error";
 
@@ -19,32 +18,28 @@ export class HotelService {
 
   ) {}
 
-  async getAllHotels() {
+  async getAllHotels(): Promise<HotelDto[]> {
 
-    const hotels = await this.repository.findAll();
+    const hotels =
+      await this.repository.findAll();
 
     return hotels.map(
-
-      hotel => HotelMapper.toDto(hotel)
-
+      HotelMapper.toDto,
     );
 
   }
 
   async getHotelById(
-
     id: number,
+  ): Promise<HotelDto> {
 
-  ) {
-
-    const hotel = await this.repository.findById(id);
+    const hotel =
+      await this.repository.findById(id);
 
     if (!hotel) {
 
       throw new NotFoundException(
-
-        "Hôtel introuvable"
-
+        "Hôtel introuvable",
       );
 
     }
@@ -54,90 +49,68 @@ export class HotelService {
   }
 
   async createHotel(
-
     dto: CreateHotelDto,
+  ): Promise<HotelDto> {
 
-  ) {
+    const aggregate =
+      HotelBuilder.fromDto(dto);
 
-    const hotel = new Hotel(
-
-      0,
-
-      dto.name,
-
-      dto.country,
-
-      dto.city,
-
-      dto.address,
-
-      dto.stars,
-
-    );
-
-    const created = await this.repository.create(
-
-      hotel
-
-    );
+    const created =
+      await this.repository.createAggregate(
+        aggregate,
+      );
 
     return HotelMapper.toDto(created);
 
   }
 
   async updateHotel(
-
     id: number,
-
     dto: UpdateHotelDto,
+  ): Promise<HotelDto> {
 
-  ) {
+    const existing =
+      await this.repository.findById(id);
 
-    const exists = await this.repository.findById(id);
-
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
-        "Hôtel introuvable"
-
+        "Hôtel introuvable",
       );
 
     }
 
-    const updated = await this.repository.update(
+    const aggregate =
+      HotelBuilder.updateFromDto(
+        existing,
+        dto,
+      );
 
-      id,
-
-      dto,
-
-    );
+    const updated =
+      await this.repository.updateAggregate(
+        aggregate,
+      );
 
     return HotelMapper.toDto(updated);
 
   }
 
   async deleteHotel(
-
     id: number,
+  ): Promise<void> {
 
-  ) {
+    const existing =
+      await this.repository.findById(id);
 
-    const exists = await this.repository.findById(id);
-
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
-        "Hôtel introuvable"
-
+        "Hôtel introuvable",
       );
 
     }
 
-    const deleted = await this.repository.delete(id);
-
-    return HotelMapper.toDto(deleted);
+    await this.repository.delete(id);
 
   }
 

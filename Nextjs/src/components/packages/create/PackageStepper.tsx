@@ -1,4 +1,6 @@
 
+"use client";
+
 type Props = {
 
     current:number
@@ -27,42 +29,48 @@ export default function PackageStepper({
 
 }:Props){
 
-    return(
+    return (
 
-        <div className="flex justify-between gap-2">
+        <div className="grid grid-cols-6 gap-3">
 
-            {
+            {labels.map((label, index) => (
 
-                labels.map((label,index)=>(
+                <div
 
-                    <div
+                    key={label}
 
-                        key={label}
-
-                        className={`flex-1 rounded-lg border p-3 text-center text-sm
-
+                    className={`
+                        rounded-xl
+                        border
+                        p-3
+                        text-center
+                        transition
                         ${
-                            current===index
-                            ?"bg-blue-600 text-white"
-                            :"bg-white"
-                        }`}
+                            current === index
+                                ? "bg-primary text-white border-primary font-semibold"
+                                : "bg-white border-gray-300 text-gray-700"
+                        }
+                    `}
+                >
 
-                    >
+                    <div className="text-lg font-bold">
 
-                        {index+1}
+                        {index + 1}
 
-                        <br/>
+                    </div>
+
+                    <div className="text-sm">
 
                         {label}
 
                     </div>
 
-                ))
+                </div>
 
-            }
+            ))}
 
         </div>
 
-    )
+    );
 
 }

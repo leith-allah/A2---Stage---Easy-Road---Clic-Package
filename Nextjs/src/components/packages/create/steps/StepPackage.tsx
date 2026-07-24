@@ -1,240 +1,274 @@
 
 "use client";
 
-interface Props {
-  data: any;
-  setData: any;
-  next: () => void;
-}
+import { usePackageWizard } from "@/context/usePackageWizard";
+import { useWizardUpdater } from "@/hooks/useWizardUpdater";
+import { useWizardValidation } from "@/hooks/useWizardValidation";
 
-export default function StepPackage({
-  data,
-  setData,
-  next,
-}: Props) {
+import FormSection from "@/components/packages/create/ui/FormSection";
+import FormInput from "@/components/packages/create/ui/FormInput";
+import FormTextarea from "@/components/packages/create/ui/FormTextarea";
+import StepNavigation from "@/components/packages/create/ui/StepNavigation";
 
-  function handleSubmit(
-    e: React.FormEvent
-  ) {
 
-    e.preventDefault();
+export default function StepPackage() {
 
-    next();
+    const {
 
-  }
+        data,
+        setData,
+        next,
 
-  return (
+    } = usePackageWizard();
 
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6"
-    >
+    const { updatePackage} = useWizardUpdater(setData);
 
-      <div>
+    const { errors, canGoNext } = useWizardValidation();
 
-        <label>Nom du Package</label>
+    const packageErrors = errors.package;
 
-        <input
-          className="w-full border rounded p-3"
-          value={data.package.name ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                name: e.target.value,
-              },
-            }))
-          }
-          required
-        />
+    function handleNext() {
 
-      </div>
+        if (!canGoNext()) return;
 
-      <div>
+        next();
 
-        <label>Pays</label>
+    }
 
-        <input
-          className="w-full border rounded p-3"
-          value={data.package.country ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                country: e.target.value,
-              },
-            }))
-          }
-          required
-        />
+console.log("canGoNext :", canGoNext());
+console.log("errors :", errors);
+console.log("package :", data.package);
 
-      </div>
+    return (
 
-      <div>
+        <div className="space-y-8">
 
-        <label>Destination</label>
+            <FormSection
+                title="Informations générales"
+            >
 
-        <input
-          className="w-full border rounded p-3"
-          value={data.package.destination ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                destination: e.target.value,
-              },
-            }))
-          }
-          required
-        />
+                <FormInput
 
-      </div>
+                    label="Nom du Package"
 
-      <div>
+                    value={data.package.name}
 
-        <label>Description</label>
+                    onChange={(value)=>
 
-        <textarea
-          rows={4}
-          className="w-full border rounded p-3"
-          value={data.package.description ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                description: e.target.value,
-              },
-            }))
-          }
-        />
+                        updatePackage(
+                            "name",
+                            value
+                        )
 
-      </div>
+                    }
 
-      <div>
+                    error={packageErrors.name}
 
-        <label>Image</label>
+                    required
 
-        <input
-          className="w-full border rounded p-3"
-          value={data.package.image ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                image: e.target.value,
-              },
-            }))
-          }
-        />
+                />
 
-      </div>
+                <FormInput
 
-      <div>
+                    label="Pays"
 
-        <label>Date départ</label>
+                    value={data.package.country}
 
-        <input
-          type="date"
-          className="w-full border rounded p-3"
-          value={data.package.departureDate ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                departureDate: e.target.value,
-              },
-            }))
-          }
-          required
-        />
+                    onChange={(value)=>
 
-      </div>
+                        updatePackage(
+                            "country",
+                            value
+                        )
 
-      <div>
+                    }
 
-        <label>Date retour</label>
+                    error={packageErrors.country}
 
-        <input
-          type="date"
-          className="w-full border rounded p-3"
-          value={data.package.returnDate ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                returnDate: e.target.value,
-              },
-            }))
-          }
-          required
-        />
+                    required
 
-      </div>
+                />
 
-      <div>
+                <FormInput
 
-        <label>Prix de base</label>
+                    label="Destination"
 
-        <input
-          type="number"
-          className="w-full border rounded p-3"
-          value={data.package.basePrice ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                basePrice: Number(e.target.value),
-              },
-            }))
-          }
-          required
-        />
+                    value={data.package.destination}
 
-      </div>
+                    onChange={(value)=>
 
-      <div>
+                        updatePackage(
+                            "destination",
+                            value
+                        )
 
-        <label>Nombre de places</label>
+                    }
 
-        <input
-          type="number"
-          className="w-full border rounded p-3"
-          value={data.package.availableSeats ?? ""}
-          onChange={(e) =>
-            setData((prev: any) => ({
-              ...prev,
-              package: {
-                ...prev.package,
-                availableSeats: Number(e.target.value),
-              },
-            }))
-          }
-          required
-        />
+                    error={packageErrors.destination}
 
-      </div>
+                    required
 
-      <div className="flex justify-end">
+                />
 
-        <button
-          type="submit"
-          className="btn btn-primary"
-        >
-          Suivant
-        </button>
+                <FormTextarea
 
-      </div>
+                    label="Description"
 
-    </form>
+                    rows={5}
 
-  );
+                    value={data.package.description}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "description",
+                            value
+                        )
+
+                    }
+
+                />
+
+                <FormInput
+
+                    label="URL de l'image"
+                    placeholder="https://..."
+
+                    value={data.package.image}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "image",
+                            value
+                        )
+
+                    }
+
+                />
+
+            </FormSection>
+
+            <FormSection
+                title="Dates"
+            >
+
+                <FormInput
+
+                    type="date"
+
+                    label="Date de départ"
+
+                    value={data.package.departureDate}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "departureDate",
+                            value
+                        )
+
+                    }
+
+                    error={packageErrors.departureDate}
+
+                    required
+
+                />
+
+                <FormInput
+
+                    type="date"
+
+                    min={data.package.departureDate}
+
+                    label="Date de retour"
+
+                    value={data.package.returnDate}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "returnDate",
+                            value
+                        )
+
+                    }
+
+                    error={packageErrors.returnDate}
+
+                    required
+
+                />
+
+            </FormSection>
+
+            <FormSection
+                title="Tarification"
+            >
+
+                <FormInput
+
+                    type="number"
+
+                    min={0}
+
+                    step={0.01}
+
+                    label="Prix de base"
+
+                    value={data.package.basePrice}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "basePrice",
+                            Number(value)
+                        )
+
+                    }
+
+                    error={packageErrors.basePrice}
+
+                    required
+
+                />
+
+                <FormInput
+
+                    type="number"
+
+                    min={1}
+
+                    label="Nombre total de places"
+
+                    value={data.package.totalStock}
+
+                    onChange={(value)=>
+
+                        updatePackage(
+                            "totalStock",
+                            Number(value)
+                        )
+
+                    }
+
+                    error={packageErrors.totalStock}
+
+                    required
+
+                />
+
+            </FormSection>
+
+
+            <StepNavigation
+                onNext={handleNext}
+                nextDisabled={!canGoNext()}
+            />
+
+        </div>
+
+    );
 
 }

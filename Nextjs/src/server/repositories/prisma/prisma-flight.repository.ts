@@ -2,54 +2,133 @@
 import { prisma } from "@/server/db/prisma";
 
 import { Flight } from "@/server/entities/flight.entity";
+import { FlightAggregate } from "@/server/aggregates/flight.aggregate";
 
 import { FlightRepository } from "../interfaces/flight.repository.interface";
 
 import { FlightMapper } from "@/server/mappers/flight.mapper";
 
+import { FlightPersistence } from "@/server/persistence/flight.persistence";
+
 export class PrismaFlightRepository implements FlightRepository {
 
   async findAll(): Promise<Flight[]> {
 
-    const flights = await prisma.vol.findMany({
+    const flights: FlightPersistence[] =
+      await prisma.vol.findMany({
 
-      where: {
+        include: {
 
-        NOT: {
+          compagnie_aerienne: true,
 
-          statut_vol: "ARCHIVED",
+          aeroport_vol_id_aeroport_departToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+          aeroport_vol_id_aeroport_arriveeToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
 
         },
 
-      },
+        orderBy: {
 
-      orderBy: {
+          depart_vol: "asc",
 
-        date_aller_vol: "asc",
+        },
 
-      },
+      });
 
-    });
-
-    return flights.map((flight) =>
-      FlightMapper.toEntity(flight)
+    return FlightMapper.toEntities(
+      flights,
     );
 
   }
 
   async findById(
-    id: number
+    id: number,
   ): Promise<Flight | null> {
 
-    const flight = await prisma.vol.findUnique({
+    const flight =
+      await prisma.vol.findUnique({
 
-      where: {
+        where: {
 
-        id_vol: BigInt(id),
+          id_vol: BigInt(id),
 
-      },
+        },
 
-    });
+        include: {
+
+          compagnie_aerienne: true,
+
+          aeroport_vol_id_aeroport_departToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+          aeroport_vol_id_aeroport_arriveeToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+        },
+
+      });
 
     if (!flight) {
 
@@ -57,103 +136,199 @@ export class PrismaFlightRepository implements FlightRepository {
 
     }
 
-    return FlightMapper.toEntity(flight);
+    return FlightMapper.toEntity(
+      flight,
+    );
 
   }
 
   async createAggregate(
-    flight: Flight
+    aggregate: FlightAggregate,
   ): Promise<Flight> {
 
-    const created = await prisma.vol.create({
+    const flight =
+      aggregate.entity;
 
-      data: {
+    const created =
+      await prisma.vol.create({
 
-        compagnie_vol: flight.airline,
+        data: {
 
-        lieu_depart_vol: flight.departureLocation,
+          statut_vol:
+            flight.getStatus().getValue(),
 
-        destination_vol: flight.destination,
+          num_vol:
+            flight.getFlightNumber(),
 
-        date_aller_vol: flight.departureDate,
+          depart_vol:
+            flight.getDepartureDateTime(),
 
-        heure_depart_aller_vol: flight.departureTime,
+          arrivee_vol:
+            flight.getArrivalDateTime(),
 
-        heure_arrivee_aller_vol: flight.arrivalTime,
+          id_compagnie:
+            flight.getAirline().getId(),
 
-        date_retour_vol: flight.returnDate,
+          id_aeroport_depart:
+            flight.getDepartureAirport().getId(),
 
-        heure_depart_retour_vol: flight.returnDepartureTime,
+          id_aeroport_arrivee:
+            flight.getArrivalAirport().getId(),
 
-        heure_arrivee_retour_vol: flight.returnArrivalTime,
+        },
 
-        num_vol: flight.flightNumber,
+        include: {
 
-      },
+          compagnie_aerienne: true,
 
-    });
+          aeroport_vol_id_aeroport_departToaeroport: {
 
-    return FlightMapper.toEntity(created);
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+          aeroport_vol_id_aeroport_arriveeToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+        },
+
+      });
+
+    return FlightMapper.toEntity(
+      created,
+    );
 
   }
 
   async updateAggregate(
-    flight: Flight,
+    aggregate: FlightAggregate,
   ): Promise<Flight> {
 
-    const updated = await prisma.vol.update({
+    const flight =
+      aggregate.entity;
 
-      where: {
+    const updated =
+      await prisma.vol.update({
 
-        id_vol: BigInt(flight.id),
+        where: {
 
-      },
+          id_vol: BigInt(
+            flight.getId(),
+          ),
 
-      data: {
+        },
 
-        compagnie_vol: flight.airline,
+        data: {
 
-        lieu_depart_vol: flight.departureLocation,
+          statut_vol:
+            flight.getStatus().getValue(),
 
-        destination_vol: flight.destination,
+          num_vol:
+            flight.getFlightNumber(),
 
-        date_aller_vol: flight.departureDate,
+          depart_vol:
+            flight.getDepartureDateTime(),
 
-        heure_depart_aller_vol: flight.departureTime,
+          arrivee_vol:
+            flight.getArrivalDateTime(),
 
-        heure_arrivee_aller_vol: flight.arrivalTime,
+          id_compagnie:
+            flight.getAirline().getId(),
 
-        date_retour_vol: flight.returnDate,
+          id_aeroport_depart:
+            flight.getDepartureAirport().getId(),
 
-        heure_depart_retour_vol: flight.returnDepartureTime,
+          id_aeroport_arrivee:
+            flight.getArrivalAirport().getId(),
 
-        heure_arrivee_retour_vol: flight.returnArrivalTime,
+        },
 
-        num_vol: flight.flightNumber,
+        include: {
 
-      }
+          compagnie_aerienne: true,
 
-    });
+          aeroport_vol_id_aeroport_departToaeroport: {
 
-    return FlightMapper.toEntity(updated);
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+          aeroport_vol_id_aeroport_arriveeToaeroport: {
+
+            include: {
+
+              ville: {
+
+                include: {
+
+                  pays: true,
+
+                },
+
+              },
+
+            },
+
+          },
+
+        },
+
+      });
+
+    return FlightMapper.toEntity(
+      updated,
+    );
 
   }
 
   async delete(
-    id: number
+    id: number,
   ): Promise<void> {
 
-    await prisma.vol.update({
+    await prisma.vol.delete({
 
       where: {
 
         id_vol: BigInt(id),
-
-      },
-
-      data: {
-
-        statut_vol: "ARCHIVED",
 
       },
 

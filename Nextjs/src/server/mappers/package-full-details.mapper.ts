@@ -1,10 +1,13 @@
 
+import { PackageAggregate }
+from "@/server/aggregates/package.aggregate";
+
 import { PackageFullDetailsDto } from "@/server/dto/package/package-full-details.dto";
 
 export class PackageFullDetailsMapper {
 
   static toDto(
-    pkg: any,
+    pkg: PackageAggregate,
     flights: any[],
     hotels: any[],
     transports: any[],
@@ -13,85 +16,85 @@ export class PackageFullDetailsMapper {
 
     return {
 
-      id: Number(pkg.id_pack),
+        id: pkg.id,
 
-      name: pkg.nom_pack,
+        name: pkg.name,
 
-      country: pkg.pays_pack,
+        country: pkg.country,
 
-      destination: pkg.destination_pack,
+        destination: pkg.destination,
 
-      image: pkg.image_pack,
+        image: pkg.image ?? undefined,
 
-      description: pkg.description_pack,
+        description: pkg.description ?? undefined,
 
-      departureDate:
-        pkg.date_depart_pack.toISOString(),
+        departureDate:
+            pkg.departureDate.toISOString(),
 
-      returnDate:
-        pkg.date_retour_pack.toISOString(),
+        returnDate:
+            pkg.returnDate.toISOString(),
 
-      basePrice:
-        Number(pkg.prix_base_pack),
+        basePrice:
+            pkg.basePrice,
 
-      availableSeats:
-        pkg.stock_dispo_pack,
+        availableSeats:
+            pkg.getAvailableStock(),
 
-      stockTotal:
-        pkg.stock_total_pack,
+        stockTotal:
+            pkg.getTotalStock(),
 
-      status:
-        pkg.statut_pack,
+        status:
+            pkg.getStatus(),
 
-      suppEconomy:
-        Number(pkg.supp_economy_pack),
+        suppEconomy:
+            pkg.supplements.ECONOMY,
 
-      suppBusiness:
-        Number(pkg.supp_business_pack),
+        suppBusiness:
+            pkg.supplements.BUSINESS,
 
-      suppFirst:
-        Number(pkg.supp_first_pack),
+        suppFirst:
+            pkg.supplements.FIRST,
 
-      suppSingle:
-        Number(pkg.supp_single_pack),
+        suppSingle:
+            pkg.supplements.SINGLE,
 
-      suppDouble:
-        Number(pkg.supp_double_pack),
+        suppDouble:
+            pkg.supplements.DOUBLE,
 
-      suppTriple:
-        Number(pkg.supp_triple_pack),
+        suppTriple:
+            pkg.supplements.TRIPLE,
 
-      suppQuadruple:
-        Number(pkg.supp_quadruple_pack),
+        suppQuadruple:
+            pkg.supplements.QUADRUPLE,
 
-      suppSuite:
-        Number(pkg.supp_suite_pack),
+        suppSuite:
+            pkg.supplements.SUITE,
 
-      suppBedOnly:
-        Number(pkg.supp_bed_only_pack),
+        suppBedOnly:
+            pkg.supplements.BED_ONLY,
 
-      suppBedBreakfast:
-        Number(pkg.supp_bed_breakfast_pack),
+        suppBedBreakfast:
+            pkg.supplements.BED_BREAKFAST,
 
-      suppHalfBoard:
-        Number(pkg.supp_half_board_pack),
+        suppHalfBoard:
+            pkg.supplements.HALF_BOARD,
 
-      suppFullBoard:
-        Number(pkg.supp_full_board_pack),
+        suppFullBoard:
+            pkg.supplements.FULL_BOARD,
 
-      suppAllInclusive:
-        Number(pkg.supp_all_inclusive_pack),
+        suppAllInclusive:
+            pkg.supplements.ALL_INCLUSIVE,
 
-      flights,
+        flights,
 
-      hotels,
+        hotels,
 
-      transports,
+        transports,
 
-      excursions
+        excursions,
 
     };
 
-  }
+}
 
 }

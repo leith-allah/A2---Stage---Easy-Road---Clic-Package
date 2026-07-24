@@ -10,7 +10,7 @@ export const registerSchema =
     id_bureau:
       z.number(),
 
-    firstName:
+    FIRSTName:
       z.string(),
 
     lastName:

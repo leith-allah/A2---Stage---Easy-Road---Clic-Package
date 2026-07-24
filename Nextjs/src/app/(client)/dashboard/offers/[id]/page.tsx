@@ -72,10 +72,10 @@ export default function PackageDetailsPage() {
   const [travelers, setTravelers] = useState(1);
 
   const [flightClass, setFlightClass] =
-    useState("economy");
+    useState("ECONOMY");
 
   const [roomType, setRoomType] =
-    useState("double");
+    useState("DOUBLE");
 
   const [pension, setPension] =
     useState("breakfast");
@@ -85,20 +85,20 @@ export default function PackageDetailsPage() {
     let price = packageData.basePrice;
 
     // Classe Vol
-    if (flightClass === "business") {
+    if (flightClass === "BUSINESS") {
       price += 120000;
     }
 
-    if (flightClass === "first") {
+    if (flightClass === "FIRST") {
       price += 250000;
     }
 
     // Chambre
-    if (roomType === "single") {
+    if (roomType === "SINGLE") {
       price += 50000;
     }
 
-    if (roomType === "suite") {
+    if (roomType === "SUITE") {
       price += 180000;
     }
 
@@ -424,15 +424,15 @@ export default function PackageDetailsPage() {
                       py-4
                     "
                   >
-                    <option value="economy">
+                    <option value="ECONOMY">
                       Économique
                     </option>
 
-                    <option value="business">
+                    <option value="BUSINESS">
                       Business
                     </option>
 
-                    <option value="first">
+                    <option value="FIRST">
                       First Class
                     </option>
                   </select>
@@ -460,15 +460,15 @@ export default function PackageDetailsPage() {
                       py-4
                     "
                   >
-                    <option value="double">
+                    <option value="DOUBLE">
                       Double
                     </option>
 
-                    <option value="single">
+                    <option value="SINGLE">
                       Single
                     </option>
 
-                    <option value="suite">
+                    <option value="SUITE">
                       Suite
                     </option>
                   </select>

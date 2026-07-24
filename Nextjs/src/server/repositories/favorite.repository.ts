@@ -11,12 +11,16 @@ export const favoriteRepository = {
         id_user: BigInt(userId),
       },
 
-      include: {
-        package_voyage: true,
+      select: {
+
+        id_pack: true,
+
       },
 
       orderBy: {
+
         date_ajout_fav: "desc",
+
       },
 
     });

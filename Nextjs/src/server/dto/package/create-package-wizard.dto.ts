@@ -14,21 +14,22 @@ from "../transport/create-transport.dto";
 import { CreateExcursionDto }
 from "../excursion/create-excursion.dto";
 
-import { CreateSupplementsDto }
-from "./create-supplements.dto";
+import { PackageSupplementsDto }
+from "./package-supplements.dto";
+
 
 export interface CreatePackageWizardDto {
 
-  package: CreatePackageDto;
+    package: CreatePackageDto;
 
-  flights: CreateFlightDto[];
+    flights: CreateFlightDto[];
 
-  hotels: CreateHotelDto[];
+    hotels: CreateHotelDto[];
 
-  transports: CreateTransportDto[];
+    transports: CreateTransportDto[];
 
-  excursions: CreateExcursionDto[];
+    excursions: CreateExcursionDto[];
 
-  supplements: CreateSupplementsDto;
+    supplements: PackageSupplementsDto;
 
 }

@@ -13,7 +13,7 @@ export default function RegisterForm() {
 
     nin: "",
 
-    firstName: "",
+    FIRSTName: "",
 
     lastName: "",
 
@@ -62,7 +62,7 @@ export default function RegisterForm() {
 
         nom_user: form.lastName,
 
-        prenom_user: form.firstName,
+        prenom_user: form.FIRSTName,
 
         ddn_user: form.birthDate,
 
@@ -157,11 +157,11 @@ export default function RegisterForm() {
 
         <input
           placeholder="Prénom"
-          value={form.firstName}
+          value={form.FIRSTName}
           onChange={(e) =>
             setForm({
               ...form,
-              firstName: e.target.value,
+              FIRSTName: e.target.value,
             })
           }
         />

@@ -1,5 +1,6 @@
 
 export type PackageType = {
+  
   id: number;
 
   title: string;

@@ -1,13 +1,12 @@
 
 import { ExcursionRepository } from "@/server/repositories/interfaces/excursion.repository.interface";
 
-import { Excursion } from "@/server/entities/excursion.entity";
-
 import { ExcursionMapper } from "@/server/mappers/excursion.mapper";
+import { ExcursionBuilder } from "@/server/builders/excursion.builder";
 
 import { CreateExcursionDto } from "@/server/dto/excursion/create-excursion.dto";
-
 import { UpdateExcursionDto } from "@/server/dto/excursion/update-excursion.dto";
+import { ExcursionDto } from "@/server/dto/excursion/excursion.dto";
 
 import { NotFoundException } from "@/server/utils/api-error";
 
@@ -19,38 +18,28 @@ export class ExcursionService {
 
   ) {}
 
-  async getAllExcursions() {
+  async getAllExcursions(): Promise<ExcursionDto[]> {
 
     const excursions =
-
       await this.repository.findAll();
 
     return excursions.map(
-
-      excursion =>
-
-        ExcursionMapper.toDto(excursion),
-
+      ExcursionMapper.toDto,
     );
 
   }
 
   async getExcursionById(
-
     id: number,
-
-  ) {
+  ): Promise<ExcursionDto> {
 
     const excursion =
-
       await this.repository.findById(id);
 
     if (!excursion) {
 
       throw new NotFoundException(
-
         "Excursion introuvable",
-
       );
 
     }
@@ -60,61 +49,46 @@ export class ExcursionService {
   }
 
   async createExcursion(
-
     dto: CreateExcursionDto,
+  ): Promise<ExcursionDto> {
 
-  ) {
-
-    const excursion = new Excursion(
-
-      0,
-
-      dto.name,
-
-      dto.location,
-
-      dto.description,
-
-    );
+    const aggregate =
+      ExcursionBuilder.fromDto(dto);
 
     const created =
-
-      await this.repository.create(excursion);
+      await this.repository.createAggregate(
+        aggregate,
+      );
 
     return ExcursionMapper.toDto(created);
 
   }
 
   async updateExcursion(
-
     id: number,
-
     dto: UpdateExcursionDto,
+  ): Promise<ExcursionDto> {
 
-  ) {
-
-    const exists =
-
+    const existing =
       await this.repository.findById(id);
 
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
         "Excursion introuvable",
-
       );
 
     }
 
-    const updated =
-
-      await this.repository.update(
-
-        id,
-
+    const aggregate =
+      ExcursionBuilder.updateFromDto(
+        existing,
         dto,
+      );
 
+    const updated =
+      await this.repository.updateAggregate(
+        aggregate,
       );
 
     return ExcursionMapper.toDto(updated);
@@ -122,30 +96,21 @@ export class ExcursionService {
   }
 
   async deleteExcursion(
-
     id: number,
+  ): Promise<void> {
 
-  ) {
-
-    const exists =
-
+    const existing =
       await this.repository.findById(id);
 
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
         "Excursion introuvable",
-
       );
 
     }
 
-    const deleted =
-
-      await this.repository.delete(id);
-
-    return ExcursionMapper.toDto(deleted);
+    await this.repository.delete(id);
 
   }
 

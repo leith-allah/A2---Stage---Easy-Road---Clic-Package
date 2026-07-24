@@ -2,6 +2,21 @@
 import { CreatePackageWizardDto }
 from "@/server/dto/package/create-package-wizard.dto";
 
+import { UpdatePackageWizardDto }
+from "@/server/dto/package/update-package-wizard.dto";
+
+import { CreateFlightDto } 
+from "@/server/dto/flight/create-flight.dto";
+
+import { CreateHotelDto } 
+from "@/server/dto/hotel/create-hotel.dto";
+
+import { CreateTransportDto } 
+from "@/server/dto/transport/create-transport.dto";
+
+import { CreateExcursionDto } 
+from "@/server/dto/excursion/create-excursion.dto";
+
 import { PrismaFlightRepository }
 from "@/server/repositories/prisma/prisma-flight.repository";
 
@@ -11,11 +26,21 @@ from "@/server/repositories/prisma/prisma-hotel.repository";
 import { PrismaTransportRepository }
 from "@/server/repositories/prisma/prisma-transport.repository";
 
-import { PrismaExcursionRepository }
-from "@/server/repositories/prisma/prisma-excursion.repository";
+import {
+    PrismaExcursionRepository,
+} from "@/server/repositories/prisma/prisma-excursion.repository";
 
-import { FlightBuilder }
-from "@/server/builders/flight.builder";
+import {
+    PrismaAirlineRepository,
+} from "@/server/repositories/prisma/prisma-airline.repository";
+
+import {
+    PrismaAirportRepository,
+} from "@/server/repositories/prisma/prisma-airport.repository";
+
+import {
+    FlightBuilder,
+} from "@/server/builders/flight.builder";
 
 import { HotelBuilder }
 from "@/server/builders/hotel.builder";
@@ -32,8 +57,15 @@ from "@/server/builders/package.builder";
 import { PackageAggregate }
 from "@/server/aggregates/package.aggregate";
 
+import { FlightAggregate } 
+from "@/server/aggregates/flight.aggregate";
+
 import { PackageRepository }
 from "@/server/repositories/interfaces/package.repository.interface";
+
+import { Hotel } from "@/server/entities/hotel.entity";
+import { Transport } from "@/server/entities/transport.entity";
+import { Excursion } from "@/server/entities/excursion.entity";
 
 import { getCurrentUserId }
 from "@/server/auth/session";
@@ -55,9 +87,15 @@ export class PackageWizardService {
       new PrismaTransportRepository(),
 
     private readonly excursionRepository =
-      new PrismaExcursionRepository(),
+        new PrismaExcursionRepository(),
 
-  ) {}
+    private readonly airlineRepository =
+        new PrismaAirlineRepository(),
+
+    private readonly airportRepository =
+        new PrismaAirportRepository(),
+
+    ) {}
 
   async createPackage(
 
@@ -76,61 +114,70 @@ export class PackageWizardService {
 
     const flights = await Promise.all(
 
-      dto.flights.map(async (flightDto) => {
+        dto.flights.map(async (flightDto) => {
 
-        const aggregate =
-          FlightBuilder.fromDto(flightDto);
+            const airline =
+                await this.airlineRepository.findById(
+                    flightDto.airlineId,
+                );
 
-        return await this.flightRepository.createAggregate(
-          aggregate
-        );
+            if (!airline) {
 
-      })
+                throw new Error(
+                    `Compagnie ${flightDto.airlineId} introuvable`,
+                );
 
-    );
+            }
 
-    const hotels = await Promise.all(
+            const departureAirport =
+                await this.airportRepository.findById(
+                    flightDto.departureAirportId,
+                );
 
-      dto.hotels.map(async (hotelDto) => {
+            if (!departureAirport) {
 
-        const aggregate =
-          HotelBuilder.fromDto(hotelDto);
+                throw new Error(
+                    `Aéroport départ ${flightDto.departureAirportId} introuvable`,
+                );
 
-        return await this.hotelRepository.createAggregate(
-          aggregate
-        );
+            }
 
-      })
+            const arrivalAirport =
+                await this.airportRepository.findById(
+                    flightDto.arrivalAirportId,
+                );
 
-    );
+            if (!arrivalAirport) {
 
-    const transports = await Promise.all(
+                throw new Error(
+                    `Aéroport arrivée ${flightDto.arrivalAirportId} introuvable`,
+                );
 
-      dto.transports.map(async (transportDto) => {
+            }
 
-        const aggregate =
-          TransportBuilder.fromDto(transportDto);
+            const flight =
+                FlightBuilder.fromDto(
 
-        return await this.transportRepository.createAggregate(
-          aggregate
-        );
+                    flightDto,
 
-      })
+                    airline,
 
-    );
+                    departureAirport,
 
-    const excursions = await Promise.all(
+                    arrivalAirport,
 
-      dto.excursions.map(async (excursionDto) => {
+                );
 
-        const aggregate =
-          ExcursionBuilder.fromDto(excursionDto);
+            const aggregate =
+                new FlightAggregate(
+                    flight,
+                );
 
-        return await this.excursionRepository.createAggregate(
-          aggregate
-        );
+            return await this.flightRepository.createAggregate(
+                aggregate,
+            );
 
-      })
+        }),
 
     );
 
@@ -140,9 +187,13 @@ export class PackageWizardService {
     =========================================
     */
 
-    const aggregate =
+    const hotels: Hotel[] = [];
 
-      PackageBuilder.fromWizard(
+    const transports: Transport[] = [];
+
+    const excursions: Excursion[] = [];
+
+    const aggregate = PackageBuilder.fromWizard(
 
         dto,
 
@@ -156,7 +207,7 @@ export class PackageWizardService {
 
         excursions,
 
-      );
+    );
 
     /*
     =========================================
@@ -174,7 +225,21 @@ export class PackageWizardService {
 
   }
 
-}
+  async updatePackage(
+
+      id: number,
+
+      dto: UpdatePackageWizardDto,
+
+  ): Promise<PackageAggregate> {
+
+      throw new Error(
+          "Update Package Wizard non implémenté pour le moment."
+      );
+
+  }
+  }
+
 
 import { PrismaPackageRepository }
 from "@/server/repositories/prisma/prisma-package.repository";

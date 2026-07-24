@@ -1,34 +1,40 @@
 
-import { PackageAggregate }
-
-from "@/server/aggregates/package.aggregate";
+import { PackageAggregate } from "@/server/aggregates/package.aggregate";
 
 export interface PackageRepository {
 
-  findAll(): Promise<PackageAggregate[]>;
+    findAll(): Promise<PackageAggregate[]>;
 
-  findById(
+    findArchived(): Promise<PackageAggregate[]>;
 
-    id: number,
+    findFiltered(filters: {
+        country?: string;
+        destination?: string;
+        status?: string;
+    }): Promise<PackageAggregate[]>;
 
-  ): Promise<PackageAggregate | null>;
+    findById(
+        id: number,
+    ): Promise<PackageAggregate | null>;
 
-  createAggregate(
+    findByIdIncludingArchived(
+        id: number,
+    ): Promise<PackageAggregate | null>;
 
-    aggregate: PackageAggregate,
+    createAggregate(
+        aggregate: PackageAggregate,
+    ): Promise<PackageAggregate>;
 
-  ): Promise<PackageAggregate>;
+    updateAggregate(
+        aggregate: PackageAggregate,
+    ): Promise<PackageAggregate>;
 
-  updateAggregate(
+    archive(
+        id: number,
+    ): Promise<void>;
 
-    aggregate: PackageAggregate,
-
-  ): Promise<PackageAggregate>;
-
-  delete(
-
-    id: number,
-
-  ): Promise<void>;
+    restore(
+        id: number,
+    ): Promise<void>;
 
 }

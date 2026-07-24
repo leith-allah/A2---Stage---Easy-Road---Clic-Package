@@ -6,7 +6,7 @@ export const updateMyProfileSchema =
 
   z.object({
 
-    firstName:
+    FIRSTName:
       z.string().min(2).optional(),
 
     lastName:

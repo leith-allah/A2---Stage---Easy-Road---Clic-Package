@@ -1,6 +1,9 @@
 
 import PackageCreationWizard from "@/components/packages/create/PackageCreationWizard";
 
+import { PackageWizardProvider } from "@/context/PackageWizardProvider";
+
+
 export default function CreatePackagePage() {
   return (
     <div className="space-y-6">
@@ -17,7 +20,11 @@ export default function CreatePackagePage() {
 
       </div>
 
-      <PackageCreationWizard />
+      <PackageWizardProvider>
+
+          <PackageCreationWizard/>
+
+      </PackageWizardProvider>
 
     </div>
   );

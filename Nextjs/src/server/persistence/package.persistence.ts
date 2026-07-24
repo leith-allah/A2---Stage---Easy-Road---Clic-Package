@@ -4,6 +4,13 @@ import { Hotel } from "@/server/entities/hotel.entity";
 import { Transport } from "@/server/entities/transport.entity";
 import { Excursion } from "@/server/entities/excursion.entity";
 
+import {
+    FlightClass,
+    RoomType,
+    BoardType,
+} from "@/server/entities/value-objects/supplements.value-object";
+
+
 export interface PackagePersistence {
 
   id: number;
@@ -30,35 +37,41 @@ export interface PackagePersistence {
 
   status: string;
 
+  defaultFlightClass: FlightClass;
+
+  defaultRoomType: RoomType;
+  
+  defaultBoardType: BoardType;
+
   ownerId: number;
 
   supplements: {
 
-    economy: number;
+    ECONOMY: number;
 
-    business: number;
+    BUSINESS: number;
 
-    first: number;
+    FIRST: number;
 
-    single: number;
+    SINGLE: number;
 
-    double: number;
+    DOUBLE: number;
 
-    triple: number;
+    TRIPLE: number;
 
-    quadruple: number;
+    QUADRUPLE: number;
 
-    suite: number;
+    SUITE: number;
 
-    bedOnly: number;
+    BED_ONLY: number;
 
-    bedBreakfast: number;
+    BED_BREAKFAST: number;
 
-    halfBoard: number;
+    HALF_BOARD: number;
 
-    fullBoard: number;
+    FULL_BOARD: number;
 
-    allInclusive: number;
+    ALL_INCLUSIVE: number;
 
   };
 

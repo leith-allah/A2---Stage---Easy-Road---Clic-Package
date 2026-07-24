@@ -1,10 +1,10 @@
 
 export const RECHARGE_REQUEST_STATUS = {
-
-  PENDING: "EN_ATTENTE",
-
-  APPROVED: "APPROUVEE",
-
-  REJECTED: "REFUSEE",
+  
+  PENDING: "PENDING",
+  
+  APPROVED: "APPROVED",
+  
+  REJECTED: "REJECTED",
 
 } as const;

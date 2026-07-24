@@ -3,7 +3,7 @@ export interface AccountRequestDto {
 
   id: number;
 
-  firstName: string;
+  FIRSTName: string;
 
   lastName: string;
 

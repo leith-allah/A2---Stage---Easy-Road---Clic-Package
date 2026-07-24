@@ -5,7 +5,7 @@ export interface RegisterDto {
 
   id_bureau: number;
 
-  firstName: string;
+  FIRSTName: string;
 
   lastName: string;
 

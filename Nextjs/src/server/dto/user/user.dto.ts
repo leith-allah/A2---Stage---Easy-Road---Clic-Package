@@ -7,7 +7,7 @@ export interface UserDto {
 
   nin: string;
 
-  firstName: string;
+  FIRSTName: string;
 
   lastName: string;
 

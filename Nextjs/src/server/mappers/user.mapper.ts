@@ -21,7 +21,7 @@ export class UserMapper {
       nin:
         user.nin_user,
 
-      firstName:
+      FIRSTName:
         user.prenom_user,
 
       lastName:

@@ -1,67 +1,71 @@
 
 export type FlightClass =
 
-  | "economy"
+  | "ECONOMY"
 
-  | "business"
+  | "BUSINESS"
 
-  | "first";
+  | "FIRST";
 
 export type RoomType =
 
-  | "single"
+  | "SINGLE"
 
-  | "double"
+  | "DOUBLE"
 
-  | "triple"
+  | "TRIPLE"
 
-  | "quadruple"
+  | "QUADRUPLE"
 
-  | "suite";
+  | "SUITE";
 
 export type BoardType =
 
-  | "bedOnly"
+  | "BED_ONLY"
 
-  | "bedBreakfast"
+  | "BED_BREAKFAST"
 
-  | "halfBoard"
+  | "HALF_BOARD"
 
-  | "fullBoard"
+  | "FULL_BOARD"
 
-  | "allInclusive";
+  | "ALL_INCLUSIVE";
 
 export class Supplements {
 
   constructor(
 
-    public economy = 0,
+    public ECONOMY = 0,
 
-    public business = 0,
+    public BUSINESS = 0,
 
-    public first = 0,
+    public FIRST = 0,
 
-    public single = 0,
+    public SINGLE = 0,
 
-    public double = 0,
+    public DOUBLE = 0,
 
-    public triple = 0,
+    public TRIPLE = 0,
 
-    public quadruple = 0,
+    public QUADRUPLE = 0,
 
-    public suite = 0,
+    public SUITE = 0,
 
-    public bedOnly = 0,
+    public BED_ONLY = 0,
 
-    public bedBreakfast = 0,
+    public BED_BREAKFAST = 0,
 
-    public halfBoard = 0,
+    public HALF_BOARD = 0,
 
-    public fullBoard = 0,
+    public FULL_BOARD = 0,
 
-    public allInclusive = 0,
+    public ALL_INCLUSIVE = 0,
 
-  ) {}
+  ) {
+
+    this.validatePositive();
+
+  }
 
   getFlightSupplement(
 
@@ -136,6 +140,38 @@ export class Supplements {
     }
 
     return total;
+
+  }
+
+  private validatePositive() {
+
+      const values = [
+
+          this.ECONOMY,
+          this.BUSINESS,
+          this.FIRST,
+
+          this.SINGLE,
+          this.DOUBLE,
+          this.TRIPLE,
+          this.QUADRUPLE,
+          this.SUITE,
+
+          this.BED_ONLY,
+          this.BED_BREAKFAST,
+          this.HALF_BOARD,
+          this.FULL_BOARD,
+          this.ALL_INCLUSIVE,
+
+      ];
+
+      if(values.some(v => v < 0)) {
+
+          throw new Error(
+              "Les suppléments doivent être positifs."
+          );
+
+      }
 
   }
 

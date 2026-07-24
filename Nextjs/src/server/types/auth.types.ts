@@ -11,7 +11,7 @@ export interface AuthUser {
 
   email: string;
 
-  firstName: string;
+  FIRSTName: string;
 
   lastName: string;
 

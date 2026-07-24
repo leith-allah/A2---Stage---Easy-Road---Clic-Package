@@ -1,24 +1,20 @@
 
+import { FlightStatusValue } from "@/server/entities/value-objects/flight-status.value-object";
+
 export interface UpdateFlightDto {
 
-  airline?: string;
-
-  departureLocation?: string;
-
-  destination?: string;
-
-  departureDate?: Date;
-
-  departureTime?: Date;
-
-  arrivalTime?: Date;
-
-  returnDate?: Date | null;
-
-  returnDepartureTime?: Date | null;
-
-  returnArrivalTime?: Date | null;
+  status?: FlightStatusValue;
 
   flightNumber?: string;
+
+  departureDateTime?: string;
+
+  arrivalDateTime?: string;
+
+  departureAirportId?: number;
+
+  arrivalAirportId?: number;
+
+  airlineId?: number;
 
 }

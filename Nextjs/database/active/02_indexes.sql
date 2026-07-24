@@ -26,3 +26,25 @@ ON demande_creation_compte(id_role);
 
 CREATE INDEX idx_demande_creation_bureau
 ON demande_creation_compte(id_bureau);
+
+-- =========================
+-- GEOGRAPHIE
+-- =========================
+
+CREATE INDEX idx_ville_pays
+ON ville(id_pays);
+
+CREATE INDEX idx_aeroport_ville
+ON aeroport(id_ville);
+
+CREATE INDEX idx_vol_depart
+ON vol(id_aeroport_depart);
+
+CREATE INDEX idx_vol_arrivee
+ON vol(id_aeroport_arrivee);
+
+CREATE INDEX idx_vol_compagnie
+ON vol(id_compagnie);
+
+CREATE INDEX idx_vol_datetime
+ON vol(depart_vol);

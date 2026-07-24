@@ -1,173 +1,47 @@
 
+import {
+  FlightClass,
+  RoomType,
+  BoardType,
+} from "@/server/entities/value-objects/supplements.value-object";
+
+import { PackageAggregate }
+from "@/server/aggregates/package.aggregate";
+
 export const pricingService = {
 
   calculatePackagePrice(
 
-    packageData: any,
+    packageData: PackageAggregate,
 
     options: {
 
       nbVoyageurs: number;
 
-      classeVol: string;
+      classeVol: FlightClass;
 
-      typeChambre: string;
+      typeChambre: RoomType;
 
-      pension: string;
+      pension: BoardType;
 
     }
 
   ) {
 
-    let unitPrice =
+    const unitPrice =
 
-      Number(
-        packageData.prix_base_pack
-      );
+      packageData.calculatePrice({
 
-    switch (
-      options.classeVol
-    ) {
+        flightClass:
+          options.classeVol,
 
-      case "BUSINESS":
+        roomType:
+          options.typeChambre,
 
-        unitPrice +=
+        boardType:
+          options.pension,
 
-          Number(
-            packageData.supp_business_pack
-          );
-
-        break;
-
-      case "FIRST":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_first_pack
-          );
-
-        break;
-
-      default:
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_economy_pack
-          );
-
-    }
-
-    switch (
-      options.typeChambre
-    ) {
-
-      case "SINGLE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_single_pack
-          );
-
-        break;
-
-      case "DOUBLE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_double_pack
-          );
-
-        break;
-
-      case "TRIPLE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_triple_pack
-          );
-
-        break;
-
-      case "QUADRUPLE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_quadruple_pack
-          );
-
-        break;
-
-      case "SUITE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_suite_pack
-          );
-
-        break;
-
-    }
-
-    switch (
-      options.pension
-    ) {
-
-      case "BED_BREAKFAST":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_bed_breakfast_pack
-          );
-
-        break;
-
-      case "HALF_BOARD":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_half_board_pack
-          );
-
-        break;
-
-      case "FULL_BOARD":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_full_board_pack
-          );
-
-        break;
-
-      case "ALL_INCLUSIVE":
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_all_inclusive_pack
-          );
-
-        break;
-
-      default:
-
-        unitPrice +=
-
-          Number(
-            packageData.supp_bed_only_pack
-          );
-
-    }
+      });
 
     return (
 

@@ -1,4 +1,11 @@
 
+import {
+  FlightClass,
+  RoomType,
+  BoardType,
+} from "@/server/entities/value-objects/supplements.value-object";
+
+
 export interface CreatePackageDto {
 
   // --------------------
@@ -6,71 +13,61 @@ export interface CreatePackageDto {
   // --------------------
 
   name: string;
-
   country: string;
-
   destination: string;
 
-  image?: string;
-
-  description?: string;
-
-  // --------------------
-  // Voyage
-  // --------------------
+  image?: string | null;
+  description?: string | null;
 
   departureDate: string;
-
   returnDate: string;
-
-  // --------------------
-  // Prix
-  // --------------------
 
   basePrice: number;
 
-  // --------------------
-  // Stock
-  // --------------------
-
   totalStock: number;
 
-  // --------------------
-  // Suppléments Vol
-  // --------------------
+  // ==========================
+  // Options incluses
+  // ==========================
 
-  suppEconomy?: number;
+  defaultFlightClass: FlightClass;
 
-  suppBusiness?: number;
+  defaultRoomType: RoomType;
 
-  suppFirst?: number;
+  defaultBoardType: BoardType;
 
-  // --------------------
-  // Suppléments Chambre
-  // --------------------
+  // ==========================
+  // Suppléments
+  // ==========================
 
-  suppSingle?: number;
+  supplements: {
 
-  suppDouble?: number;
+      ECONOMY: number;
 
-  suppTriple?: number;
+      BUSINESS: number;
 
-  suppQuadruple?: number;
+      FIRST: number;
 
-  suppSuite?: number;
+      SINGLE: number;
 
-  // --------------------
-  // Suppléments Pension
-  // --------------------
+      DOUBLE: number;
 
-  suppBedOnly?: number;
+      TRIPLE: number;
 
-  suppBedBreakfast?: number;
+      QUADRUPLE: number;
 
-  suppHalfBoard?: number;
+      SUITE: number;
 
-  suppFullBoard?: number;
+      BED_ONLY: number;
 
-  suppAllInclusive?: number;
+      BED_BREAKFAST: number;
+
+      HALF_BOARD: number;
+
+      FULL_BOARD: number;
+
+      ALL_INCLUSIVE: number;
+
+  };
 
 }

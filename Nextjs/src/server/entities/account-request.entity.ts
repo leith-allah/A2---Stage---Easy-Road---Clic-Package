@@ -3,7 +3,7 @@ export interface AccountRequest {
 
   id: number;
 
-  firstName: string;
+  FIRSTName: string;
 
   lastName: string;
 

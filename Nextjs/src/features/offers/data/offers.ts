@@ -1,4 +1,4 @@
-
+/*
 import { Offer } from "@/features/offers/types/offer.types";
 
 export const offers: Offer[] = [
@@ -77,3 +77,4 @@ export const offers: Offer[] = [
     ],
   },
 ];
+*/

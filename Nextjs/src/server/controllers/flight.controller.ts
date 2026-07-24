@@ -10,52 +10,58 @@ from "@/server/dto/flight/update-flight.dto";
 
 export class FlightController {
 
-    constructor(
+  constructor(
 
-        private readonly service: FlightService
+    private readonly service: FlightService,
 
-    ) {}
+  ) {}
 
-    async findAll() {
+  async findAll() {
 
-        return this.service.findAll();
+    return this.service.findAll();
 
-    }
+  }
 
-    async findById(id:number) {
+  async findById(
+    id: number,
+  ) {
 
-        return this.service.findById(id);
+    return this.service.findById(id);
 
-    }
+  }
 
-    async create(dto:CreateFlightDto) {
+  async create(
+    dto: CreateFlightDto,
+  ) {
 
-        return this.service.create(dto);
+    return this.service.create(dto);
 
-    }
+  }
 
-    async update(
+  async update(
 
-        id:number,
+    id: number,
 
-        dto:UpdateFlightDto
+    dto: UpdateFlightDto,
 
-    ) {
+  ) {
 
-        return this.service.update(
+    return this.service.update(
 
-            id,
+      id,
 
-            dto
+      dto,
 
-        );
+    );
 
-    }
+  }
 
-    async delete(id:number) {
+  async delete(
+    id: number,
+  ) {
 
-        return this.service.delete(id);
+    return this.service.delete(id);
 
-    }
+  }
 
 }

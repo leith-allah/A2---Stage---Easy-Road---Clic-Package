@@ -4,24 +4,38 @@ from "@/server/db/prisma";
 
 export const packageFlightRepository = {
 
-  addFlightToPackage(
-    packageId: number,
-    flightId: number
+  async addFlightToPackage(
+      packageId: number,
+      flightId: number
   ) {
 
-    return prisma.possede.create({
+      const lastFlight = await prisma.possede.findFirst({
 
-      data: {
+          where: {
+              id_pack: BigInt(packageId),
+          },
 
-        id_pack:
-          BigInt(packageId),
+          orderBy: {
+              ordre: "desc",
+          },
 
-        id_vol:
-          BigInt(flightId),
+      });
 
-      },
+      return prisma.possede.create({
 
-    });
+          data: {
+
+              id_pack: BigInt(packageId),
+
+              id_vol: BigInt(flightId),
+
+              ordre: lastFlight
+                  ? lastFlight.ordre + 1
+                  : 1,
+
+          },
+
+      });
 
   },
 

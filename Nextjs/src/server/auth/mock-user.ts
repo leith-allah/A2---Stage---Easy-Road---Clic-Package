@@ -9,7 +9,7 @@ export async function getMockUser() {
 
     password: await hashPassword("Admin123!"),
 
-    firstName: "Admin",
+    FIRSTName: "Admin",
 
     lastName: "EasyRoad",
 

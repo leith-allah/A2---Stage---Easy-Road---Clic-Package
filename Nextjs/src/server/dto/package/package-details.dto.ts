@@ -9,9 +9,9 @@ export interface PackageDetailsDto {
 
   destination: string;
 
-  image?: string;
+  image?: string | null;
 
-  description?: string;
+  description?: string | null;
 
   departureDate: string;
 
@@ -23,36 +23,20 @@ export interface PackageDetailsDto {
 
   stockTotal: number;
 
-  // Vol
-
   suppEconomy: number;
-
   suppBusiness: number;
-
   suppFirst: number;
 
-  // Chambres
-
   suppSingle: number;
-
   suppDouble: number;
-
   suppTriple: number;
-
   suppQuadruple: number;
-
   suppSuite: number;
 
-  // Pension
-
   suppBedOnly: number;
-
   suppBedBreakfast: number;
-
   suppHalfBoard: number;
-
   suppFullBoard: number;
-
   suppAllInclusive: number;
 
 }

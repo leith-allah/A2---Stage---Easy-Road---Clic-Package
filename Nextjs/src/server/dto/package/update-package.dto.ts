@@ -1,4 +1,11 @@
 
+import {
+    FlightClass,
+    RoomType,
+    BoardType,
+} from "@/server/entities/value-objects/supplements.value-object";
+
+
 export interface UpdatePackageDto {
 
   name?: string;
@@ -17,22 +24,40 @@ export interface UpdatePackageDto {
 
   basePrice?: number;
 
-  availableSeats?: number;
+  totalStock?: number;
 
-  suppEconomy?: number;
-  suppBusiness?: number;
-  suppFirst?: number;
+  defaultFlightClass?: FlightClass;
+  defaultRoomType?: RoomType;
+  defaultBoardType?: BoardType;
 
-  suppSingle?: number;
-  suppDouble?: number;
-  suppTriple?: number;
-  suppQuadruple?: number;
-  suppSuite?: number;
+  supplements?: {
 
-  suppBedOnly?: number;
-  suppBedBreakfast?: number;
-  suppHalfBoard?: number;
-  suppFullBoard?: number;
-  suppAllInclusive?: number;
+      ECONOMY?: number;
+
+      BUSINESS?: number;
+
+      FIRST?: number;
+
+      SINGLE?: number;
+
+      DOUBLE?: number;
+
+      TRIPLE?: number;
+
+      QUADRUPLE?: number;
+
+      SUITE?: number;
+
+      BED_ONLY?: number;
+
+      BED_BREAKFAST?: number;
+
+      HALF_BOARD?: number;
+
+      FULL_BOARD?: number;
+
+      ALL_INCLUSIVE?: number;
+
+  };
   
 }

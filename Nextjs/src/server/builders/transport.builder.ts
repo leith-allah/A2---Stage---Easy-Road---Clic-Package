@@ -1,15 +1,13 @@
 
 import { Transport }
-
 from "@/server/entities/transport.entity";
 
-import {
-
-  CreateTransportDto,
-
-}
-
+import { CreateTransportDto }
 from "@/server/dto/transport/create-transport.dto";
+
+import { UpdateTransportDto }
+from "@/server/dto/transport/update-transport.dto";
+
 
 export class TransportBuilder {
 
@@ -28,6 +26,28 @@ export class TransportBuilder {
       dto.company ?? null,
 
     );
+
+  }
+
+  static updateFromDto(
+
+      existing: Transport,
+
+      dto: UpdateTransportDto,
+
+  ): Transport {
+
+      return new Transport(
+
+          existing.id,
+
+          dto.route
+              ?? existing.route,
+
+          dto.company
+              ?? existing.company,
+
+      );
 
   }
 

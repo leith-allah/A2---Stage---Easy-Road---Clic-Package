@@ -1,181 +1,86 @@
 
-import { Package } from "@/server/entities/package.entity";
+import { PackageAggregate } from "@/server/aggregates/package.aggregate";
 
 import { PackageDto } from "@/server/dto/package/package.dto";
 
 export class PackageMapper {
 
-  static fromPrisma(
-    prismaPackage: any
-  ): Package {
-
-    return {
-
-      id:
-        Number(
-          prismaPackage.id_pack
-        ),
-
-      name:
-        prismaPackage.nom_pack,
-
-      country:
-        prismaPackage.pays_pack,
-
-      destination:
-        prismaPackage.destination_pack,
-
-      image:
-        prismaPackage.image_pack,
-
-      description:
-        prismaPackage.description_pack,
-
-      departureDate:
-        prismaPackage.date_depart_pack,
-
-      returnDate:
-        prismaPackage.date_retour_pack,
-
-      basePrice:
-        Number(
-          prismaPackage.prix_base_pack
-        ),
-
-      availableSeats:
-        prismaPackage.stock_dispo_pack,
-
-      createdAt:
-        prismaPackage.date_heure_creation_pack,
-
-      status:
-        prismaPackage.statut_pack,
-
-      totalSeats:
-        prismaPackage.stock_total_pack,
-
-      suppEconomy:
-        Number(prismaPackage.supp_economy_pack),
-
-      suppBusiness:
-        Number(prismaPackage.supp_business_pack),
-
-      suppFirst:
-        Number(prismaPackage.supp_first_pack),
-
-      suppSingle:
-        Number(prismaPackage.supp_single_pack),
-
-      suppDouble:
-        Number(prismaPackage.supp_double_pack),
-
-      suppTriple:
-        Number(prismaPackage.supp_triple_pack),
-
-      suppQuadruple:
-        Number(prismaPackage.supp_quadruple_pack),
-
-      suppSuite:
-        Number(prismaPackage.supp_suite_pack),
-
-      suppBedOnly:
-        Number(prismaPackage.supp_bed_only_pack),
-
-      suppBedBreakfast:
-        Number(prismaPackage.supp_bed_breakfast_pack),
-
-      suppHalfBoard:
-        Number(prismaPackage.supp_half_board_pack),
-
-      suppFullBoard:
-        Number(prismaPackage.supp_full_board_pack),
-
-      suppAllInclusive:
-        Number(prismaPackage.supp_all_inclusive_pack),
-    };
-  }
-
   static toDto(
-    entity: Package
+    aggregate: PackageAggregate
   ): PackageDto {
 
     return {
 
-      id:
-        entity.id,
+      id: aggregate.id,
 
-      name:
-        entity.name,
+      name: aggregate.name,
 
-      country:
-        entity.country,
+      country: aggregate.country,
 
-      destination:
-        entity.destination,
+      destination: aggregate.destination,
 
-      image:
-        entity.image,
+      image: aggregate.image ?? undefined,
 
-      description:
-        entity.description,
+      description: aggregate.description ?? undefined,
 
       departureDate:
-        entity.departureDate.toISOString(),
+        aggregate.departureDate.toISOString(),
 
       returnDate:
-        entity.returnDate.toISOString(),
+        aggregate.returnDate.toISOString(),
 
       basePrice:
-        entity.basePrice,
+        aggregate.basePrice,
 
       availableSeats:
-        entity.availableSeats,
+        aggregate.getAvailableStock(),
 
       status:
-        entity.status,
+        aggregate.getStatus(),
 
       totalSeats:
-        entity.totalSeats,
+        aggregate.getTotalStock(),
 
       suppEconomy:
-        entity.suppEconomy,
+        aggregate.supplements.ECONOMY,
 
       suppBusiness:
-        entity.suppBusiness,
+        aggregate.supplements.BUSINESS,
 
       suppFirst:
-        entity.suppFirst,
+        aggregate.supplements.FIRST,
 
       suppSingle:
-        entity.suppSingle,
+        aggregate.supplements.SINGLE,
 
       suppDouble:
-        entity.suppDouble,
+        aggregate.supplements.DOUBLE,
 
       suppTriple:
-        entity.suppTriple,
+        aggregate.supplements.TRIPLE,
 
       suppQuadruple:
-        entity.suppQuadruple,
+        aggregate.supplements.QUADRUPLE,
 
       suppSuite:
-        entity.suppSuite,
+        aggregate.supplements.SUITE,
 
       suppBedOnly:
-        entity.suppBedOnly,
+        aggregate.supplements.BED_ONLY,
 
       suppBedBreakfast:
-        entity.suppBedBreakfast,
+        aggregate.supplements.BED_BREAKFAST,
 
       suppHalfBoard:
-        entity.suppHalfBoard,
+        aggregate.supplements.HALF_BOARD,
 
       suppFullBoard:
-        entity.suppFullBoard,
+        aggregate.supplements.FULL_BOARD,
 
       suppAllInclusive:
-        entity.suppAllInclusive,
-    };
-  }
+        aggregate.supplements.ALL_INCLUSIVE,
 
+    };
+
+  }
 }

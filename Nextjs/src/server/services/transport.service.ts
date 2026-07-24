@@ -2,12 +2,11 @@
 import { TransportRepository } from "@/server/repositories/interfaces/transport.repository.interface";
 
 import { TransportMapper } from "@/server/mappers/transport.mapper";
+import { TransportBuilder } from "@/server/builders/transport.builder";
 
 import { CreateTransportDto } from "@/server/dto/transport/create-transport.dto";
-
 import { UpdateTransportDto } from "@/server/dto/transport/update-transport.dto";
-
-import { Transport } from "@/server/entities/transport.entity";
+import { TransportDto } from "@/server/dto/transport/transport.dto";
 
 import { NotFoundException } from "@/server/utils/api-error";
 
@@ -19,36 +18,28 @@ export class TransportService {
 
   ) {}
 
-  async getAllTransports() {
+  async getAllTransports(): Promise<TransportDto[]> {
 
     const transports =
-
       await this.repository.findAll();
 
     return transports.map(
-
-      transport => TransportMapper.toDto(transport)
-
+      TransportMapper.toDto,
     );
 
   }
 
   async getTransportById(
-
     id: number,
-
-  ) {
+  ): Promise<TransportDto> {
 
     const transport =
-
       await this.repository.findById(id);
 
     if (!transport) {
 
       throw new NotFoundException(
-
-        "Transport introuvable"
-
+        "Transport introuvable",
       );
 
     }
@@ -58,59 +49,46 @@ export class TransportService {
   }
 
   async createTransport(
-
     dto: CreateTransportDto,
+  ): Promise<TransportDto> {
 
-  ) {
-
-    const transport = new Transport(
-
-      0,
-
-      dto.route,
-
-      dto.company ?? null,
-
-    );
+    const aggregate =
+      TransportBuilder.fromDto(dto);
 
     const created =
-
-      await this.repository.create(transport);
+      await this.repository.createAggregate(
+        aggregate,
+      );
 
     return TransportMapper.toDto(created);
 
   }
 
   async updateTransport(
-
     id: number,
-
     dto: UpdateTransportDto,
+  ): Promise<TransportDto> {
 
-  ) {
-
-    const exists =
-
+    const existing =
       await this.repository.findById(id);
 
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
-        "Transport introuvable"
-
+        "Transport introuvable",
       );
 
     }
 
-    const updated =
-
-      await this.repository.update(
-
-        id,
-
+    const aggregate =
+      TransportBuilder.updateFromDto(
+        existing,
         dto,
+      );
 
+    const updated =
+      await this.repository.updateAggregate(
+        aggregate,
       );
 
     return TransportMapper.toDto(updated);
@@ -118,30 +96,21 @@ export class TransportService {
   }
 
   async deleteTransport(
-
     id: number,
+  ): Promise<void> {
 
-  ) {
-
-    const exists =
-
+    const existing =
       await this.repository.findById(id);
 
-    if (!exists) {
+    if (!existing) {
 
       throw new NotFoundException(
-
-        "Transport introuvable"
-
+        "Transport introuvable",
       );
 
     }
 
-    const deleted =
-
-      await this.repository.delete(id);
-
-    return TransportMapper.toDto(deleted);
+    await this.repository.delete(id);
 
   }
 

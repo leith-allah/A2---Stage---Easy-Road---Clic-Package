@@ -1,27 +1,20 @@
 
+import {
+  FlightClass,
+  RoomType,
+  BoardType,
+} from "@/server/entities/value-objects/supplements.value-object";
+
 export interface CreateAchatPackageDto {
 
   packageId: number;
 
   nbVoyageurs: number;
 
-  classeVol:
-    | "ECONOMY"
-    | "BUSINESS"
-    | "FIRST";
+  classeVol: FlightClass;
 
-  typeChambre:
-    | "SINGLE"
-    | "DOUBLE"
-    | "TRIPLE"
-    | "QUADRUPLE"
-    | "SUITE";
+  typeChambre: RoomType;
 
-  pension:
-    | "BED_ONLY"
-    | "BED_BREAKFAST"
-    | "HALF_BOARD"
-    | "FULL_BOARD"
-    | "ALL_INCLUSIVE";
+  pension: BoardType;
 
 }

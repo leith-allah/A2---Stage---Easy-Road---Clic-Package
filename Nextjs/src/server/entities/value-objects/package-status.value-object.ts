@@ -1,11 +1,13 @@
 
 export enum PackageStatusValue {
 
-  DRAFT = "DRAFT",
+    DRAFT = "BROUILLON",
 
-  PUBLISHED = "PUBLISHED",
+    ACTIVE = "ACTIF",
 
-  ARCHIVED = "ARCHIVED",
+    INACTIVE = "INACTIF",
+
+    ARCHIVED = "ARCHIVE",
 
 }
 
@@ -19,49 +21,53 @@ export class PackageStatus {
 
   publish() {
 
-    this.value =
+      this.value = PackageStatusValue.ACTIVE;
 
-      PackageStatusValue.PUBLISHED;
+  }
 
+  activate() {
+
+      this.value = PackageStatusValue.ACTIVE;
+
+  }
+
+  disable() {
+      this.value = PackageStatusValue.INACTIVE;
   }
 
   archive() {
 
-    this.value =
-
-      PackageStatusValue.ARCHIVED;
+      this.value = PackageStatusValue.ARCHIVED;
 
   }
 
   draft() {
 
-    this.value =
-
-      PackageStatusValue.DRAFT;
+      this.value = PackageStatusValue.DRAFT;
 
   }
 
   isPublished() {
 
-    return this.value ===
+      return this.value === PackageStatusValue.ACTIVE;
 
-      PackageStatusValue.PUBLISHED;
+  }
+
+  isInactive() {
+
+      return this.value === PackageStatusValue.INACTIVE;
 
   }
 
   isArchived() {
 
-    return this.value ===
-
-      PackageStatusValue.ARCHIVED;
+      return this.value === PackageStatusValue.ARCHIVED;
 
   }
 
   isDraft() {
 
-    return this.value ===
-
-      PackageStatusValue.DRAFT;
+      return this.value === PackageStatusValue.DRAFT;
 
   }
 

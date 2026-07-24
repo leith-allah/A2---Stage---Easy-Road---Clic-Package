@@ -35,7 +35,7 @@ export default function AgencyDetailsPage() {
   const [users, setUsers] = useState([
     {
       id: 1,
-      firstname: "Thomas",
+      FIRSTname: "Thomas",
       lastname: "Dubois",
       email:
         "thomas@travelhorizon.com",
@@ -46,7 +46,7 @@ export default function AgencyDetailsPage() {
 
     {
       id: 2,
-      firstname: "Sarah",
+      FIRSTname: "Sarah",
       lastname: "Martin",
       email:
         "sarah@travelhorizon.com",
@@ -57,7 +57,7 @@ export default function AgencyDetailsPage() {
 
     {
       id: 3,
-      firstname: "Lucas",
+      FIRSTname: "Lucas",
       lastname: "Petit",
       email:
         "lucas@travelhorizon.com",
@@ -373,7 +373,7 @@ export default function AgencyDetailsPage() {
                 {/* LEFT */}
                 <div>
                   <h3 className="text-xl font-bold">
-                    {user.firstname}
+                    {user.FIRSTname}
                     {" "}
                     {user.lastname}
                   </h3>

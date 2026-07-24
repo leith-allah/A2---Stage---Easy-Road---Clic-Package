@@ -1,4 +1,9 @@
 
+import { FlightDto } from "../flight/flight.dto";
+import { HotelDto } from "../hotel/hotel.dto";
+import { TransportDto } from "../transport/transport.dto";
+import { ExcursionDto } from "../excursion/excursion.dto";
+
 export interface PackageFullDetailsDto {
 
   id: number;
@@ -9,9 +14,9 @@ export interface PackageFullDetailsDto {
 
   destination: string;
 
-  image?: string;
+  image?: string | null;
 
-  description?: string;
+  description?: string | null;
 
   departureDate: string;
 
@@ -41,11 +46,12 @@ export interface PackageFullDetailsDto {
   suppFullBoard: number;
   suppAllInclusive: number;
 
-  flights: any[];
+  flights: FlightDto[];
 
-  hotels: any[];
+  hotels: HotelDto[];
 
-  transports: any[];
+  transports: TransportDto[];
 
-  excursions: any[];
+  excursions: ExcursionDto[];
+
 }

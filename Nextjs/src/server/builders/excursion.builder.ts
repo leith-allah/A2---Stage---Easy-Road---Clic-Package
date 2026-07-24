@@ -1,15 +1,13 @@
 
 import { Excursion }
-
 from "@/server/entities/excursion.entity";
 
-import {
-
-  CreateExcursionDto,
-
-}
-
+import { CreateExcursionDto }
 from "@/server/dto/excursion/create-excursion.dto";
+
+import { UpdateExcursionDto }
+from "@/server/dto/excursion/update-excursion.dto";
+
 
 export class ExcursionBuilder {
 
@@ -30,6 +28,31 @@ export class ExcursionBuilder {
       dto.description,
 
     );
+
+  }
+
+  static updateFromDto(
+
+      existing: Excursion,
+
+      dto: UpdateExcursionDto,
+
+  ): Excursion {
+
+      return new Excursion(
+
+          existing.id,
+
+          dto.name
+              ?? existing.name,
+
+          dto.location
+              ?? existing.location,
+
+          dto.description
+              ?? existing.description,
+
+      );
 
   }
 

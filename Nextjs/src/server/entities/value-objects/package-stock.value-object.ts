@@ -3,11 +3,37 @@ export class PackageStock {
 
   constructor(
 
-    private total: number,
+      private total: number,
 
-    private available: number,
+      private available: number,
 
-  ) {}
+  ) {
+
+      if (total < 0) {
+
+          throw new Error(
+              "Le stock total ne peut pas être négatif."
+          );
+
+      }
+
+      if (available < 0) {
+
+          throw new Error(
+              "Le stock disponible ne peut pas être négatif."
+          );
+
+      }
+
+      if (available > total) {
+
+          throw new Error(
+              "Le stock disponible ne peut pas dépasser le stock total."
+          );
+
+      }
+
+  }
 
   reserve(quantity: number) {
 
@@ -61,37 +87,45 @@ export class PackageStock {
 
   increase(quantity: number) {
 
-    this.total += quantity;
+      if (quantity <= 0) {
 
-    this.available += quantity;
+          throw new Error(
+              "La quantité doit être supérieure à 0."
+          );
+
+      }
+
+      this.total += quantity;
+
+      this.available += quantity;
 
   }
 
   decrease(quantity: number) {
 
-    if (quantity > this.total)
+      if (quantity <= 0) {
 
-      throw new Error(
+          throw new Error(
+              "La quantité doit être supérieure à 0."
+          );
 
-        "Impossible.",
+      }
 
-      );
+      if (quantity > this.total) {
 
-    this.total -= quantity;
+          throw new Error(
+              "Impossible de retirer plus que le stock total."
+          );
 
-    if (
+      }
 
-      this.available >
+      this.total -= quantity;
 
-      this.total
+      if (this.available > this.total) {
 
-    ) {
+          this.available = this.total;
 
-      this.available =
-
-        this.total;
-
-    }
+      }
 
   }
 

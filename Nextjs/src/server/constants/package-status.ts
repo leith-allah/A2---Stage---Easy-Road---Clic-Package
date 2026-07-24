@@ -1,12 +1,12 @@
 
 export const PACKAGE_STATUS = {
 
-  ACTIVE: "ACTIF",
-
-  INACTIVE: "INACTIF",
-
-  ARCHIVED: "ARCHIVE",
-
-  DRAFT: "BROUILLON",
+  ACTIVE: "ACTIVE",
+  
+  INACTIVE: "INACTIVE",
+  
+  ARCHIVED: "ARCHIVED",
+  
+  DRAFT: "DRAFT",
 
 } as const;

@@ -103,7 +103,7 @@ export async function PATCH(
           body.lastName,
 
         prenom_user:
-          body.firstName,
+          body.FIRSTName,
 
         email_pro_user:
           body.email,

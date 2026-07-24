@@ -2,11 +2,11 @@
 import { requirePermission }
 from "@/server/middlewares/permission.middleware";
 
-import { packageRepository }
-from "@/server/repositories/package.repository";
+import { PrismaPackageRepository }
+from "@/server/repositories/prisma/prisma-package.repository";
 
-import { PACKAGE_STATUS }
-from "@/server/constants/package-status";
+const packageRepository =
+    new PrismaPackageRepository();
 
 type Params = {
 
@@ -29,15 +29,8 @@ export async function PATCH(
     await params;
 
   const result =
-    await packageRepository.update(
-
-      Number(id),
-
-      {
-        statut_pack:
-          PACKAGE_STATUS.DRAFT,
-      }
-
+    await packageRepository.unpublish(
+      Number(id)
     );
 
   return Response.json(

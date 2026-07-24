@@ -36,43 +36,43 @@ export class PackageDetailsMapper {
         pkg.stock_total_pack,
 
       suppEconomy:
-        Number(pkg.supp_economy_pack),
+        Number(pkg.supp_ECONOMY_pack),
 
       suppBusiness:
-        Number(pkg.supp_business_pack),
+        Number(pkg.supp_BUSINESS_pack),
 
       suppFirst:
-        Number(pkg.supp_first_pack),
+        Number(pkg.supp_FIRST_pack),
 
       suppSingle:
-        Number(pkg.supp_single_pack),
+        Number(pkg.supp_SINGLE_pack),
 
       suppDouble:
-        Number(pkg.supp_double_pack),
+        Number(pkg.supp_DOUBLE_pack),
 
       suppTriple:
-        Number(pkg.supp_triple_pack),
+        Number(pkg.supp_TRIPLE_pack),
 
       suppQuadruple:
-        Number(pkg.supp_quadruple_pack),
+        Number(pkg.supp_QUADRUPLE_pack),
 
       suppSuite:
-        Number(pkg.supp_suite_pack),
+        Number(pkg.supp_SUITE_pack),
 
       suppBedOnly:
-        Number(pkg.supp_bed_only_pack),
+        Number(pkg.supp_BED_ONLY_pack),
 
       suppBedBreakfast:
-        Number(pkg.supp_bed_breakfast_pack),
+        Number(pkg.supp_BED_BREAKFAST_pack),
 
       suppHalfBoard:
-        Number(pkg.supp_half_board_pack),
+        Number(pkg.supp_HALF_BOARD_pack),
 
       suppFullBoard:
-        Number(pkg.supp_full_board_pack),
+        Number(pkg.supp_FULL_BOARD_pack),
 
       suppAllInclusive:
-        Number(pkg.supp_all_inclusive_pack),
+        Number(pkg.supp_ALL_INCLUSIVE_pack),
 
     };
 

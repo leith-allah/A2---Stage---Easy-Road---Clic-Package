@@ -29,7 +29,7 @@ export const updatePackageSchema =
     basePrice:
       z.number().positive().optional(),
 
-    availableSeats:
+    totalStock:
       z.number().int().positive().optional(),
       
 

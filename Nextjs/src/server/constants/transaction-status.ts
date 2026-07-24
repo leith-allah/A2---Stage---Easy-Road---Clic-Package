@@ -1,10 +1,10 @@
 
 export const TRANSACTION_STATUS = {
 
-  PENDING: "EN_ATTENTE",
-
-  SUCCESS: "SUCCES",
-
-  FAILED: "ECHEC",
+  PENDING: "PENDING",
+  
+  SUCCESS: "SUCCESS",
+  
+  FAILED: "FAILED",
 
 } as const;

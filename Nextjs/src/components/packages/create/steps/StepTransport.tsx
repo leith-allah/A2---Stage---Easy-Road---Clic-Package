@@ -2,94 +2,90 @@
 "use client";
 
 import { useWizardUpdater } from "@/hooks/useWizardUpdater";
+import { usePackageWizard } from "@/context/usePackageWizard";
+import { useWizardValidation } from "@/hooks/useWizardValidation";
 
+import FormSection from "../ui/FormSection";
+import FormInput from "../ui/FormInput";
+import StepNavigation from "../ui/StepNavigation";
 
-interface Props {
-    data:any;
-    setData:any;
-    next:()=>void;
-    previous:()=>void;
-}
+export default function StepTransport() {
 
-export default function StepTransport({
-    data,
-    setData,
-    next,
-    previous
-}: Props){
+    const {
+
+        data,
+
+        setData,
+
+        next,
+
+        previous,
+
+    } = usePackageWizard();
+
+    const {
+
+        errors,
+
+        canGoNext,
+
+    } = useWizardValidation();
+
+    const transportErrors = errors.transports;
+
+    const {
+
+        updateTransport,
+
+    } = useWizardUpdater(setData);
 
     function handleNext() {
+
+        if (!canGoNext()) return;
+
         next();
+
     }
 
-    const { updateItem } =
-        useWizardUpdater(setData);
-
-    return(
+    return (
 
         <div className="space-y-6">
 
-            <h2 className="text-xl font-bold">
-                Transport
-            </h2>
+            <FormSection title="Informations du transport">
 
-            <input
+                <FormInput
+                    label="Trajet"
+                    value={data.transports[0].route}
+                    error={transportErrors[0]?.route}
+                    onChange={(value) =>
+                        updateTransport(
+                            0,
+                            "route",
+                            value
+                        )
+                    }
+                />
 
-                className="input input-bordered w-full"
-                placeholder="Trajet"
-                value={data.transports[0].route}
-                onChange={(e)=>
-                    updateItem(
-                        "transports",
-                        0,
-                        "route",
-                        e.target.value
-                    )
-                }
+                <FormInput
+                    label="Société"
+                    value={data.transports[0].company}
+                    error={transportErrors[0]?.company}
+                    onChange={(value) =>
+                        updateTransport(
+                            0,
+                            "company",
+                            value
+                        )
+                    }
+                />
+
+            </FormSection>
+
+            <StepNavigation
+                onPrevious={previous}
+                onNext={handleNext}
+                nextDisabled={!canGoNext()}
             />
-
-            <input
-
-                className="input input-bordered w-full"
-                placeholder="Société"
-                value={data.transports[0].company}
-                onChange={(e)=>
-                    updateItem(
-                        "transports",
-                        0,
-                        "company",
-                        e.target.value
-                    )
-                }
-            />
-
-            <div className="flex justify-between">
-
-                <button
-
-                    className="btn"
-
-                    onClick={previous}
-
-                >
-
-                    Retour
-
-                </button>
-
-                <button
-
-                    className="btn btn-primary"
-
-                    onClick={handleNext}
-
-                >
-
-                    Continuer
-
-                </button>
-
-            </div>
 
         </div>
 
