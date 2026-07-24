@@ -40,6 +40,8 @@ implements PackageRepository {
 
   private toAggregate(p: any): PackageAggregate {
 
+      console.log(p);
+
       return PackageAggregateMapper.fromPersistence({
 
           id: Number(p.id_pack),
@@ -76,31 +78,21 @@ implements PackageRepository {
 
           supplements: {
 
-              ECONOMY: Number(p.supp_ECONOMY_pack),
+            ECONOMY: Number(p.supp_economy_pack),
+            BUSINESS: Number(p.supp_business_pack),
+            FIRST: Number(p.supp_first_pack),
 
-              BUSINESS: Number(p.supp_BUSINESS_pack),
+            SINGLE: Number(p.supp_single_pack),
+            DOUBLE: Number(p.supp_double_pack),
+            TRIPLE: Number(p.supp_triple_pack),
+            QUADRUPLE: Number(p.supp_quadruple_pack),
+            SUITE: Number(p.supp_suite_pack),
 
-              FIRST: Number(p.supp_FIRST_pack),
-
-              SINGLE: Number(p.supp_SINGLE_pack),
-
-              DOUBLE: Number(p.supp_DOUBLE_pack),
-
-              TRIPLE: Number(p.supp_TRIPLE_pack),
-
-              QUADRUPLE: Number(p.supp_QUADRUPLE_pack),
-
-              SUITE: Number(p.supp_SUITE_pack),
-
-              BED_ONLY: Number(p.supp_BED_ONLY_pack),
-
-              BED_BREAKFAST: Number(p.supp_BED_BREAKFAST_pack),
-
-              HALF_BOARD: Number(p.supp_HALF_BOARD_pack),
-
-              FULL_BOARD: Number(p.supp_FULL_BOARD_pack),
-
-              ALL_INCLUSIVE: Number(p.supp_ALL_INCLUSIVE_pack),
+            BED_ONLY: Number(p.supp_bed_only_pack),
+            BED_BREAKFAST: Number(p.supp_bed_breakfast_pack),
+            HALF_BOARD: Number(p.supp_half_board_pack),
+            FULL_BOARD: Number(p.supp_full_board_pack),
+            ALL_INCLUSIVE: Number(p.supp_all_inclusive_pack),
 
           },
 

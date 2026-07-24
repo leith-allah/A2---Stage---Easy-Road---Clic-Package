@@ -50,7 +50,7 @@ export default function FlightDefaultClass({
 
                         value: "ECONOMY",
 
-                        label: "Economy",
+                        label: "ECONOMY",
 
                     },
 
@@ -58,7 +58,7 @@ export default function FlightDefaultClass({
 
                         value: "BUSINESS",
 
-                        label: "Business",
+                        label: "BUSINESS",
 
                     },
 
@@ -66,7 +66,7 @@ export default function FlightDefaultClass({
 
                         value: "FIRST",
 
-                        label: "First",
+                        label: "FIRST",
 
                     },
 

@@ -58,6 +58,8 @@ export const achatPackageService = {
         dto.packageId
       );
 
+console.log(packageData);
+
     if (!packageData) {
 
       throw new Error(
@@ -161,6 +163,13 @@ export const achatPackageService = {
       Number(
         ownerWallet.solde_total_prtfl
       ) + totalPrice;
+
+console.log({
+    currentBalance,
+    totalPrice,
+    newBuyerBalance,
+    newOwnerBalance
+});
 
 
     const purchase =

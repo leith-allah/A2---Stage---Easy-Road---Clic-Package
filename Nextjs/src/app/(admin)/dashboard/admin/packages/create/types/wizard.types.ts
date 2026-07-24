@@ -14,21 +14,21 @@ export interface PackageFormData {
   stock_total_pack: number;
   stock_dispo_pack: number;
 
-  supp_ECONOMY_pack?: number;
-  supp_BUSINESS_pack?: number;
-  supp_FIRST_pack?: number;
+  supp_economy_pack?: number;
+  supp_business_pack?: number;
+  supp_first_pack?: number;
 
-  supp_SINGLE_pack?: number;
-  supp_DOUBLE_pack?: number;
-  supp_TRIPLE_pack?: number;
-  supp_QUADRUPLE_pack?: number;
-  supp_SUITE_pack?: number;
+  supp_single_pack?: number;
+  supp_double_pack?: number;
+  supp_triple_pack?: number;
+  supp_quadruple_pack?: number;
+  supp_suite_pack?: number;
 
-  supp_BED_ONLY_pack?: number;
-  supp_BED_BREAKFAST_pack?: number;
-  supp_HALF_BOARD_pack?: number;
-  supp_FULL_BOARD_pack?: number;
-  supp_ALL_INCLUSIVE_pack?: number;
+  supp_bed_only_pack?: number;
+  supp_BEDbed_breakfast_pack?: number;
+  supp_half_board_pack?: number;
+  supp_full_board_pack?: number;
+  supp_all_inclusive_pack?: number;
 }
 
 export interface WizardState {

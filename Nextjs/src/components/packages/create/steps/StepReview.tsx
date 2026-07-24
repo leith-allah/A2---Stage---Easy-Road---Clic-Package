@@ -35,38 +35,38 @@ export default function StepReview() {
 
     const flightSupplements = [
         {
-            label: "Economy",
+            label: "ECONOMY",
             value: data.supplements.ECONOMY,
         },
         {
-            label: "Business",
+            label: "BUSINESS",
             value: data.supplements.BUSINESS,
         },
         {
-            label: "First",
+            label: "FIRST",
             value: data.supplements.FIRST,
         },
     ];
 
     const roomSupplements = [
         {
-            label: "Single",
+            label: "SINGLE",
             value: data.supplements.SINGLE,
         },
         {
-            label: "Double",
+            label: "DOUBLE",
             value: data.supplements.DOUBLE,
         },
         {
-            label: "Triple",
+            label: "TRIPLE",
             value: data.supplements.TRIPLE,
         },
         {
-            label: "Quadruple",
+            label: "QUADRUPLE",
             value: data.supplements.QUADRUPLE,
         },
         {
-            label: "Suite",
+            label: "SUITE",
             value: data.supplements.SUITE,
         },
     ];

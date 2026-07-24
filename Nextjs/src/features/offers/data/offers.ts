@@ -59,15 +59,15 @@ export const offers: Offer[] = [
       "Excursion VIP avec dîner gastronomique et activités dans le désert.",
 
     availableFlightClasses: [
-      "Economy",
-      "Business",
-      "First",
+      "ECONOMY",
+      "BUSINESS",
+      "FIRST",
     ],
 
     availableRoomTypes: [
       "Standard",
       "Deluxe",
-      "Suite",
+      "SUITE",
     ],
 
     availablePensions: [

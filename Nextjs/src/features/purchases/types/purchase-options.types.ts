@@ -1,20 +1,20 @@
 
 export type FlightClass =
-  | "Economy"
-  | "Business"
-  | "First";
+  | "ECONOMY"
+  | "BUSINESS"
+  | "FIRST";
 
 export type RoomType =
-  | "Single"
-  | "Double"
-  | "Triple"
-  | "Quadruple"
-  | "Suite";
+  | "SINGLE"
+  | "DOUBLE"
+  | "TRIPLE"
+  | "QUADRUPLE"
+  | "SUITE";
 
 export type PensionType =
-  | "BedOnly"
-  | "BedBreakfast"
-  | "HalfBoard"
-  | "FullBoard"
-  | "AllInclusive";
+  | "BED_ONLY"
+  | "BED_BREAKFAST"
+  | "HALF_BOARD"
+  | "FULL_BOARD"
+  | "ALL_INCLUSIVE";
   

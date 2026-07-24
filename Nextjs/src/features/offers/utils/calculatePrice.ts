@@ -30,14 +30,14 @@ export function calculatePrice({
   let total =
     packageData.basePrice;
 
-  if (flightClass === "Business") {
+  if (flightClass === "BUSINESS") {
 
     total +=
       packageData.suppBusiness ?? 0;
 
   }
 
-  if (flightClass === "First") {
+  if (flightClass === "FIRST") {
 
     total +=
       packageData.suppFirst ?? 0;
@@ -46,27 +46,27 @@ export function calculatePrice({
 
   switch (roomType) {
 
-    case "Single":
+    case "SINGLE":
       total +=
         packageData.suppSingle ?? 0;
       break;
 
-    case "Double":
+    case "DOUBLE":
       total +=
         packageData.suppDouble ?? 0;
       break;
 
-    case "Triple":
+    case "TRIPLE":
       total +=
         packageData.suppTriple ?? 0;
       break;
 
-    case "Quadruple":
+    case "QUADRUPLE":
       total +=
         packageData.suppQuadruple ?? 0;
       break;
 
-    case "Suite":
+    case "SUITE":
       total +=
         packageData.suppSuite ?? 0;
       break;
@@ -74,22 +74,22 @@ export function calculatePrice({
 
   switch (pension) {
 
-    case "BedBreakfast":
+    case "BED_BREAKFAST":
       total +=
         packageData.suppBedBreakfast ?? 0;
       break;
 
-    case "HalfBoard":
+    case "HALF_BOARD":
       total +=
         packageData.suppHalfBoard ?? 0;
       break;
 
-    case "FullBoard":
+    case "FULL_BOARD":
       total +=
         packageData.suppFullBoard ?? 0;
       break;
 
-    case "AllInclusive":
+    case "ALL_INCLUSIVE":
       total +=
         packageData.suppAllInclusive ?? 0;
       break;

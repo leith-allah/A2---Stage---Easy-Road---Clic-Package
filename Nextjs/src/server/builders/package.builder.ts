@@ -73,7 +73,7 @@ export class PackageBuilder {
 
     const status = new PackageStatus(
 
-      PackageStatusValue.DRAFT,
+      PackageStatusValue.ACTIVE,
 
     );
 

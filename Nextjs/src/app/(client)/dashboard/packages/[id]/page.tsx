@@ -45,13 +45,13 @@ export default function PackageDetailsPage() {
     useState(1);
 
   const [flightClass, setFlightClass] =
-    useState<FlightClass>("Economy");
+    useState<FlightClass>("ECONOMY");
 
   const [roomType, setRoomType] =
-    useState<RoomType>("Double");
+    useState<RoomType>("DOUBLE");
 
   const [pension, setPension] =
-    useState<PensionType>("BedOnly");
+    useState<PensionType>("BED_ONLY");
 
   useEffect(() => {
 
@@ -406,18 +406,18 @@ export default function PackageDetailsPage() {
         <div className="space-y-2">
 
           <PriceRow
-            label="Economy"
+            label="ECONOMY"
             value="Inclus"
             green
           />
 
           <PriceRow
-            label="Business"
+            label="BUSINESS"
             value={`${pkg.suppBusiness} DA`}
           />
 
           <PriceRow
-            label="First"
+            label="FIRST"
             value={`${pkg.suppFirst} DA`}
           />
 
@@ -433,11 +433,11 @@ export default function PackageDetailsPage() {
 
         <div className="space-y-2">
 
-          <PriceRow label="Single" value={`${pkg.suppSingle} DA`} />
-          <PriceRow label="Double" value={`${pkg.suppDouble} DA`} />
-          <PriceRow label="Triple" value={`${pkg.suppTriple} DA`} />
-          <PriceRow label="Quadruple" value={`${pkg.suppQuadruple} DA`} />
-          <PriceRow label="Suite" value={`${pkg.suppSuite} DA`} />
+          <PriceRow label="SINGLE" value={`${pkg.suppSingle} DA`} />
+          <PriceRow label="DOUBLE" value={`${pkg.suppDouble} DA`} />
+          <PriceRow label="TRIPLE" value={`${pkg.suppTriple} DA`} />
+          <PriceRow label="QUADRUPLE" value={`${pkg.suppQuadruple} DA`} />
+          <PriceRow label="SUITE" value={`${pkg.suppSuite} DA`} />
 
         </div>
 
@@ -513,13 +513,13 @@ export default function PackageDetailsPage() {
               className="border rounded p-2 w-full"
             >
 
-              <option value="Economy">
+              <option value="ECONOMY">
                 Economy (Inclus)
               </option>
 
               {pkg.suppBusiness > 0 && (
 
-                <option value="Business">
+                <option value="BUSINESS">
                   Business (+{pkg.suppBusiness.toLocaleString()} DA)
                 </option>
 
@@ -527,7 +527,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppFirst > 0 && (
 
-                <option value="First">
+                <option value="FIRST">
                   First (+{pkg.suppFirst.toLocaleString()} DA)
                 </option>
 
@@ -555,13 +555,13 @@ export default function PackageDetailsPage() {
 
               {pkg.suppSingle > 0 && (
 
-                <option value="Single">
+                <option value="SINGLE">
                   Single (+{pkg.suppSingle.toLocaleString()} DA)
                 </option>
 
               )}
 
-              <option value="Double">
+              <option value="DOUBLE">
                 Double
                 {pkg.suppDouble > 0 &&
                   ` (+${pkg.suppDouble.toLocaleString()} DA)`}
@@ -569,7 +569,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppTriple > 0 && (
 
-                <option value="Triple">
+                <option value="TRIPLE">
                   Triple (+{pkg.suppTriple.toLocaleString()} DA)
                 </option>
 
@@ -577,7 +577,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppQuadruple > 0 && (
 
-                <option value="Quadruple">
+                <option value="QUADRUPLE">
                   Quadruple (+{pkg.suppQuadruple.toLocaleString()} DA)
                 </option>
 
@@ -585,7 +585,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppSuite > 0 && (
 
-                <option value="Suite">
+                <option value="SUITE">
                   Suite (+{pkg.suppSuite.toLocaleString()} DA)
                 </option>
 
@@ -611,13 +611,13 @@ export default function PackageDetailsPage() {
               className="border rounded p-2 w-full"
             >
 
-              <option value="BedOnly">
+              <option value="BED_ONLY">
                 Bed Only
               </option>
 
               {pkg.suppBedBreakfast > 0 && (
 
-                <option value="BedBreakfast">
+                <option value="BED_BREAKFAST">
                   Bed & Breakfast
                   (+{pkg.suppBedBreakfast.toLocaleString()} DA)
                 </option>
@@ -626,7 +626,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppHalfBoard > 0 && (
 
-                <option value="HalfBoard">
+                <option value="HALF_BOARD">
                   Half Board
                   (+{pkg.suppHalfBoard.toLocaleString()} DA)
                 </option>
@@ -635,7 +635,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppFullBoard > 0 && (
 
-                <option value="FullBoard">
+                <option value="FULL_BOARD">
                   Full Board
                   (+{pkg.suppFullBoard.toLocaleString()} DA)
                 </option>
@@ -644,7 +644,7 @@ export default function PackageDetailsPage() {
 
               {pkg.suppAllInclusive > 0 && (
 
-                <option value="AllInclusive">
+                <option value="ALL_INCLUSIVE">
                   All Inclusive
                   (+{pkg.suppAllInclusive.toLocaleString()} DA)
                 </option>

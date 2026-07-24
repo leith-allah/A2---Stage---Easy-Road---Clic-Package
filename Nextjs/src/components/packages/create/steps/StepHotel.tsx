@@ -137,11 +137,11 @@ export default function StepHotel() {
                   )
               }
               options={[
-                  { label: "Single", value: "SINGLE" },
-                  { label: "Double", value: "DOUBLE" },
-                  { label: "Triple", value: "TRIPLE" },
-                  { label: "Quadruple", value: "QUADRUPLE" },
-                  { label: "Suite", value: "SUITE" },
+                  { label: "SINGLE", value: "SINGLE" },
+                  { label: "DOUBLE", value: "DOUBLE" },
+                  { label: "TRIPLE", value: "TRIPLE" },
+                  { label: "QUADRUPLE", value: "QUADRUPLE" },
+                  { label: "SUITE", value: "SUITE" },
               ]}
           />
 

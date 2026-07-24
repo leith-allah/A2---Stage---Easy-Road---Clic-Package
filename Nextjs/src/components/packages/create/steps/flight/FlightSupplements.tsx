@@ -60,7 +60,7 @@ export default function FlightSupplements({
 
                     type="number"
 
-                    label="Economy"
+                    label="ECONOMY"
 
                     value={String(ECONOMYPrice)}
 
@@ -84,7 +84,7 @@ export default function FlightSupplements({
 
                     type="number"
 
-                    label="Business"
+                    label="BUSINESS"
 
                     value={String(BUSINESSPrice)}
 
@@ -108,7 +108,7 @@ export default function FlightSupplements({
 
                     type="number"
 
-                    label="First"
+                    label="FIRST"
 
                     value={String(FIRSTPrice)}
 

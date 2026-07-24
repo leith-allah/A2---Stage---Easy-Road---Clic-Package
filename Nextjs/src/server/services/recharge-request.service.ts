@@ -177,7 +177,7 @@ export const rechargeRequestService = {
     if (!ownerWallet) {
 
       throw new Error(
-        "Business wallet not found"
+        "BUSINESS wallet not found"
       );
 
     }
@@ -210,7 +210,7 @@ export const rechargeRequestService = {
     ) {
 
       throw new Error(
-        "Business wallet balance insufficient"
+        "BUSINESS wallet balance insufficient"
       );
 
     }

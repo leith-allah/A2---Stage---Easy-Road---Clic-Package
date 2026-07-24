@@ -1,13 +1,13 @@
 
 export enum PackageStatusValue {
 
-    DRAFT = "BROUILLON",
+    DRAFT = "DRAFT",
 
-    ACTIVE = "ACTIF",
+    ACTIVE = "ACTIVE",
 
-    INACTIVE = "INACTIF",
+    INACTIVE = "INACTIVE",
 
-    ARCHIVED = "ARCHIVE",
+    ARCHIVED = "ARCHIVED",
 
 }
 
