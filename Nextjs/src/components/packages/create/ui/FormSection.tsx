@@ -1,11 +1,13 @@
 
 "use client";
 
-interface Props{
+interface Props {
 
-    title:string;
+    title: string;
 
-    children:React.ReactNode;
+    description?: string;
+
+    children: React.ReactNode;
 
 }
 
@@ -13,47 +15,108 @@ export default function FormSection({
 
     title,
 
+    description,
+
     children,
 
-}:Props){
+}: Props) {
 
-    return(
+    return (
 
         <section
 
             className="
 
-                rounded-xl
+                bg-white
 
                 border
 
-                p-6
+                border-slate-200
 
-                space-y-5
+                rounded-3xl
 
-                bg-white
+                shadow-[0_6px_20px_rgba(15,23,42,0.04)]
+
+                hover:shadow-md
+
+                transition-all
+
+                duration-300
+
+                hover:-translate-y-0.5
+
+                p-8
+
+                space-y-8
 
             "
 
         >
 
-            <h2
+            <div className="space-y-2">
 
-                className="
+                <h2
 
-                    text-xl
+                    className="
 
-                    font-bold
+                        text-2xl
 
-                "
+                        font-bold
 
-            >
+                        text-slate-800
 
-                {title}
+                        tracking-tight
 
-            </h2>
+                    "
 
-            {children}
+                >
+
+                    {title}
+
+                </h2>
+
+                {description && (
+
+                    <p
+                        className="
+                            text-sm
+                            text-slate-500
+                            leading-relaxed
+                            max-w-3xl
+                        "
+                    >
+
+                        {description}
+
+                    </p>
+
+                )}
+
+                <div
+
+                    className="
+
+                        h-px
+
+                        bg-gradient-to-r
+
+                        from-primary
+
+                        via-cyan-300
+
+                        to-transparent
+
+                    "
+
+                />
+
+            </div>
+
+            <div className="space-y-6">
+
+                {children}
+
+            </div>
 
         </section>
 

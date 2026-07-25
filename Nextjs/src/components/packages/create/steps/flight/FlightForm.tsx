@@ -73,40 +73,21 @@ export default function FlightForm({
                 <div className="grid grid-cols-2 gap-4">
 
                     <SearchSelect
-
+                        label="Compagnie aérienne"
+                        required
+                        error={errors.airline}
                         options={airlines}
-
                         value={flight.airline}
-
                         loading={loadingAirlines}
-
                         placeholder="Compagnie aérienne"
-
                         getLabel={(airline) => airline.name}
-
                         onChange={(airline) =>
-
                             onFlightChange(
-
                                 "airline",
-
                                 airline,
-
                             )
-
                         }
-
                     />
-
-                    {errors.airline && (
-
-                        <p className="text-sm text-red-500">
-
-                            {errors.airline}
-
-                        </p>
-
-                    )}
 
                     <FormInput
 
@@ -141,84 +122,42 @@ export default function FlightForm({
                 <div className="grid grid-cols-2 gap-4">
 
                     <SearchSelect
-
+                        label="Aéroport de départ"
+                        required
+                        error={errors.departureAirport}
                         options={airports}
-
                         value={flight.departureAirport}
-
                         loading={loadingAirports}
-
                         placeholder="Aéroport de départ"
-
                         getLabel={(airport) =>
-
-                            `${airport.iataCode} - ${airport.city} (${airport.country})`
-
+                            `${airport.iataCode} - ${airport.city.name} (${airport.city.country})`
                         }
-
                         onChange={(airport) =>
-
                             onFlightChange(
-
                                 "departureAirport",
-
                                 airport,
-
                             )
-
                         }
-
                     />
-
-                    {errors.departureAirport && (
-
-                        <p className="text-sm text-red-500">
-
-                            {errors.departureAirport}
-
-                        </p>
-
-                    )}
 
                     <SearchSelect
-
+                        label="Aéroport d'Arrivée"
+                        required
+                        error={errors.arrivalAirport}
                         options={airports}
-
                         value={flight.arrivalAirport}
-
                         loading={loadingAirports}
-
-                        placeholder="Aéroport d'arrivée"
-
+                        placeholder="Aéroport d'Arrivée"
                         getLabel={(airport) =>
-
-                            `${airport.iataCode} - ${airport.city} (${airport.country})`
-
+                            `${airport.iataCode} - ${airport.city.name} (${airport.city.country})`
                         }
-
                         onChange={(airport) =>
-
                             onFlightChange(
-
                                 "arrivalAirport",
-
                                 airport,
-
                             )
-
                         }
-
                     />
-
-                    {errors.arrivalAirport && (
-
-                        <p className="text-sm text-red-500">
-
-                            {errors.arrivalAirport}
-
-                        </p>
-
-                    )}
 
                 </div>
 
@@ -281,60 +220,6 @@ export default function FlightForm({
                     />
 
                 </div>
-
-            </FormSection>
-
-            <FormSection title="Statut">
-
-                <FormSelect
-
-                    label="Statut"
-
-                    value={flight.status}
-
-                    onChange={(value) =>
-
-                        onFlightChange(
-
-                            "status",
-
-                            value,
-
-                        )
-
-                    }
-
-                    options={[
-
-                        {
-
-                            value: FlightStatusValue.ACTIVE,
-
-                            label: "Actif",
-
-                        },
-
-                        {
-
-                            value: FlightStatusValue.INACTIVE,
-
-                            label: "Inactif",
-
-                        },
-
-                        {
-
-                            value: FlightStatusValue.ARCHIVED,
-
-                            label: "Archivé",
-
-                        },
-
-                    ]}
-
-                    error={errors.status}
-
-                />
 
             </FormSection>
 

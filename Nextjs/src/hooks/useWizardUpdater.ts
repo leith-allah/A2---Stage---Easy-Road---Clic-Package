@@ -6,8 +6,25 @@ import { createEmptyFlight } from "@/types/package/defaults";
 
 
 export function useWizardUpdater(
-    setData: React.Dispatch<React.SetStateAction<WizardFormData>>
+    setData: React.Dispatch<React.SetStateAction<WizardFormData>>,
+    step: number,
+    setTouchedSteps: React.Dispatch<React.SetStateAction<number[]>>
 ) {
+
+    function touchCurrentStep() {
+
+        setTouchedSteps(previous =>
+
+            previous.includes(step)
+
+                ? previous
+
+                : [...previous, step]
+
+        );
+
+    }
+
     // =====================================================
     // Package
     // =====================================================
@@ -18,6 +35,8 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["package"][K]
     ) {
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             package: {
@@ -37,6 +56,8 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["supplements"][K]
     ) {
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             supplements: {
@@ -57,6 +78,8 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["flights"][number][K]
     ) {
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             flights: prev.flights.map((flight, i) =>
@@ -71,6 +94,8 @@ export function useWizardUpdater(
     }
 
     function addFlight() {
+
+        touchCurrentStep();
 
         setData(prev => ({
 
@@ -89,6 +114,9 @@ export function useWizardUpdater(
     }
 
     function removeFlight(index: number) {
+
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             flights:
@@ -99,6 +127,9 @@ export function useWizardUpdater(
     }
 
     function duplicateFlight(index: number) {
+
+        touchCurrentStep();
+
         setData(prev => {
             const copy = {
                 ...prev.flights[index],
@@ -126,6 +157,9 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["hotels"][number][K]
     ) {
+
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             hotels: prev.hotels.map((hotel, i) =>
@@ -150,6 +184,9 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["transports"][number][K]
     ) {
+
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             transports: prev.transports.map((transport, i) =>
@@ -163,6 +200,85 @@ export function useWizardUpdater(
         }));
     }
 
+    function addTransport() {
+
+        touchCurrentStep();
+
+        setData(previous => ({
+
+            ...previous,
+
+            transports: [
+
+                ...previous.transports,
+
+                {
+                    route: "",
+                    company: "",
+                },
+
+            ],
+
+        }));
+
+    }
+
+    function removeTransport(index: number) {
+
+        touchCurrentStep();
+
+        setData(previous => ({
+
+            ...previous,
+
+            transports:
+
+                previous.transports.length === 1
+
+                    ? previous.transports
+
+                    : previous.transports.filter(
+
+                        (_, i) => i !== index,
+
+                    ),
+
+        }));
+
+    }
+
+    function duplicateTransport(index: number) {
+
+        touchCurrentStep();
+
+        setData(previous => {
+
+            const copy = {
+
+                ...previous.transports[index],
+
+            };
+
+            return {
+
+                ...previous,
+
+                transports: [
+
+                    ...previous.transports.slice(0, index + 1),
+
+                    copy,
+
+                    ...previous.transports.slice(index + 1),
+
+                ],
+
+            };
+
+        });
+
+    }
+
     // =====================================================
     // Excursions
     // =====================================================
@@ -174,6 +290,9 @@ export function useWizardUpdater(
         field: K,
         value: WizardFormData["excursions"][number][K]
     ) {
+
+        touchCurrentStep();
+
         setData(prev => ({
             ...prev,
             excursions: prev.excursions.map((excursion, i) =>
@@ -185,6 +304,88 @@ export function useWizardUpdater(
                     : excursion
             ),
         }));
+    }
+
+    function addExcursion() {
+
+        touchCurrentStep();
+
+        setData(previous => ({
+
+            ...previous,
+
+            excursions: [
+
+                ...previous.excursions,
+
+                {
+
+                    name: "",
+                    location: "",
+                    description: "",
+
+                },
+
+            ],
+
+        }));
+
+    }
+
+    function removeExcursion(index: number) {
+
+        touchCurrentStep();
+
+        setData(previous => ({
+
+            ...previous,
+
+            excursions:
+
+                previous.excursions.length === 1
+
+                    ? previous.excursions
+
+                    : previous.excursions.filter(
+
+                        (_, i) => i !== index,
+
+                    ),
+
+        }));
+
+    }
+
+    function duplicateExcursion(index: number) {
+
+        touchCurrentStep();
+
+        setData(previous => {
+
+            const copy = {
+
+                ...previous.excursions[index],
+
+            };
+
+            return {
+
+                ...previous,
+
+                excursions: [
+
+                    ...previous.excursions.slice(0, index + 1),
+
+                    copy,
+
+                    ...previous.excursions.slice(index + 1),
+
+                ],
+
+            };
+
+        });
+
     }
 
     return {
@@ -200,8 +401,14 @@ export function useWizardUpdater(
         updateHotel,
 
         updateTransport,
+        addTransport,
+        removeTransport,
+        duplicateTransport,
 
         updateExcursion,
+        addExcursion,
+        removeExcursion,
+        duplicateExcursion,
     };
 
 }

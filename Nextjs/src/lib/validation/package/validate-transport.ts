@@ -21,9 +21,28 @@ export const validateTransport: TransportValidator = (
 
     const errors: TransportErrors = {};
 
-    /* =====================================================
-       Trajet
-    ===================================================== */
+    /*
+    =====================================================
+    Transport complètement vide
+    =====================================================
+    */
+
+    const isEmpty =
+
+        !data.route.trim() &&
+        !data.company.trim();
+
+    if (isEmpty) {
+
+        return {};
+
+    }
+
+    /*
+    =====================================================
+    Trajet
+    =====================================================
+    */
 
     const route = data.route.trim();
 
@@ -56,15 +75,16 @@ export const validateTransport: TransportValidator = (
 
     }
 
-    /* =====================================================
-       Compagnie
-    ===================================================== */
+    /*
+    =====================================================
+    Compagnie
+    =====================================================
+    */
 
     if (
 
         data.company &&
         data.company.length >
-
         TRANSPORT_RULES.COMPANY.MAX
 
     ) {

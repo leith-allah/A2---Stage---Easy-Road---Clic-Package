@@ -1,14 +1,20 @@
 
+import type { City } from "./city";
+
 export interface Airport {
 
     id: number;
 
     name: string;
 
-    city: string;
-
-    country: string;
-
     iataCode: string;
+
+    icaoCode: string;
+
+    latitude: number;
+
+    longitude: number;
+
+    city: City;
 
 }

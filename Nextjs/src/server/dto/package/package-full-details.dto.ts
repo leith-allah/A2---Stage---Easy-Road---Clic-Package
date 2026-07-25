@@ -5,31 +5,28 @@ import { TransportDto } from "../transport/transport.dto";
 import { ExcursionDto } from "../excursion/excursion.dto";
 
 export interface PackageFullDetailsDto {
-
   id: number;
-
   name: string;
-
   country: string;
-
   destination: string;
-
   image?: string | null;
-
   description?: string | null;
-
   departureDate: string;
-
   returnDate: string;
-
   basePrice: number;
-
   availableSeats: number;
-
   stockTotal: number;
-
   status: string;
 
+  // Valeurs par défaut transmises au frontend
+  defaultFlightClass?: string;
+  defaultRoomType?: string;
+  defaultBoardType?: string;
+
+  // Suppléments sous forme d'objet
+  supplements?: Record<string, number>;
+
+  // Suppléments à plat
   suppEconomy: number;
   suppBusiness: number;
   suppFirst: number;
@@ -47,11 +44,7 @@ export interface PackageFullDetailsDto {
   suppAllInclusive: number;
 
   flights: FlightDto[];
-
   hotels: HotelDto[];
-
   transports: TransportDto[];
-
   excursions: ExcursionDto[];
-
 }

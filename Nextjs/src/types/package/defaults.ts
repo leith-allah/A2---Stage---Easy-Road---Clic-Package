@@ -59,7 +59,7 @@ export function createEmptyHotel(): HotelFormData {
 
         address: "",
 
-        stars: 3,
+        stars: 0,
 
     };
 

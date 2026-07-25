@@ -59,6 +59,10 @@ export default function AdminHeader() {
                     Packages
                 </Link>
 
+                <Link href="/dashboard/favorites">
+                    ❤️
+                </Link>
+
                 <Link href="/dashboard/admin/packages/create">
                     Création Packages
                 </Link>

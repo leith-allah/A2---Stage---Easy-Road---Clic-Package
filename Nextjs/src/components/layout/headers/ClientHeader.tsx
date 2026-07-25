@@ -58,7 +58,7 @@ export default function ClientHeader() {
                 </Link>
 
                 <Link href="/dashboard/favorites">
-                    Favoris
+                    ❤️
                 </Link>
 
                 <Link href="/dashboard/bookings">

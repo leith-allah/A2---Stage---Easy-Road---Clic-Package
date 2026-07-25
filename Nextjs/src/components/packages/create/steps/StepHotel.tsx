@@ -22,28 +22,32 @@ export default function StepHotel() {
     const {
 
         data,
-
         setData,
 
         next,
-
         previous,
+        
+        step,
+        setTouchedSteps,
 
     } = usePackageWizard();
 
     const {
         errors,
         canGoNext,
+        canLeaveCurrentStep,
     } = useWizardValidation();
 
-    const hotelErrors = errors.hotels;
+    const hotelErrors = errors.hotels ?? [];
 
-  const {
-
-      updateHotel,
-      updateSupplement,
-
-  } = useWizardUpdater(setData);
+    const {
+        updateHotel,
+        updateSupplement,
+    } = useWizardUpdater(
+        setData,
+        step,
+        setTouchedSteps
+    );
 
   function handleNext() {
 
@@ -62,6 +66,7 @@ export default function StepHotel() {
 
           <FormInput
               label="Nom"
+              required
               value={data.hotels[0].name}
               error={hotelErrors[0]?.name}
               onChange={(value)=>
@@ -85,6 +90,7 @@ export default function StepHotel() {
 
           <FormInput
               label="Pays"
+              required
               value={data.hotels[0].country}
               error={hotelErrors[0]?.country}
               onChange={(value)=>
@@ -98,6 +104,7 @@ export default function StepHotel() {
 
           <FormInput
               label="Ville"
+              required
               value={data.hotels[0].city}
               error={hotelErrors[0]?.city}
               onChange={(value)=>
@@ -111,6 +118,7 @@ export default function StepHotel() {
 
           <FormInput
               label="Adresse"
+              required
               value={data.hotels[0].address}
               error={hotelErrors[0]?.address}
               onChange={(value)=>
@@ -300,6 +308,7 @@ export default function StepHotel() {
 
       <StepNavigation
           onPrevious={previous}
+          previousDisabled={!canLeaveCurrentStep()}
           onNext={handleNext}
           nextDisabled={!canGoNext()}
       />

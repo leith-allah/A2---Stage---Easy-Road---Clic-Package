@@ -27,4 +27,11 @@ export interface PackageFormData {
 
     status?: string;
 
+    // Options par défaut
+    defaultFlightClass?: string;
+
+    defaultRoomType?: string;
+
+    defaultBoardType?: string;
+    
 }

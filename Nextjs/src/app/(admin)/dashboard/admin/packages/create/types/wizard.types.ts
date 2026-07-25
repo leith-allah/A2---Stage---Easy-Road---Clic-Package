@@ -29,6 +29,15 @@ export interface PackageFormData {
   supp_half_board_pack?: number;
   supp_full_board_pack?: number;
   supp_all_inclusive_pack?: number;
+
+  // Options par défaut
+  default_flight_class_pack?: string;
+  default_room_type_pack?: string;
+  default_board_type_pack?: string;
+
+  defaultFlightClass?: string;
+  defaultRoomType?: string;
+  defaultBoardType?: string;
 }
 
 export interface WizardState {

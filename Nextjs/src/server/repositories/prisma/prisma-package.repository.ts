@@ -68,11 +68,14 @@ implements PackageRepository {
 
           status: p.statut_pack as PackageStatusValue,
 
-          defaultFlightClass: p.default_flight_class_pack,
+          defaultFlightClass:
+              p.default_flight_class_pack.toUpperCase() as FlightClass,
 
-          defaultRoomType: p.default_room_type_pack,
+          defaultRoomType:
+              p.default_room_type_pack.toUpperCase() as RoomType,
 
-          defaultBoardType: p.default_board_type_pack,
+          defaultBoardType:
+              p.default_board_type_pack.toUpperCase() as BoardType,
 
           ownerId: Number(p.id_user),
 
@@ -501,220 +504,224 @@ implements PackageRepository {
 
 
   async createAggregate(
-    aggregate: PackageAggregate,
-  ): Promise<PackageAggregate> {
-
-    return await prisma.$transaction(async (tx) => {
-
-      const createdPackage = await tx.package_voyage.create({
-
-        data: {
-
-          mle_pack: crypto.randomUUID(),
-
-          statut_pack: aggregate.getStatus(),
-
-          nom_pack: aggregate.name,
-
-          pays_pack: aggregate.country,
-
-          destination_pack: aggregate.destination,
-
-          image_pack: aggregate.image,
-
-          description_pack: aggregate.description,
-
-          date_depart_pack: aggregate.departureDate,
-
-          date_retour_pack: aggregate.returnDate,
-
-          prix_base_pack: aggregate.basePrice,
-
-          stock_total_pack: aggregate.getTotalStock(),
-
-          stock_dispo_pack: aggregate.getAvailableStock(),
-
-          supp_economy_pack: aggregate.supplements.ECONOMY,
-
-          supp_business_pack: aggregate.supplements.BUSINESS,
-
-          supp_first_pack: aggregate.supplements.FIRST,
-
-          supp_single_pack: aggregate.supplements.SINGLE,
-
-          supp_double_pack: aggregate.supplements.DOUBLE,
-
-          supp_triple_pack: aggregate.supplements.TRIPLE,
-
-          supp_quadruple_pack: aggregate.supplements.QUADRUPLE,
-
-          supp_suite_pack: aggregate.supplements.SUITE,
-
-          supp_bed_only_pack: aggregate.supplements.BED_ONLY,
-
-          supp_bed_breakfast_pack: aggregate.supplements.BED_BREAKFAST,
-
-          supp_half_board_pack: aggregate.supplements.HALF_BOARD,
-
-          supp_full_board_pack: aggregate.supplements.FULL_BOARD,
-
-          supp_all_inclusive_pack: aggregate.supplements.ALL_INCLUSIVE,
-
-          default_flight_class_pack:
-            aggregate.defaultFlightClass,
-
-          default_room_type_pack:
-            aggregate.defaultRoomType,
-
-          default_board_type_pack:
-            aggregate.defaultBoardType,
-
-          date_heure_creation_pack: new Date(),
-
-          id_user: BigInt(
-              aggregate.ownerId
-          ),
-
-        },
-
-      })
-      
-      // ======================================
-      // Flights
-      // ======================================
-
-      for (const [index, flight] of aggregate.flights.entries()) {
-
-        await tx.possede.create({
-
-          data: {
-
-            id_pack: createdPackage.id_pack,
-
-            id_vol: BigInt(flight.getId()),
-
-            ordre: index + 1,
-
-          },
-
-        });
-
-      }
-
-      // ======================================
-      // Hotels
-      // ======================================
-
-      for (const hotel of aggregate.hotels) {
-
-        await tx.heberge.create({
-
-          data: {
-
-            id_pack: createdPackage.id_pack,
-
-            id_hot: BigInt(hotel.id),
-
-          },
-
-        });
-
-      }
-
-      // ======================================
-      // Transports
-      // ======================================
-
-      for (const transport of aggregate.transports) {
-
-        await tx.utilise.create({
-
-          data: {
-
-            id_pack: createdPackage.id_pack,
-
-            id_transp: BigInt(transport.id),
-
-          },
-
-        });
-
-      }
-
-      // ======================================
-      // Excursions
-      // ======================================
-
-      for (const excursion of aggregate.excursions) {
-
-        await tx.propose.create({
-
-          data: {
-
-            id_pack: createdPackage.id_pack,
-
-            id_exc: BigInt(excursion.id),
-
-          },
-
-        });
-
-      }
-
-      return new PackageAggregate(
-
-        Number(createdPackage.id_pack),
-
-        aggregate.name,
-
-        aggregate.country,
-
-        aggregate.destination,
-
-        aggregate.image,
-
-        aggregate.description,
-
-        aggregate.departureDate,
-
-        aggregate.returnDate,
-
-        aggregate.basePrice,
-
-        aggregate.stock,
-
-        aggregate.status,
-
-        aggregate.supplements,
-
-        aggregate.defaultFlightClass,
-
-        aggregate.defaultRoomType,
-
-        aggregate.defaultBoardType,
-
-        aggregate.ownerId,
-
-        aggregate.flights,
-
-        aggregate.hotels,
-
-        aggregate.transports,
-
-        aggregate.excursions,
-
-      );
-
-    })
-  }
-
-
-  async updateAggregate(
       aggregate: PackageAggregate,
+      txParam?: any,
+    ): Promise<PackageAggregate> {
+
+      const execute = async (tx: any) => {
+        const createdPackage = await tx.package_voyage.create({
+          data: {
+            mle_pack: crypto.randomUUID(),
+            statut_pack: aggregate.getStatus(),
+            nom_pack: aggregate.name,
+            pays_pack: aggregate.country,
+            destination_pack: aggregate.destination,
+            image_pack: aggregate.image,
+            description_pack: aggregate.description,
+            date_depart_pack: aggregate.departureDate,
+            date_retour_pack: aggregate.returnDate,
+            prix_base_pack: aggregate.basePrice,
+            stock_total_pack: aggregate.getTotalStock(),
+            stock_dispo_pack: aggregate.getAvailableStock(),
+            supp_economy_pack: aggregate.supplements.ECONOMY,
+            supp_business_pack: aggregate.supplements.BUSINESS,
+            supp_first_pack: aggregate.supplements.FIRST,
+            supp_single_pack: aggregate.supplements.SINGLE,
+            supp_double_pack: aggregate.supplements.DOUBLE,
+            supp_triple_pack: aggregate.supplements.TRIPLE,
+            supp_quadruple_pack: aggregate.supplements.QUADRUPLE,
+            supp_suite_pack: aggregate.supplements.SUITE,
+            supp_bed_only_pack: aggregate.supplements.BED_ONLY,
+            supp_bed_breakfast_pack: aggregate.supplements.BED_BREAKFAST,
+            supp_half_board_pack: aggregate.supplements.HALF_BOARD,
+            supp_full_board_pack: aggregate.supplements.FULL_BOARD,
+            supp_all_inclusive_pack: aggregate.supplements.ALL_INCLUSIVE,
+            default_flight_class_pack: aggregate.defaultFlightClass ?? "ECONOMY",
+            default_room_type_pack: aggregate.defaultRoomType ?? "DOUBLE",
+            default_board_type_pack: aggregate.defaultBoardType ?? "BED_ONLY",
+            date_heure_creation_pack: new Date(),
+            id_user: BigInt(aggregate.ownerId),
+          },
+        });
+
+        // ======================================
+        // Flights
+        // ======================================
+        for (const [index, flight] of aggregate.flights.entries()) {
+          await tx.possede.create({
+            data: {
+              id_pack: createdPackage.id_pack,
+              id_vol: BigInt(flight.getId()),
+              ordre: index + 1,
+            },
+          });
+        }
+
+        // ======================================
+        // Hotels
+        // ======================================
+        for (const hotel of aggregate.hotels) {
+          await tx.heberge.create({
+            data: {
+              id_pack: createdPackage.id_pack,
+              id_hot: BigInt(hotel.id),
+            },
+          });
+        }
+
+        // ======================================
+        // Transports
+        // ======================================
+        for (const transport of aggregate.transports) {
+          await tx.utilise.create({
+            data: {
+              id_pack: createdPackage.id_pack,
+              id_transp: BigInt(transport.id),
+            },
+          });
+        }
+
+        // ======================================
+        // Excursions
+        // ======================================
+        for (const excursion of aggregate.excursions) {
+          await tx.propose.create({
+            data: {
+              id_pack: createdPackage.id_pack,
+              id_exc: BigInt(excursion.id),
+            },
+          });
+        }
+
+        return new PackageAggregate(
+          Number(createdPackage.id_pack),
+          aggregate.name,
+          aggregate.country,
+          aggregate.destination,
+          aggregate.image,
+          aggregate.description,
+          aggregate.departureDate,
+          aggregate.returnDate,
+          aggregate.basePrice,
+          aggregate.stock,
+          aggregate.status,
+          aggregate.supplements,
+          aggregate.defaultFlightClass,
+          aggregate.defaultRoomType,
+          aggregate.defaultBoardType,
+          aggregate.ownerId,
+          aggregate.flights,
+          aggregate.hotels,
+          aggregate.transports,
+          aggregate.excursions,
+        );
+      };
+
+      // Si une transaction parente existe, on réutilise 'txParam', sinon on en ouvre une nouvelle
+      if (txParam) {
+        return await execute(txParam);
+      } else {
+        return await prisma.$transaction(execute);
+      }
+    }
+
+
+async updateAggregate(
+    aggregate: PackageAggregate,
+    txParam?: any,
   ): Promise<PackageAggregate> {
+    const execute = async (tx: any) => {
+      // 1. Mise à jour des informations du package dans package_voyage
+      await tx.package_voyage.update({
+        where: {
+          id_pack: BigInt(aggregate.id),
+        },
+        data: {
+          statut_pack: aggregate.getStatus(),
+          nom_pack: aggregate.name,
+          pays_pack: aggregate.country,
+          destination_pack: aggregate.destination,
+          image_pack: aggregate.image,
+          description_pack: aggregate.description,
+          date_depart_pack: aggregate.departureDate,
+          date_retour_pack: aggregate.returnDate,
+          prix_base_pack: aggregate.basePrice,
+          stock_total_pack: aggregate.getTotalStock(),
+          stock_dispo_pack: aggregate.getAvailableStock(),
+          supp_economy_pack: aggregate.supplements.ECONOMY,
+          supp_business_pack: aggregate.supplements.BUSINESS,
+          supp_first_pack: aggregate.supplements.FIRST,
+          supp_single_pack: aggregate.supplements.SINGLE,
+          supp_double_pack: aggregate.supplements.DOUBLE,
+          supp_triple_pack: aggregate.supplements.TRIPLE,
+          supp_quadruple_pack: aggregate.supplements.QUADRUPLE,
+          supp_suite_pack: aggregate.supplements.SUITE,
+          supp_bed_only_pack: aggregate.supplements.BED_ONLY,
+          supp_bed_breakfast_pack: aggregate.supplements.BED_BREAKFAST,
+          supp_half_board_pack: aggregate.supplements.HALF_BOARD,
+          supp_full_board_pack: aggregate.supplements.FULL_BOARD,
+          supp_all_inclusive_pack: aggregate.supplements.ALL_INCLUSIVE,
+          default_flight_class_pack: aggregate.defaultFlightClass ?? "ECONOMY",
+          default_room_type_pack: aggregate.defaultRoomType ?? "DOUBLE",
+          default_board_type_pack: aggregate.defaultBoardType ?? "BED_ONLY",
+        },
+      });
 
-      throw new Error("Not implemented yet");
+      // 2. Nettoyage des anciennes relations
+      await tx.possede.deleteMany({ where: { id_pack: BigInt(aggregate.id) } });
+      await tx.heberge.deleteMany({ where: { id_pack: BigInt(aggregate.id) } });
+      await tx.utilise.deleteMany({ where: { id_pack: BigInt(aggregate.id) } });
+      await tx.propose.deleteMany({ where: { id_pack: BigInt(aggregate.id) } });
 
+      // 3. Re-création des relations - Vols
+      for (const [index, flight] of aggregate.flights.entries()) {
+        await tx.possede.create({
+          data: {
+            id_pack: BigInt(aggregate.id),
+            id_vol: BigInt(flight.getId()),
+            ordre: index + 1,
+          },
+        });
+      }
+
+      // 4. Re-création des relations - Hôtels
+      for (const hotel of aggregate.hotels) {
+        await tx.heberge.create({
+          data: {
+            id_pack: BigInt(aggregate.id),
+            id_hot: BigInt(hotel.id),
+          },
+        });
+      }
+
+      // 5. Re-création des relations - Transports
+      for (const transport of aggregate.transports) {
+        await tx.utilise.create({
+          data: {
+            id_pack: BigInt(aggregate.id),
+            id_transp: BigInt(transport.id),
+          },
+        });
+      }
+
+      // 6. Re-création des relations - Excursions
+      for (const excursion of aggregate.excursions) {
+        await tx.propose.create({
+          data: {
+            id_pack: BigInt(aggregate.id),
+            id_exc: BigInt(excursion.id),
+          },
+        });
+      }
+
+      return aggregate;
+    };
+
+    if (txParam) {
+      return await execute(txParam);
+    } else {
+      return await prisma.$transaction(execute);
+    }
   }
 
 async archive(

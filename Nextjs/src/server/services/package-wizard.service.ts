@@ -1,21 +1,16 @@
 
+import { prisma } from "@/server/db/prisma";
+
 import { CreatePackageWizardDto }
 from "@/server/dto/package/create-package-wizard.dto";
 
 import { UpdatePackageWizardDto }
 from "@/server/dto/package/update-package-wizard.dto";
 
-import { CreateFlightDto } 
-from "@/server/dto/flight/create-flight.dto";
-
-import { CreateHotelDto } 
-from "@/server/dto/hotel/create-hotel.dto";
-
-import { CreateTransportDto } 
-from "@/server/dto/transport/create-transport.dto";
-
-import { CreateExcursionDto } 
-from "@/server/dto/excursion/create-excursion.dto";
+import { FlightMapper } from "@/server/mappers/flight.mapper";
+import { HotelMapper } from "@/server/mappers/hotel.mapper";
+import { TransportMapper } from "@/server/mappers/transport.mapper";
+import { ExcursionMapper } from "@/server/mappers/excursion.mapper";
 
 import { PrismaFlightRepository }
 from "@/server/repositories/prisma/prisma-flight.repository";
@@ -106,139 +101,299 @@ export class PackageWizardService {
     const ownerId =
       await getCurrentUserId();
 
-    /*
-    =========================================
-    Construction des objets métier
-    =========================================
-    */
+    // 🔒 TRANSACTION ATOMIQUE : Tout est exécuté ensemble dans 'tx'
+    return await prisma.$transaction(async (tx) => {
 
-    const flights = await Promise.all(
+      /* --- 1. VOLS --- */
+      const flights = await Promise.all(
+        (dto.flights || []).map(async (flightDto) => {
+          const airline = await this.airlineRepository.findById(flightDto.airlineId);
+          if (!airline) throw new Error(`Compagnie ${flightDto.airlineId} introuvable`);
 
-        dto.flights.map(async (flightDto) => {
+          const departureAirport = await this.airportRepository.findById(flightDto.departureAirportId);
+          if (!departureAirport) throw new Error(`Aéroport départ ${flightDto.departureAirportId} introuvable`);
 
-            const airline =
-                await this.airlineRepository.findById(
-                    flightDto.airlineId,
-                );
+          const arrivalAirport = await this.airportRepository.findById(flightDto.arrivalAirportId);
+          if (!arrivalAirport) throw new Error(`Aéroport arrivée ${flightDto.arrivalAirportId} introuvable`);
 
-            if (!airline) {
+          // tx.vol.create avec include charge les relations au format BDD exact
+          const depTime = new Date(flightDto.departureDateTime);
+          const arrTime = new Date(flightDto.arrivalDateTime);
 
-                throw new Error(
-                    `Compagnie ${flightDto.airlineId} introuvable`,
-                );
+          const createdVol = await tx.vol.upsert({
+            where: {
+              num_vol_depart_vol: {
+                num_vol: flightDto.flightNumber,
+                depart_vol: depTime,
+              },
+            },
+            update: {
+              arrivee_vol: arrTime,
+              id_compagnie: flightDto.airlineId,
+              id_aeroport_depart: flightDto.departureAirportId,
+              id_aeroport_arrivee: flightDto.arrivalAirportId,
+            },
+            create: {
+              num_vol: flightDto.flightNumber,
+              depart_vol: depTime,
+              arrivee_vol: arrTime,
+              id_compagnie: flightDto.airlineId,
+              id_aeroport_depart: flightDto.departureAirportId,
+              id_aeroport_arrivee: flightDto.arrivalAirportId,
+            },
+            include: {
+              compagnie_aerienne: true,
+              aeroport_vol_id_aeroport_departToaeroport: {
+                include: { ville: { include: { pays: true } } },
+              },
+              aeroport_vol_id_aeroport_arriveeToaeroport: {
+                include: { ville: { include: { pays: true } } },
+              },
+            },
+          });
 
-            }
+          return FlightMapper.toEntity(createdVol);
+        })
+      );
 
-            const departureAirport =
-                await this.airportRepository.findById(
-                    flightDto.departureAirportId,
-                );
+      /* --- 2. HÔTELS --- */
+      const hotels = await Promise.all(
+        (dto.hotels || []).map(async (hotelDto) => {
+          const createdHotel = await tx.hotel.create({
+            data: {
+              nom_hot: hotelDto.name,
+              pays_hot: hotelDto.country,
+              ville_hot: hotelDto.city,
+              adresse_hot: hotelDto.address,
+              nb_etoiles_hot: hotelDto.stars,
+            },
+          });
+          return HotelMapper.toEntity(createdHotel);
+        })
+      );
 
-            if (!departureAirport) {
+      /* --- 3. TRANSPORTS --- */
+      const transports = await Promise.all(
+        (dto.transports || []).map(async (transportDto) => {
+          const createdTransport = await tx.transport.create({
+            data: {
+              trajet_transp: transportDto.route,
+              societe_transp: transportDto.company,
+            },
+          });
+          return TransportMapper.toEntity(createdTransport);
+        })
+      );
 
-                throw new Error(
-                    `Aéroport départ ${flightDto.departureAirportId} introuvable`,
-                );
+      /* --- 4. EXCURSIONS --- */
+      const excursions = await Promise.all(
+        (dto.excursions || []).map(async (excursionDto) => {
+          const createdExcursion = await tx.excursion.create({
+            data: {
+              nom_exc: excursionDto.name,
+              lieu_exc: excursionDto.location,
+              description_exc: excursionDto.description,
+            },
+          });
+          return ExcursionMapper.toEntity(createdExcursion);
+        })
+      );
 
-            }
-
-            const arrivalAirport =
-                await this.airportRepository.findById(
-                    flightDto.arrivalAirportId,
-                );
-
-            if (!arrivalAirport) {
-
-                throw new Error(
-                    `Aéroport arrivée ${flightDto.arrivalAirportId} introuvable`,
-                );
-
-            }
-
-            const flight =
-                FlightBuilder.fromDto(
-
-                    flightDto,
-
-                    airline,
-
-                    departureAirport,
-
-                    arrivalAirport,
-
-                );
-
-            const aggregate =
-                new FlightAggregate(
-                    flight,
-                );
-
-            return await this.flightRepository.createAggregate(
-                aggregate,
-            );
-
-        }),
-
-    );
-
-    /*
-    =========================================
-    Construction Aggregate
-    =========================================
-    */
-
-    const hotels: Hotel[] = [];
-
-    const transports: Transport[] = [];
-
-    const excursions: Excursion[] = [];
-
-    const aggregate = PackageBuilder.fromWizard(
-
+      /* --- 5. PACKAGE --- */
+      const aggregate = PackageBuilder.fromWizard(
         dto,
-
         ownerId,
-
         flights,
-
         hotels,
-
         transports,
-
-        excursions,
-
-    );
-
-    /*
-    =========================================
-    Persistance
-    =========================================
-    */
-
-    return await
-
-      this.packageRepository.createAggregate(
-
-        aggregate,
-
+        excursions
       );
+
+      return await this.packageRepository.createAggregate(aggregate, tx);
+    });
 
   }
 
-  async updatePackage(
-
-      id: number,
-
-      dto: UpdatePackageWizardDto,
-
+async updatePackage(
+    id: number,
+    dto: UpdatePackageWizardDto
   ): Promise<PackageAggregate> {
+    const existing = await this.packageRepository.findById(id);
+    if (!existing) {
+      throw new Error(`Package avec l'ID ${id} introuvable.`);
+    }
 
-      throw new Error(
-          "Update Package Wizard non implémenté pour le moment."
+    // 🔒 TRANSACTION ATOMIQUE GLOBALE
+    return await prisma.$transaction(async (tx) => {
+      /* --- 1. VOLS --- */
+      const flights = dto.flights
+        ? await Promise.all(
+            dto.flights.map(async (flightDto, index) => {
+              const prevFlight = existing.flights[index];
+
+              // Utilisation des getters de l'entité Flight si prevFlight existe
+              const airlineId = flightDto.airlineId ?? prevFlight?.getAirline().getId();
+              const depAirportId = flightDto.departureAirportId ?? prevFlight?.getDepartureAirport().getId();
+              const arrAirportId = flightDto.arrivalAirportId ?? prevFlight?.getArrivalAirport().getId();
+              const flightNum = flightDto.flightNumber ?? prevFlight?.getFlightNumber();
+              const depTime = flightDto.departureDateTime 
+                ? new Date(flightDto.departureDateTime) 
+                : prevFlight?.getDepartureDateTime();
+              const arrTime = flightDto.arrivalDateTime 
+                ? new Date(flightDto.arrivalDateTime) 
+                : prevFlight?.getArrivalDateTime();
+
+              if (!airlineId || !depAirportId || !arrAirportId || !flightNum || !depTime || !arrTime) {
+                throw new Error(`Vol #${index + 1} invalide ou incomplet.`);
+              }
+
+              const airline = await this.airlineRepository.findById(airlineId);
+              if (!airline) throw new Error(`Compagnie ${airlineId} introuvable`);
+
+              const departureAirport = await this.airportRepository.findById(depAirportId);
+              if (!departureAirport) throw new Error(`Aéroport départ ${depAirportId} introuvable`);
+
+              const arrivalAirport = await this.airportRepository.findById(arrAirportId);
+              if (!arrivalAirport) throw new Error(`Aéroport arrivée ${arrAirportId} introuvable`);
+
+              const createdVol = await tx.vol.upsert({
+                where: {
+                  num_vol_depart_vol: {
+                    num_vol: flightNum,
+                    depart_vol: depTime,
+                  },
+                },
+                update: {
+                  arrivee_vol: arrTime,
+                  id_compagnie: airlineId,
+                  id_aeroport_depart: depAirportId,
+                  id_aeroport_arrivee: arrAirportId,
+                },
+                create: {
+                  num_vol: flightNum,
+                  depart_vol: depTime,
+                  arrivee_vol: arrTime,
+                  id_compagnie: airlineId,
+                  id_aeroport_depart: depAirportId,
+                  id_aeroport_arrivee: arrAirportId,
+                },
+                include: {
+                  compagnie_aerienne: true,
+                  aeroport_vol_id_aeroport_departToaeroport: {
+                    include: { ville: { include: { pays: true } } },
+                  },
+                  aeroport_vol_id_aeroport_arriveeToaeroport: {
+                    include: { ville: { include: { pays: true } } },
+                  },
+                },
+              });
+
+              return FlightMapper.toEntity(createdVol);
+            })
+          )
+        : existing.flights;
+
+      /* --- 2. HÔTELS --- */
+      const hotels = dto.hotels
+        ? await Promise.all(
+            dto.hotels.map(async (hotelDto, index) => {
+              const prevHotel = existing.hotels[index];
+
+              const name = hotelDto.name ?? prevHotel?.name;
+              const country = hotelDto.country ?? prevHotel?.country;
+              const city = hotelDto.city ?? prevHotel?.city;
+              const address = hotelDto.address ?? prevHotel?.address ?? "";
+              const stars = hotelDto.stars ?? prevHotel?.stars ?? 0;
+
+              if (!name || !country || !city) {
+                throw new Error(`Hôtel #${index + 1} invalide ou incomplet.`);
+              }
+
+              const createdHotel = await tx.hotel.create({
+                data: {
+                  nom_hot: name,
+                  pays_hot: country,
+                  ville_hot: city,
+                  adresse_hot: address,
+                  nb_etoiles_hot: stars,
+                },
+              });
+
+              return HotelMapper.toEntity(createdHotel);
+            })
+          )
+        : existing.hotels;
+
+      /* --- 3. TRANSPORTS --- */
+      const transports = dto.transports
+        ? await Promise.all(
+            dto.transports.map(async (transportDto, index) => {
+              const prevTransport = existing.transports[index];
+
+              const route = transportDto.route ?? prevTransport?.route;
+              const company = transportDto.company ?? prevTransport?.company ?? "";
+
+              if (!route) {
+                throw new Error(`Transport #${index + 1} invalide.`);
+              }
+
+              const createdTransport = await tx.transport.create({
+                data: {
+                  trajet_transp: route,
+                  societe_transp: company,
+                },
+              });
+
+              return TransportMapper.toEntity(createdTransport);
+            })
+          )
+        : existing.transports;
+
+      /* --- 4. EXCURSIONS --- */
+      const excursions = dto.excursions
+        ? await Promise.all(
+            dto.excursions.map(async (excursionDto, index) => {
+              const prevExcursion = existing.excursions[index];
+
+              const name = excursionDto.name ?? prevExcursion?.name;
+              const location = excursionDto.location ?? prevExcursion?.location;
+              const description = excursionDto.description ?? prevExcursion?.description ?? "";
+
+              if (!name || !location) {
+                throw new Error(`Excursion #${index + 1} invalide.`);
+              }
+
+              const createdExcursion = await tx.excursion.create({
+                data: {
+                  nom_exc: name,
+                  lieu_exc: location,
+                  description_exc: description,
+                },
+              });
+
+              return ExcursionMapper.toEntity(createdExcursion);
+            })
+          )
+        : existing.excursions;
+
+      /* --- 5. METTRE À JOUR L'AGRÉGAT ET SAUVEGARDER --- */
+      const updatedAggregate = PackageBuilder.updateFromWizard(
+        existing,
+        dto,
+        flights,
+        hotels,
+        transports,
+        excursions
       );
 
+      return await this.packageRepository.updateAggregate(
+        updatedAggregate,
+        tx
+      );
+    });
   }
-  }
+
+}
 
 
 import { PrismaPackageRepository }

@@ -127,6 +127,20 @@ export const validatePackage: PackageValidator = (
 
     }
 
+    if (data.departureDate) {
+            // Date d'aujourd'hui (mise à 00:00:00 pour comparer uniquement les jours)
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const departure = new Date(data.departureDate);
+            departure.setHours(0, 0, 0, 0);
+
+            if (departure < today) {
+                errors.departureDate =
+                    "La date de départ ne peut pas être antérieure à aujourd'hui.";
+            }
+        }
+
     if (
 
         data.departureDate &&

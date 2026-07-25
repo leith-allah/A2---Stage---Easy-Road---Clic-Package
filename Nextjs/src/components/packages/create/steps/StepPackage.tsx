@@ -18,14 +18,29 @@ export default function StepPackage() {
         data,
         setData,
         next,
+        touchedSteps,
+        step,
+        setTouchedSteps,
 
     } = usePackageWizard();
 
-    const { updatePackage} = useWizardUpdater(setData);
+    const {
+
+        updatePackage,
+
+    } = useWizardUpdater(
+
+        setData,
+        step,
+        setTouchedSteps,
+
+    );
 
     const { errors, canGoNext } = useWizardValidation();
 
     const packageErrors = errors.package;
+
+    const showErrors = touchedSteps.includes(0);
 
     function handleNext() {
 
@@ -35,6 +50,9 @@ export default function StepPackage() {
 
     }
 
+    // Date d'aujourd'hui au format YYYY-MM-DD pour l'attribut min
+    const today = new Date().toISOString().split("T")[0];
+
 console.log("canGoNext :", canGoNext());
 console.log("errors :", errors);
 console.log("package :", data.package);
@@ -42,6 +60,24 @@ console.log("package :", data.package);
     return (
 
         <div className="space-y-8">
+
+            <div className="space-y-2">
+
+                <h1 className="text-3xl font-bold text-slate-800">
+
+                    📦 Création du package
+
+                </h1>
+
+                <p className="text-slate-500 max-w-3xl">
+
+                    Commencez par renseigner les informations principales de votre
+                    offre. Elles permettront aux agences d'identifier rapidement
+                    votre package.
+
+                </p>
+
+            </div>
 
             <FormSection
                 title="Informations générales"
@@ -62,7 +98,7 @@ console.log("package :", data.package);
 
                     }
 
-                    error={packageErrors.name}
+                    error={showErrors ? packageErrors.name : undefined}
 
                     required
 
@@ -83,7 +119,7 @@ console.log("package :", data.package);
 
                     }
 
-                    error={packageErrors.country}
+                    error={showErrors ? packageErrors.country : undefined}
 
                     required
 
@@ -104,11 +140,13 @@ console.log("package :", data.package);
 
                     }
 
-                    error={packageErrors.destination}
+                    error={showErrors ? packageErrors.destination : undefined}
 
                     required
 
                 />
+
+                <hr className="border-slate-200" />
 
                 <FormTextarea
 
@@ -127,7 +165,11 @@ console.log("package :", data.package);
 
                     }
 
+                    error={showErrors ? packageErrors.description : undefined} 
+
                 />
+
+                <hr className="border-slate-200" />
 
                 <FormInput
 
@@ -153,53 +195,59 @@ console.log("package :", data.package);
                 title="Dates"
             >
 
-                <FormInput
+                <div className="grid md:grid-cols-2 gap-6">
 
-                    type="date"
+                    <FormInput
 
-                    label="Date de départ"
+                        type="date"
 
-                    value={data.package.departureDate}
+                        min={today}
 
-                    onChange={(value)=>
+                        label="Date de départ"
 
-                        updatePackage(
-                            "departureDate",
-                            value
-                        )
+                        value={data.package.departureDate}
 
-                    }
+                        onChange={(value)=>
 
-                    error={packageErrors.departureDate}
+                            updatePackage(
+                                "departureDate",
+                                value
+                            )
 
-                    required
+                        }
 
-                />
+                        error={showErrors ? packageErrors.departureDate : undefined}
 
-                <FormInput
+                        required
 
-                    type="date"
+                    />
 
-                    min={data.package.departureDate}
+                    <FormInput
 
-                    label="Date de retour"
+                        type="date"
 
-                    value={data.package.returnDate}
+                        min={data.package.departureDate || today}
 
-                    onChange={(value)=>
+                        label="Date de retour"
 
-                        updatePackage(
-                            "returnDate",
-                            value
-                        )
+                        value={data.package.returnDate}
 
-                    }
+                        onChange={(value)=>
 
-                    error={packageErrors.returnDate}
+                            updatePackage(
+                                "returnDate",
+                                value
+                            )
 
-                    required
+                        }
 
-                />
+                        error={showErrors ? packageErrors.returnDate : undefined}
+
+                        required
+
+                    />
+
+                </div>
 
             </FormSection>
 
@@ -207,57 +255,61 @@ console.log("package :", data.package);
                 title="Tarification"
             >
 
-                <FormInput
+                <div className="grid md:grid-cols-2 gap-6">
 
-                    type="number"
+                    <FormInput
 
-                    min={0}
+                        type="number"
 
-                    step={0.01}
+                        min={0}
 
-                    label="Prix de base"
+                        step={0.01}
 
-                    value={data.package.basePrice}
+                        label="Prix de base"
 
-                    onChange={(value)=>
+                        value={data.package.basePrice}
 
-                        updatePackage(
-                            "basePrice",
-                            Number(value)
-                        )
+                        onChange={(value)=>
 
-                    }
+                            updatePackage(
+                                "basePrice",
+                                Number(value)
+                            )
 
-                    error={packageErrors.basePrice}
+                        }
 
-                    required
+                        error={showErrors ? packageErrors.basePrice : undefined}
 
-                />
+                        required
 
-                <FormInput
+                    />
 
-                    type="number"
+                    <FormInput
 
-                    min={1}
+                        type="number"
 
-                    label="Nombre total de places"
+                        min={1}
 
-                    value={data.package.totalStock}
+                        label="Nombre total de places"
 
-                    onChange={(value)=>
+                        value={data.package.totalStock}
 
-                        updatePackage(
-                            "totalStock",
-                            Number(value)
-                        )
+                        onChange={(value)=>
 
-                    }
+                            updatePackage(
+                                "totalStock",
+                                Number(value)
+                            )
 
-                    error={packageErrors.totalStock}
+                        }
 
-                    required
+                        error={showErrors ? packageErrors.totalStock : undefined}
 
-                />
+                        required
+
+                    />
+
+                </div>
 
             </FormSection>
 

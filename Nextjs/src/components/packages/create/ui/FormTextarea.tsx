@@ -1,6 +1,8 @@
 
 "use client";
 
+import FormField from "./FormField";
+
 interface Props {
 
     label: string;
@@ -14,6 +16,8 @@ interface Props {
     placeholder?: string;
 
     error?: string;
+
+    required?: boolean;
 
 }
 
@@ -31,17 +35,21 @@ export default function FormTextarea({
 
     error,
 
+    required,
+
 }: Props) {
 
     return (
 
-        <div className="space-y-2">
+        <FormField
 
-            <label className="font-medium">
+            label={label}
 
-                {label}
+            required={required}
 
-            </label>
+            error={error}
+
+        >
 
             <textarea
 
@@ -58,44 +66,42 @@ export default function FormTextarea({
                 }
 
                 className={`
-
                     w-full
 
-                    rounded-lg
+                    rounded-xl
 
                     border
+
+                    bg-white
 
                     px-4
 
                     py-3
 
+                    text-gray-800
+
+                    placeholder:text-gray-400
+
+                    shadow-sm
+
                     outline-none
 
                     resize-none
 
-                    transition
+                    transition-all
 
-                    ${error
-                        ? "border-red-500"
-                        : "border-gray-300"}
+                    duration-200
 
-                    focus:border-primary
-
+                    ${
+                        error
+                            ? "border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                            : "border-gray-300 hover:border-gray-400 focus:border-primary focus:ring-4 focus:ring-cyan-100"
+                    }
                 `}
 
             />
 
-            {error && (
-
-                <p className="text-sm text-red-500">
-
-                    {error}
-
-                </p>
-
-            )}
-
-        </div>
+        </FormField>
 
     );
 

@@ -23,12 +23,18 @@ export default function FormPrice({
 
     return(
 
-        <div className="space-y-2">
+        <div className="space-y-3">
 
-            <label className="font-medium">
-
+            <label
+                className="
+                    block
+                    text-sm
+                    font-semibold
+                    text-slate-700
+                    tracking-wide
+                "
+            >
                 Prix
-
             </label>
 
             <div className="relative">
@@ -45,38 +51,68 @@ export default function FormPrice({
 
                     }
 
-                    className="
-
+                    className={`
                         w-full
 
-                        rounded-lg
+                        rounded-2xl
 
                         border
 
-                        px-4
+                        bg-white
 
-                        py-3
+                        px-5
+
+                        py-3.5
 
                         pr-16
 
-                    "
+                        text-slate-800
+
+                        shadow-sm
+
+                        outline-none
+
+                        transition-all
+
+                        duration-200
+
+                        ${
+                            error
+                                ? `
+                                    border-red-500
+                                    focus:border-red-500
+                                    focus:ring-4
+                                    focus:ring-red-100
+                                `
+                                : `
+                                    border-gray-300
+                                    hover:border-gray-400
+                                    focus:border-primary
+                                    focus:ring-4
+                                    focus:ring-cyan-100
+                                `
+                        }
+                    `}
+
+                    onWheel={(e) => {
+
+                        (e.target as HTMLInputElement).blur();
+
+                    }}
 
                 />
 
                 <span
 
                     className="
-
                         absolute
-
-                        right-4
-
-                        top-3
-
-                        text-gray-500
-
+                        right-5
+                        top-1/2
+                        -translate-y-1/2
+                        text-sm
+                        font-semibold
+                        text-slate-500
                     "
-
                 >
 
                     DZD
@@ -89,7 +125,7 @@ export default function FormPrice({
 
                 error &&
 
-                <p className="text-red-500 text-sm">
+                <p className="text-sm font-medium text-red-500">
 
                     {error}
 

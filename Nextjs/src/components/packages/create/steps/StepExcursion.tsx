@@ -15,14 +15,26 @@ export default function StepExcursion() {
     const {
 
         data,
-
         setData,
 
         next,
-
         previous,
 
+        step,
+        setTouchedSteps,        
+
     } = usePackageWizard();
+
+    const {
+        updateExcursion,
+        addExcursion,
+        duplicateExcursion,
+        removeExcursion,
+    } = useWizardUpdater(
+        setData,
+        step,
+        setTouchedSteps
+    );
 
     const {
 
@@ -30,15 +42,11 @@ export default function StepExcursion() {
 
         canGoNext,
 
+        canLeaveCurrentStep,
+
     } = useWizardValidation();
 
-    const excursionErrors = errors.excursions;
-
-    const {
-
-        updateExcursion,
-
-    } = useWizardUpdater(setData);
+    const excursionErrors = errors.excursions ?? [];
 
     function handleNext() {
 
@@ -52,52 +60,102 @@ export default function StepExcursion() {
 
         <div className="space-y-6">
 
-            <FormSection title="Informations de l'excursion">
+            {data.excursions.map((excursion, index) => (
 
-                <FormInput
-                    label="Nom"
-                    value={data.excursions[0].name}
-                    error={excursionErrors[0]?.name}
-                    onChange={(value) =>
-                        updateExcursion(
-                            0,
-                            "name",
-                            value
-                        )
-                    }
-                />
+                <FormSection
+                    key={index}
+                    title={`Excursion ${index + 1}`}
+                >
 
-                <FormInput
-                    label="Lieu"
-                    value={data.excursions[0].location}
-                    error={excursionErrors[0]?.location}
-                    onChange={(value) =>
-                        updateExcursion(
-                            0,
-                            "location",
-                            value
-                        )
-                    }
-                />
+                    <FormInput
+                        label="Nom"
+                        required
+                        value={excursion.name}
+                        error={excursionErrors[index]?.name}
+                        onChange={(value) =>
+                            updateExcursion(
+                                index,
+                                "name",
+                                value
+                            )
+                        }
+                    />
 
-                <FormTextarea
-                    label="Description"
-                    rows={5}
-                    value={data.excursions[0].description}
-                    error={excursionErrors[0]?.description}
-                    onChange={(value) =>
-                        updateExcursion(
-                            0,
-                            "description",
-                            value
-                        )
-                    }
-                />
+                    <FormInput
+                        label="Lieu"
+                        required
+                        value={excursion.location}
+                        error={excursionErrors[index]?.location}
+                        onChange={(value) =>
+                            updateExcursion(
+                                index,
+                                "location",
+                                value
+                            )
+                        }
+                    />
 
-            </FormSection>
+                    <FormTextarea
+                        label="Description"
+                        required
+                        rows={5}
+                        value={excursion.description}
+                        error={excursionErrors[index]?.description}
+                        onChange={(value) =>
+                            updateExcursion(
+                                index,
+                                "description",
+                                value
+                            )
+                        }
+                    />
+
+                    <div className="flex justify-end gap-2">
+
+                        <button
+                            type="button"
+                            className="btn"
+                            onClick={() =>
+                                duplicateExcursion(index)
+                            }
+                        >
+                            Dupliquer
+                        </button>
+
+                        <button
+                            type="button"
+                            className="btn btn-error"
+                            disabled={data.excursions.length === 1}
+                            onClick={() =>
+                                removeExcursion(index)
+                            }
+                        >
+                            Supprimer
+                        </button>
+
+                    </div>
+
+                </FormSection>
+
+            ))}
+
+            <div className="flex justify-center">
+
+                <button
+                    type="button"
+                    className="btn btn-success"
+                    onClick={addExcursion}
+                >
+                    + Ajouter une excursion
+                </button>
+
+            </div>
+
+            <hr className="my-6" />
 
             <StepNavigation
                 onPrevious={previous}
+                previousDisabled={!canLeaveCurrentStep()}
                 onNext={handleNext}
                 nextDisabled={!canGoNext()}
             />

@@ -99,7 +99,7 @@ export class PackageAggregate {
 
   disable() {
 
-      this.status.disable(); // ou disable() selon ton choix
+      this.status.disable(); 
 
   }
 
@@ -196,6 +196,47 @@ export class PackageAggregate {
             - this.supplements.getBoardSupplement(this.defaultBoardType);
 
       }
+
+console.log("======== PACKAGE CALCUL ========");
+
+console.log({
+    basePrice: this.basePrice,
+
+    selectedFlight: options.flightClass,
+    defaultFlight: this.defaultFlightClass,
+
+    flightSelected:
+        options.flightClass
+            ? this.supplements.getFlightSupplement(options.flightClass)
+            : null,
+
+    flightDefault:
+        this.supplements.getFlightSupplement(this.defaultFlightClass),
+
+    selectedRoom: options.roomType,
+    defaultRoom: this.defaultRoomType,
+
+    roomSelected:
+        options.roomType
+            ? this.supplements.getRoomSupplement(options.roomType)
+            : null,
+
+    roomDefault:
+        this.supplements.getRoomSupplement(this.defaultRoomType),
+
+    selectedBoard: options.boardType,
+    defaultBoard: this.defaultBoardType,
+
+    boardSelected:
+        options.boardType
+            ? this.supplements.getBoardSupplement(options.boardType)
+            : null,
+
+    boardDefault:
+        this.supplements.getBoardSupplement(this.defaultBoardType),
+
+    total,
+});
 
       return total;
 

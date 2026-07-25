@@ -23,18 +23,25 @@ export default function StepFlight() {
         setData,
         next,
         previous,
+        step,
+        setTouchedSteps,
     } = usePackageWizard();
 
     const {
         updateFlight,
-    } = useWizardUpdater(setData);
+    } = useWizardUpdater(
+        setData,
+        step,
+        setTouchedSteps
+    );
 
     const {
         errors,
         canGoNext,
+        canLeaveCurrentStep,
     } = useWizardValidation();
 
-    const flightErrors = errors.flights;
+    const flightErrors = errors.flights ?? [];
 
     const {
         airlines,
@@ -135,7 +142,7 @@ export default function StepFlight() {
 
                     flight={flight}
 
-                    errors={flightErrors[index]}
+                    errors={flightErrors[index] ?? {}}
 
                     airlines={airlines}
 
@@ -216,6 +223,7 @@ export default function StepFlight() {
 
             <StepNavigation
                 onPrevious={previous}
+                previousDisabled={!canLeaveCurrentStep()}
                 onNext={handleNext}
                 nextDisabled={!canGoNext()}
             />

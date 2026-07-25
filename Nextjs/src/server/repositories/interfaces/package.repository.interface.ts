@@ -23,10 +23,12 @@ export interface PackageRepository {
 
     createAggregate(
         aggregate: PackageAggregate,
+        tx?: any,
     ): Promise<PackageAggregate>;
 
     updateAggregate(
         aggregate: PackageAggregate,
+        tx?: any,
     ): Promise<PackageAggregate>;
 
     archive(

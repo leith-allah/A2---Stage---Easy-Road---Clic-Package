@@ -39,11 +39,25 @@ export default function FormNumber({
 
     return(
 
-        <div className="space-y-2">
+        <div className="space-y-3">
 
-            <label className="font-medium">
+            <label
+                className="
+                    block
+                    text-sm
+                    font-semibold
+                    text-slate-700
+                    tracking-wide
+                "
+            >
 
                 {label}
+
+                {required && (
+                    <span className="ml-1 text-red-500">
+                        *
+                    </span>
+                )}
 
             </label>
 
@@ -65,39 +79,53 @@ export default function FormNumber({
 
                 }
 
-                className={`
+                onWheel={(e)=>{
 
+                    (e.target as HTMLInputElement).blur();
+
+                }}
+
+                className={`
                     w-full
 
-                    rounded-lg
+                    rounded-2xl
 
                     border
 
-                    px-4
+                    bg-white
+
+                    px-5
 
                     py-3
 
-                    ${error
+                    text-slate-800
 
-                        ? "border-red-500"
+                    shadow-sm
 
-                        : "border-gray-300"}
+                    outline-none
 
+                    transition-all
+
+                    duration-200
+
+                    ${
+                        error
+                            ? "border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100"
+                            : "border-gray-300 hover:border-gray-400 focus:border-primary focus:ring-4 focus:ring-cyan-100"
+                    }
                 `}
 
             />
 
-            {
+            {error && (
 
-                error &&
-
-                <p className="text-red-500 text-sm">
+                <p className="text-sm font-medium text-red-500">
 
                     {error}
 
                 </p>
 
-            }
+            )}
 
         </div>
 

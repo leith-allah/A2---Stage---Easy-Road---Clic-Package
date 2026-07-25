@@ -2,6 +2,7 @@
 "use client";
 
 import type { InputHTMLAttributes } from "react";
+import FormField from "./FormField";
 
 interface FormInputProps
     extends Omit<
@@ -17,6 +18,8 @@ interface FormInputProps
 
     error?: string;
 
+    required?: boolean;
+
 }
 
 export default function FormInput({
@@ -29,19 +32,23 @@ export default function FormInput({
 
     error,
 
+    required,
+
     ...inputProps
 
 }: FormInputProps) {
 
     return (
 
-        <div className="space-y-2">
+        <FormField
 
-            <label className="font-medium">
+            label={label}
 
-                {label}
+            required={required}
 
-            </label>
+            error={error}
+
+        >
 
             <input
 
@@ -55,39 +62,50 @@ export default function FormInput({
 
                     w-full
 
-                    rounded-lg
+                    rounded-2xl
 
                     border
 
-                    px-4
+                    bg-white
 
-                    py-3
+                    px-5
+
+                    py-3.5
+
+                    text-slate-800
+
+                    placeholder:text-slate-400
+
+                    shadow-sm
 
                     outline-none
 
-                    transition
+                    transition-all
 
-                    ${error
-                        ? "border-red-500"
-                        : "border-gray-300"}
+                    duration-200
 
-                    focus:border-primary
+                    ${
+                        error
+                            ? `
+                                border-red-500
+                                focus:border-red-500
+                                focus:ring-4
+                                focus:ring-red-100
+                            `
+                            : `
+                                border-slate-300
+                                hover:border-slate-400
+                                focus:border-cyan-500
+                                focus:ring-4
+                                focus:ring-cyan-100
+                            `
+                    }
 
                 `}
 
             />
 
-            {error && (
-
-                <p className="text-sm text-red-500">
-
-                    {error}
-
-                </p>
-
-            )}
-
-        </div>
+        </FormField>
 
     );
 

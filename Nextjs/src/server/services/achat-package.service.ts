@@ -115,6 +115,16 @@ console.log(packageData);
 
     }
 
+console.log({
+    dto,
+
+    defaultFlight: packageData.defaultFlightClass,
+    defaultRoom: packageData.defaultRoomType,
+    defaultBoard: packageData.defaultBoardType,
+
+    supplements: packageData.supplements,
+});
+
     const totalPrice =
 
       pricingService.calculatePackagePrice(
@@ -138,6 +148,18 @@ console.log(packageData);
         }
 
       );
+
+console.log("===== CALCUL PRIX =====");
+
+console.log({
+    basePrice: packageData.basePrice,
+    supplements: packageData.supplements,
+    classeVol: dto.classeVol,
+    typeChambre: dto.typeChambre,
+    pension: dto.pension,
+    nbVoyageurs: dto.nbVoyageurs,
+    totalPrice,
+});
 
     const currentBalance =
       Number(

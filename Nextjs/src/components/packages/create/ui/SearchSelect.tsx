@@ -17,6 +17,12 @@ interface SearchSelectProps<T> {
 
     placeholder?: string;
 
+    label?: string;
+
+    required?: boolean;
+
+    error?: string;
+
 }
 
 export default function SearchSelect<T>({
@@ -26,6 +32,9 @@ export default function SearchSelect<T>({
     onChange,
     getLabel,
     placeholder = "Rechercher...",
+    label,
+    required = false,
+    error,
 }: SearchSelectProps<T>) {
 
     const [query, setQuery] = useState("");
@@ -120,9 +129,59 @@ export default function SearchSelect<T>({
             className="relative w-full"
         >
 
+            {label && (
+
+                <label className="mb-2 block text-sm font-bold text-slate-700">
+
+                    {label}
+
+                    {required && (
+
+                        <span className="text-red-500">*</span>
+
+                    )}
+
+                </label>
+
+            )}
+
             <input
                 type="text"
-                className="input input-bordered w-full"
+                className="
+                    w-full
+
+                    rounded-2xl
+
+                    border
+
+                    border-slate-300
+
+                    bg-white
+
+                    px-5
+
+                    py-3.5
+
+                    text-slate-800
+
+                    placeholder:text-slate-400
+
+                    shadow-sm
+
+                    outline-none
+
+                    transition-all
+
+                    duration-200
+
+                    hover:border-slate-400
+
+                    focus:border-cyan-500
+
+                    focus:ring-4
+
+                    focus:ring-cyan-100
+                "
                 placeholder={placeholder}
                 value={query}
                 onFocus={() => {
@@ -219,11 +278,45 @@ export default function SearchSelect<T>({
                 }}
             />
 
+            {error && (
+
+                <p className="mt-1 text-sm text-red-500">
+
+                    {error}
+
+                </p>
+
+            )}
+
             {
 
                 isOpen && (
 
-                    <div className="absolute z-50 mt-1 w-full rounded-md border bg-white shadow-lg max-h-60 overflow-y-auto">
+                            <div
+                                className="
+                                    absolute
+
+                                    z-50
+
+                                    mt-2
+
+                                    max-h-72
+
+                                    w-full
+
+                                    overflow-y-auto
+
+                                    rounded-2xl
+
+                                    border
+
+                                    border-slate-200
+
+                                    bg-white
+
+                                    shadow-xl
+                                "
+                            >
 
                             {loading ? (
 
@@ -250,19 +343,23 @@ export default function SearchSelect<T>({
                                     type="button"
 
                                     className={`
-
                                         w-full
+
+                                        px-5
+
+                                        py-3
 
                                         text-left
 
-                                        px-3
+                                        transition-colors
 
-                                        py-2
+                                        duration-150
 
-                                        hover:bg-blue-100
-
-                                        ${highlightedIndex === index ? "bg-blue-100" : ""}
-
+                                        ${
+                                            highlightedIndex === index
+                                                ? "bg-cyan-100 text-slate-800"
+                                                : "hover:bg-slate-100 text-slate-700"
+                                        }
                                     `}
 
                                     onClick={() => {

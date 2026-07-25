@@ -5,6 +5,8 @@ interface Props {
 
     onPrevious?: () => void;
 
+    previousDisabled?: boolean;
+
     onNext: () => void;
 
     nextDisabled?: boolean;
@@ -19,6 +21,8 @@ export default function StepNavigation({
 
     onPrevious,
 
+    previousDisabled = false,
+
     onNext,
 
     nextDisabled = false,
@@ -31,7 +35,19 @@ export default function StepNavigation({
 
     return (
 
-        <div className="flex justify-between pt-8">
+        <div
+            className="
+                flex
+                items-center
+                justify-between
+
+                border-t
+                border-slate-200
+
+                pt-8
+                mt-8
+            "
+        >
 
             {onPrevious ? (
 
@@ -39,13 +55,56 @@ export default function StepNavigation({
 
                     type="button"
 
-                    className="btn"
+                    disabled={previousDisabled}
 
                     onClick={onPrevious}
 
+                    className="
+                        inline-flex
+
+                        items-center
+
+                        gap-2
+
+                        rounded-2xl
+
+                        border
+
+                        border-slate-300
+
+                        bg-white
+
+                        px-6
+
+                        py-3
+
+                        font-semibold
+
+                        text-slate-700
+
+                        shadow-sm
+
+                        transition-all
+
+                        duration-200
+
+                        hover:border-slate-400
+
+                        hover:shadow-md
+
+                        hover:-translate-y-0.5
+
+                        active:translate-y-0
+
+                        disabled:opacity-50
+                        disabled:cursor-not-allowed
+                        disabled:hover:shadow-sm
+                        disabled:hover:-translate-y-0
+                    "
+
                 >
 
-                    Retour
+                    ← Retour
 
                 </button>
 
@@ -59,15 +118,61 @@ export default function StepNavigation({
 
                 type="button"
 
-                className="btn btn-primary"
+                disabled={loading || nextDisabled}
 
                 onClick={onNext}
 
-                disabled={loading || nextDisabled}
+                className="
+                    inline-flex
+
+                    items-center
+
+                    gap-2
+
+                    rounded-2xl
+
+                    bg-blue-600
+
+                    px-8
+
+                    py-3
+
+                    font-semibold
+
+                    text-white
+
+                    shadow-lg
+
+                    transition-all
+
+                    duration-200
+
+                    hover:scale-[1.02]
+
+                    hover:shadow-xl
+
+                    active:scale-[0.99]
+
+                    disabled:cursor-not-allowed
+
+                    disabled:opacity-50
+
+                    disabled:hover:scale-100
+                "
 
             >
 
-                {loading ? "Chargement..." : nextLabel}
+                {
+
+                    loading
+
+                        ? "Chargement..."
+
+                        : nextLabel
+
+                }
+
+                →
 
             </button>
 

@@ -1,17 +1,17 @@
 
 "use client";
 
-interface Props{
+interface Props {
 
-    label:string;
+    label: string;
 
-    value:string;
+    value: string;
 
-    onChange:(value:string)=>void;
+    onChange: (value: string) => void;
 
-    required?:boolean;
+    required?: boolean;
 
-    error?:string;
+    error?: string;
 
 }
 
@@ -27,15 +27,33 @@ export default function FormDate({
 
     error,
 
-}:Props){
+}: Props) {
 
-    return(
+    return (
 
-        <div className="space-y-2">
+        <div className="space-y-3">
 
-            <label className="font-medium">
+            <label
+                className="
+                    block
+                    text-sm
+                    font-semibold
+                    text-slate-700
+                    tracking-wide
+                "
+            >
 
                 {label}
+
+                {required && (
+
+                    <span className="ml-1 text-red-500">
+
+                        *
+
+                    </span>
+
+                )}
 
             </label>
 
@@ -47,45 +65,68 @@ export default function FormDate({
 
                 required={required}
 
-                onChange={(e)=>
-
+                onChange={(e) =>
                     onChange(e.target.value)
-
                 }
 
                 className={`
-
                     w-full
 
-                    rounded-lg
+                    rounded-2xl
 
                     border
 
-                    px-4
+                    bg-white
 
-                    py-3
+                    px-5
 
-                    ${error
+                    py-3.5
 
-                        ? "border-red-500"
+                    text-slate-800
 
-                        : "border-gray-300"}
+                    shadow-sm
 
+                    outline-none
+
+                    transition-all
+
+                    duration-200
+
+                    ${
+                        error
+                            ? `
+                                border-red-500
+                                focus:border-red-500
+                                focus:ring-4
+                                focus:ring-red-100
+                              `
+                            : `
+                                border-slate-300
+                                hover:border-slate-400
+                                focus:border-cyan-500
+                                focus:ring-4
+                                focus:ring-cyan-100
+                              `
+                    }
                 `}
 
             />
 
-            {
+            {error && (
 
-                error &&
-
-                <p className="text-red-500 text-sm">
+                <p
+                    className="
+                        text-sm
+                        font-medium
+                        text-red-500
+                    "
+                >
 
                     {error}
 
                 </p>
 
-            }
+            )}
 
         </div>
 
