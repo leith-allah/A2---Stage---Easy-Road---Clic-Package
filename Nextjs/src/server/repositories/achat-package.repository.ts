@@ -1,8 +1,39 @@
 
 import { prisma } from "@/server/db/prisma";
 
+// 🔍 Objet d'inclusion complet pour charger toutes les sous-relations du package
+const packageRelationsInclude = {
+  include: {
+    possede: {
+      include: {
+        vol: {
+          include: {
+            compagnie_aerienne: true,
+            aeroport_vol_id_aeroport_departToaeroport: true,
+            aeroport_vol_id_aeroport_arriveeToaeroport: true,
+          },
+        },
+      },
+    },
+    heberge: {
+      include: {
+        hotel: true,
+      },
+    },
+    utilise: {
+      include: {
+        transport: true,
+      },
+    },
+    propose: {
+      include: {
+        excursion: true,
+      },
+    },
+  },
+};
+
 export const achatPackageRepository = {
-  
   create(data: {
     ref_achat_pack: string;
     nb_voyageurs: number;
@@ -31,7 +62,7 @@ export const achatPackageRepository = {
         id_achat_pack: id,
       },
       include: {
-        package_voyage: true,
+        package_voyage: packageRelationsInclude,
         utilisateur: true,
         transactions: true,
       },
@@ -39,17 +70,13 @@ export const achatPackageRepository = {
   },
 
   findByUser(id_user: bigint) {
-
     return prisma.achat_package.findMany({
-
       where: {
         id_user,
       },
-
       include: {
-        package_voyage: true,
+        package_voyage: packageRelationsInclude,
       },
-
       orderBy: {
         date_heure_achat_pack: "desc",
       },
@@ -57,13 +84,10 @@ export const achatPackageRepository = {
   },
 
   findAll() {
-
     return prisma.achat_package.findMany({
-
       include: {
-        package_voyage: true,
+        package_voyage: packageRelationsInclude,
       },
-
       orderBy: {
         date_heure_achat_pack: "desc",
       },

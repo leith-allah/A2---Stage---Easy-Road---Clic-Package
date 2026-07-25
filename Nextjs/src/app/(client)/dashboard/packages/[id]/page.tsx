@@ -5,12 +5,15 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { fetchPackageById } from "@/features/packages/services/package-detail.service";
+
 import {
   FlightClass,
   RoomType,
   PensionType,
 } from "@/features/purchases/types/purchase-options.types";
+
 import { usePurchase } from "@/features/purchases/hooks/usePurchase";
+import { PurchaseSuccessModal } from "@/features/bookings/components/PurchaseSuccessModal";
 
 const FLIGHT_OPTIONS = [
   { key: "ECONOMY", label: "Economy" },
@@ -90,6 +93,10 @@ export default function PackageDetailsPage() {
   const [loading, setLoading] = useState(true);
 
   const [travellers, setTravellers] = useState(1);
+
+  // 🌟 États pour la modale de succès
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [createdBookingId, setCreatedBookingId] = useState<number | string | null>(null);
 
   // Maintient la classe sélectionnée pour CHAQUE vol (index -> classe)
   const [flightClasses, setFlightClasses] = useState<Record<number, FlightClass>>({});
@@ -181,14 +188,17 @@ export default function PackageDetailsPage() {
       const firstRoomType = roomTypes[0] || getDefaultKey(pkg, "room") || "DOUBLE";
       const firstPension = pensions[0] || getDefaultKey(pkg, "board") || "BED_ONLY";
 
-      await purchase({
+      const result = await purchase({
         packageId: pkg.id,
         nbVoyageurs: travellers,
         classeVol: firstFlightClass as FlightClass,
         typeChambre: firstRoomType as RoomType,
         pension: firstPension as PensionType,
       });
-      alert("Réservation effectuée avec succès !");
+
+      // 🌟 Ouvre la modale avec l'ID de réservation
+      setCreatedBookingId(result?.id ?? result?.id_achat_pack ?? pkg.id);
+      setIsSuccessModalOpen(true);
     } catch (e: any) {
       alert(e.message);
     }
@@ -549,6 +559,15 @@ export default function PackageDetailsPage() {
           </button>
         </div>
       </div>
+
+      {/* 🌟 MODALE DE SUCCÈS D'ACHAT */}
+      {createdBookingId && (
+        <PurchaseSuccessModal
+          isOpen={isSuccessModalOpen}
+          bookingId={createdBookingId}
+          onCloseAction={() => setIsSuccessModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
