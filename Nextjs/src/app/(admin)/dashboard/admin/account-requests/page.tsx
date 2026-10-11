@@ -1,60 +1,30 @@
 
-import { AccountRequestService }
-from "@/server/services/account-request.service";
-
-import AccountRequestTable
-from "@/features/account-requests/components/AccountRequestTable";
+import { AccountRequestService } from "@/server/services/account-request.service";
+import AccountRequestTable from "@/features/account-requests/components/AccountRequestTable";
 
 export default async function AccountRequestsPage() {
+  const service = new AccountRequestService();
+  const rawDemandes = await service.getAllDemandes();
 
-    const service =
-        new AccountRequestService();
+  // Convertit les BigInt en Number pour éviter les erreurs de sérialisation React/Next.js
+  const demandes = JSON.parse(
+    JSON.stringify(rawDemandes, (_, value) =>
+      typeof value === "bigint" ? Number(value) : value
+    )
+  );
 
-    const demandes =
-        await service.getAllDemandes();
+  return (
+    <main className="p-8 max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
+          Demandes de Création de Compte
+        </h1>
+        <p className="text-slate-500 text-sm mt-1">
+          Examinez, validez ou refusez les demandes d'accès d'agents et administrateurs.
+        </p>
+      </div>
 
-    return (
-
-        <main
-            className="
-                p-8
-                space-y-8
-            "
-        >
-
-            <div>
-
-                <h1
-                    className="
-                        text-4xl
-                        font-bold
-                        text-blue-600
-                    "
-                >
-
-                    Demandes de création de compte
-
-                </h1>
-
-                <p
-                    className="
-                        text-gray-500
-                        mt-2
-                    "
-                >
-
-                    Consultez, acceptez ou refusez les demandes.
-
-                </p>
-
-            </div>
-
-            <AccountRequestTable
-                demandes={demandes}
-            />
-
-        </main>
-
-    );
-
+      <AccountRequestTable demandes={demandes} />
+    </main>
+  );
 }

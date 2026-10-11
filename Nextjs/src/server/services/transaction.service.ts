@@ -57,37 +57,35 @@ export const transactionService = {
   },
 
   async getMyTransactions() {
+    const userId = await getCurrentUserId();
 
-    const userId =
-      await getCurrentUserId();
-
-    const wallet =
-      await walletRepository.findByUserId(
-        userId
-      );
+    const wallet = await walletRepository.findByUserId(userId);
 
     if (!wallet) {
-
-      throw new Error(
-        "Wallet not found"
-      );
-
+      throw new Error("Wallet introuvable");
     }
 
-    const transactions =
-      await transactionRepository.findByWalletId(
-        Number(wallet.id_prtfl)
-      );
+    const userWalletId = wallet.id_prtfl;
 
-    return transactions.map(
-      (transaction) =>
-        TransactionMapper.toDto(
-          TransactionMapper.fromPrisma(
-            transaction
-          )
-        )
+    const rawTransactions = await transactionRepository.findByWalletId(
+      Number(userWalletId)
     );
 
+    return rawTransactions.map((tx) => {
+      // 🎯 Règle infaillible : Si mon portefeuille est le destinataire => CRÉDIT (+), sinon DÉBIT (-)
+      const isCredit = tx.id_portefeuille_dest === userWalletId;
+
+      return {
+        id: Number(tx.id_transac),
+        ref: tx.ref_transac || "-",
+        type: tx.type_transac,
+        status: tx.statut_transac,
+        amount: Number(tx.montant_transac),
+        description: tx.description_transac || (isCredit ? "Rechargement / Virement reçu" : "Paiement / Virement envoyé"),
+        date: tx.date_heure_transac,
+        isCredit: isCredit, // 👈 Booléen exact injecté par le serveur
+      };
+    });
   },
 
   async createTransaction(

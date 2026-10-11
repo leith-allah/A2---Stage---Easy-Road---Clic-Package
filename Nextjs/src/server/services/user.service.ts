@@ -178,38 +178,29 @@ async assignOffice(
 async updateMyProfile(
   userId: number,
   data: {
-
+    firstName?: string;
     FIRSTName?: string;
-
     lastName?: string;
-
     nationality?: string;
-
     email?: string;
+  }
+) {
+  const firstNameToUpdate = data.firstName || data.FIRSTName;
 
+  await userRepository.update(userId, {
+    ...(firstNameToUpdate && { prenom_user: firstNameToUpdate }),
+    ...(data.lastName && { nom_user: data.lastName }),
+    ...(data.nationality && { nat_user: data.nationality }),
+    ...(data.email && { email_pro_user: data.email }),
+  });
+
+  // 🎯 Récupère l'utilisateur à jour avec ses relations et convertit en DTO (sans BigInt)
+  const updatedUser = await userRepository.findById(userId);
+  if (!updatedUser) {
+    throw new NotFoundException("Utilisateur introuvable");
   }
 
-) {
-
-  return userRepository.update(
-    userId,
-    {
-
-      prenom_user:
-        data.FIRSTName,
-
-      nom_user:
-        data.lastName,
-
-      nat_user:
-        data.nationality,
-
-      email_pro_user:
-        data.email,
-
-    }
-  );
-
+  return UserMapper.toDto(updatedUser);
 },
 
 async changePassword(
